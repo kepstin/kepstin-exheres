@@ -77,13 +77,11 @@ src_prepare()
     > src/Makefile.am.features
     touch ChangeLog
 
-    default
+    eautoreconf
 }
 
 src_compile()
 {
     die "This shouldn't be built yet, testing configure script only."
 }
-
-AT_M4DIR="${WORK}/build"
 
