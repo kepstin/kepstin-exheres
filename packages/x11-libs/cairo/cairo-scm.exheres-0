@@ -24,7 +24,7 @@ MYOPTIONS="
     script [[ description = [ Support tracing application rendering ] ]]
     svg [[ description = [ Support saving output as svg images ] ]]
     xcb [[
-        description = [ Support rendering output to X screens with libxcb ] ]]
+        description = [ Support rendering output to X screens with libxcb ]
         requires = X
     ]]
 "
