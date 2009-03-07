@@ -77,6 +77,7 @@ src_prepare()
     > src/Makefile.am.features
     touch ChangeLog
 
+    AT_M4DIR="build"
     eautoreconf
 }
 
