@@ -7,6 +7,10 @@
 
 require cairo autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.10 1.9 ] ]
 
+# Cairo lists png, ps, pdf, svg as 'mandatory' backends, so you can't disable
+# them. Note that svg requires png.
+# TODO: directfb?
+
 DOWNLOADS=""
 SCM_REPOSITORY="git://anongit.freedesktop.org/git/cairo"
 require scm-git
@@ -18,60 +22,87 @@ MYOPTIONS="
     doc [[ description = [ Install developer API documentation ] ]]
     freetype [[ description = [ Use freetype to find and render fonts ] ]]
     glitz [[ description = [ Support accellerated rendering with glitz ] ]]
-    pdf [[ description = [ Support saving output as pdf files ] ]]
-    png [[ description = [ Display and render to png images ] ]]
-    ps [[ description = [ Support saving output as ps files ] ]]
+    pdf [[ description = [ Does nothing, pdf is always enabled. For compatibility with the gtk+ exheres, enable this option. ] ]]
     script [[ description = [ Support tracing application rendering ] ]]
-    svg [[ description = [ Support saving output as svg images ] ]]
     xcb [[
         description = [ Support rendering output to X screens with libxcb ]
         requires = X
     ]]
 "
 
+# The following deps are only needed for testing:
+# ps? ( app-text/ghostscript >=app-text/libspectre-0.2.0 )
+# pdf? ( >=app-text/poppler-0.9.2[glib] )
+# svg? ( >=gnome-desktop/librsvg-2.15.0:2 x11-libs/gtk+:2 )
+
 DEPENDENCIES="
     build+run:
-          sys-libs/zlib
-          app-text/ghostscript
-          media-libs/fontconfig
-        >=x11-libs/pixman-0.12.0
-        >=media-libs/libpng-1.2.8
-        >=media-libs/freetype-2.1.9:2
-        X?  (
-                x11-libs/libX11
-                x11-libs/libXext
-                >=x11-libs/libXrender-0.6
-                xcb?    (
-                              x11-libs/libX11[xcb]
-                              x11-utils/xcb-util
-                            >=x11-libs/libxcb-0.9.92
-                        )
+        media-libs/libpng
+        sys-libs/glibc
+        sys-libs/zlib [[ note = [ required for pdf, ps backends ] ]]
+        >=x11-libs/pixman-0.12.0:1
+        X? (
+            x11-libs/libX11
+            x11-libs/libXrender
+            xcb? (
+                >=x11-libs/libxcb-0.9.92
+                x11-utils/xcb-util
             )
-        pdf? (
-                 x11-libs/pango
-               >=app-text/poppler-0.9.2[glib]
-             )
-        svg? (
-                 x11-libs/gtk+:2
-               >=gnome-desktop/librsvg-2.15.0
-             )
+        )
+        freetype? (
+            media-libs/fontconfig
+            >=media-libs/freetype-2.1.9:2
+        )
+        glitz? ( >=media-libs/glitz-0.5.1 )
+
     build:
-        >=dev-util/pkg-config-0.19
         X?  (
                 x11-proto/renderproto
                 xcb? ( x11-proto/xcb-proto )
             )
-        doc? ( >=dev-doc/gtk-doc-1.6 )
+        >=dev-doc/gtk-doc-1.6
+        >=dev-util/pkg-config-0.19
+        sys-apps/findutils [[ note = [ find, xargs used in build ] ]]
+        sys-devel/binutils [[ note = [ something links to libbfd.a ] ]]
+        sys-devel/gcc
 "
 
 RESTRICT="test"
 
-DEFAULT_SRC_CONFIGURE_PARAMS=( '--enable-ft' '--enable-ps' '--enable-pdf' '--enable-png' )
-DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'doc gtk-doc' pdf xcb 'X xlib' 'X xlib-xrender' )
-DEFAULT_SRC_INSTALL_EXTRA_DOCS=( BIBLIOGRAPHY CODING_STYLE PORTING_GUIDE RELEASING ROADMAP )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    'X xlib'
+    'X xlib-xrender'
+    'doc gtk-doc'
+    'freetype ft'
+    glitz
+    script
+    xcb
+)
+
+DEFAULT_SRC_INSTALL_EXTRA_DOCS=(
+    BIBLIOGRAPHY
+    CODING_STYLE
+    PORTING_GUIDE
+    RELEASING
+    ROADMAP
+)
+
+pkg_pretend()
+{
+    einfo "This will install cairo patched to support configurable sub-pixel"
+    einfo "rendering filters. For more information, read:"
+    einfo "    http://bugs.freedesktop.org/show_bug.cgi?id=10301"
+    einfo "    http://www.freedesktop.org/wiki/ScreenFontSettings"
+    if optionq glitz || optionq script || optionq xcb ; then
+        ewarn "The glitz, script, and xcb options enable code that is still"
+        ewarn "under development. Use at your own risk."
+    fi
+}
 
 src_prepare()
 {
+    expatch -p1 "${FILES}/LCD-filtering.patch"
+
     # create dummy */Makefile.am.features and ChangeLog to make automake happy
     > boilerplate/Makefile.am.features
     > src/Makefile.am.features
@@ -83,6 +114,9 @@ src_prepare()
 
 src_compile()
 {
-    die "This shouldn't be built yet, testing configure script only."
-}
+    default
 
+    if optionq doc ; then
+        emake doc
+    fi
+}
