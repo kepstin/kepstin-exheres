@@ -22,8 +22,9 @@ MYOPTIONS="
     doc [[ description = [ Install developer API documentation ] ]]
     freetype [[ description = [ Use freetype to find and render fonts ] ]]
     glitz [[ description = [ Support accellerated rendering with glitz ] ]]
-    pdf [[ description = [ Does nothing, pdf is always enabled. For compatibility with the gtk+ exheres, enable this option. ] ]]
+    pdf [[ description = [ Does nothing, pdf is always enabled. For compatibility with other exheres, enable this option. ] ]]
     script [[ description = [ Support tracing application rendering ] ]]
+    svg [[ description = [ Does nothing, svg is always enabled. For compatibility with other exheres, enable this option. ] ]]
     xcb [[
         description = [ Support rendering output to X screens with libxcb ]
         requires = X
