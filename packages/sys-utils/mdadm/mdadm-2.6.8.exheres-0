@@ -44,6 +44,5 @@ pkg_postinst()
     elog "To use mdadm, create a configuration file at /etc/mdadm.conf"
     elog "For reference, a sample is installed to"
     elog "    /usr/share/doc/$PNVR/mdadm.conf-example"
-    elog "No initialization scripts are provided, yet. If you want automatic"
-    elog "array initialization, try the mdadm-scm package, which uses udev."
+    elog "No initialization scripts are provided, yet."
 }
