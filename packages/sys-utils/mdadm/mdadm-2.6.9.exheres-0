@@ -15,7 +15,7 @@ RAID arrays managed using the Linux mdraid subsystem. In addition, it provides
 support for real-time monitoring and spare moving.
 "
 
-PLATFORMS="~x86 ~amd64"
+PLATFORMS="~amd64"
 RESTRICT="test" # Requires root, tests interact with local udev.
 
 MYOPTIONS=""
