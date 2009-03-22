@@ -19,12 +19,7 @@ PLATFORMS="~x86 ~amd64"
 RESTRICT="test" # Requires root, tests interact with local udev.
 
 MYOPTIONS=""
-DEPENDENCIES="
-    build+run:
-        sys-libs/glibc
-    build:
-        sys-devel/gcc
-"
+DEPENDENCIES=""
 
 BUGS_TO="calvin.walton@gmail.com"
 REMOTE_IDS="freshmeat:mdadm"
