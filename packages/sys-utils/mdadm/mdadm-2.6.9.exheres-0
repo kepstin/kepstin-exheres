@@ -4,7 +4,7 @@
 require toolchain-funcs
 
 SLOT=0
-DOWNLOADS="kernel://linux/utils/raid/$PN/$PNV.tar.bz2"
+DOWNLOADS="mirror://kernel/linux/utils/raid/$PN/$PNV.tar.bz2"
 
 HOMEPAGE="http://neil.brown.name/blog/mdadm"
 LICENCES="GPL-2"
