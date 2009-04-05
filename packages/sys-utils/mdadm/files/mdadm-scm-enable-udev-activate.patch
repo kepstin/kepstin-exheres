@@ -1,0 +1,17 @@
+Source: written by Calvin Walton <calvin.walton@gmail.com>
+Upstream: no
+Reason: Enable udev rule for auto-starting arrays. This may be enabled by
+default upstream later, when it's more stable.
+diff --git a/udev-md-raid.rules b/udev-md-raid.rules
+index 1b0da38..6702c74 100644
+--- a/udev-md-raid.rules
++++ b/udev-md-raid.rules
+@@ -4,7 +4,7 @@ SUBSYSTEM!="block", GOTO="md_end"
+ ACTION!="add|change", GOTO="md_end"
+ 
+ # import data from a raid member and activate it
+-#ENV{ID_FS_TYPE}=="linux_raid_member", IMPORT{program}="/sbin/mdadm --examine --export $tempnode", RUN+="/sbin/mdadm --incremental $env{DEVNAME}"
++ENV{ID_FS_TYPE}=="linux_raid_member", IMPORT{program}="/sbin/mdadm --examine --export $tempnode", RUN+="/sbin/mdadm --incremental $env{DEVNAME}"
+ # import data from a raid set
+ KERNEL!="md*", GOTO="md_end"
+ 

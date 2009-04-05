@@ -1,0 +1,50 @@
+# Copyright © 2009 Calvin Walton
+# Distributed under the terms of the GNU General Public License v2
+
+require toolchain-funcs
+
+SLOT=0
+DOWNLOADS=""
+SCM_REPOSITORY="git://neil.brown.name/mdadm"
+SCM_BRANCH="devel-3.0"
+require scm-git
+
+HOMEPAGE="http://neil.brown.name/blog/mdadm"
+LICENCES="GPL-2"
+SUMMARY="A tool for managing Linux Software RAID arrays"
+DESCRIPTION="
+mdadm is a tool that allows you to create, assemble, and report on software
+RAID arrays managed using the Linux mdraid subsystem. In addition, it provides
+support for real-time monitoring and spare moving.
+"
+
+PLATFORMS=""
+RESTRICT="test" # Requires root, tests interact with local udev.
+
+MYOPTIONS=""
+DEPENDENCIES=""
+
+BUGS_TO="calvin.walton@gmail.com"
+REMOTE_IDS="freshmeat:mdadm"
+UPSTREAM_CHANGELOG="http://www.kernel.org/pub/linux/utils/raid/mdadm/ChangeLog"
+UPSTREAM_DOCUMENTATION="http://linux-raid.osdl.org/index.php/Main_Page"
+UPSTREAM_RELEASE_NOTES="http://www.kernel.org/pub/linux/utils/raid/mdadm/ANNOUNCE"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    -p1
+    "$FILES/mdadm-scm-enable-udev-activate.patch"
+)
+DEFAULT_SRC_COMPILE_PARAMS=(
+    "CC=$(tc-getCC)"
+    "CXFLAGS=$CFLAGS"
+)
+DEFAULT_SRC_INSTALL_EXTRA_DOCS=( mdadm.conf-example )
+DEFAULT_SRC_INSTALL_EXCLUDE=( ReadMe.* )
+
+pkg_postinst()
+{
+    elog "mdadm 3 optionally uses a configuration file at /etc/mdadm.conf"
+    elog "For reference, a sample is installed to"
+    elog "    /usr/share/doc/$PNVR/mdadm.conf-example"
+    elog "mdadm will automatically start configured arrays using udev."
+}
