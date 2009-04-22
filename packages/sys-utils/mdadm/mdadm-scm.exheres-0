@@ -37,6 +37,8 @@ DEFAULT_SRC_PREPARE_PATCHES=(
 DEFAULT_SRC_COMPILE_PARAMS=(
     "CC=$(tc-getCC)"
     "CXFLAGS=$CFLAGS"
+    # Remove -Werror, as it's compiler dependent...
+    "CWFLAGS=-Wall -Wstrict-prototypes"
 )
 DEFAULT_SRC_INSTALL_EXTRA_DOCS=( mdadm.conf-example )
 DEFAULT_SRC_INSTALL_EXCLUDE=( ReadMe.* )
