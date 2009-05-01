@@ -14,16 +14,13 @@ internet radio, and includes plugins for several online music stores.
 "
 HOMEPAGE="http://projects.gnome.org/rhythmbox/"
 BUGS_TO="calvin.walton@gmail.com"
-UPSTREAM_CHANGELOG="http://git.gnome.org/cgit/rhythmbox/log/"
-DOWNLOADS=""
-SCM_REPOSITORY="git://git.gnome.org/rhythmbox"
-require scm-git
+UPSTREAM_CHANGELOG="http://ftp.gnome.org/pub/GNOME/sources/rhythmbox/$(ever range 1-2)/rhythmbox-${PV}.changes"
 
 RESTRICT="test" # TODO: Requires X
 
 LICENCES="GPL-2-rhythmbox"
 SLOT="0"
-PLATFORMS=""
+PLATFORMS="~amd64"
 MYOPTIONS="
     brasero [[ description = [ Use brasero to burn music CDs ] ]]
     browser-plugin [[ description = [ Build a browser plugin simulating iTunes ] ]]
@@ -88,11 +85,6 @@ DEPENDENCIES="
     run:
         python? ( gnome-bindings/gnome-python[gconf][gnome][gnomevfs] )
 "
-
-src_prepare()
-{
-    NOCONFIGURE=1 ./autogen.sh
-}
 
 src_configure()
 {
