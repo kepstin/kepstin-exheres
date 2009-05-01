@@ -5,7 +5,12 @@ require gnome-2 multilib
 
 SUMMARY="An integrated music management application inspired by iTunes"
 DESCRIPTION="
-TODO. Hopefully I'll get annoyed enough to actually fill this in eventually.
+Rhythmbox is an audio player designed to organize music, in a similar manner
+to Apple's iTunes. It is designed to work well with GNOME, and uses GStreamer
+for media playback.
+As well as playing local music, it also supports CD playback and burning,
+copying music to and from portable music players, network music shares and
+internet radio, and includes plugins for several online music stores.
 "
 HOMEPAGE="http://projects.gnome.org/rhythmbox/"
 BUGS_TO="calvin.walton@gmail.com"
@@ -14,7 +19,7 @@ DOWNLOADS=""
 SCM_REPOSITORY="git://git.gnome.org/rhythmbox"
 require scm-git
 
-RESTRICT="test" # Requires X
+RESTRICT="test" # TODO: Requires X
 
 LICENCES="GPL-2-rhythmbox"
 SLOT="0"
@@ -79,6 +84,8 @@ DEPENDENCIES="
         >=sys-devel/automake-1.9
         >=sys-devel/libtool-1.4.3
         x11-proto/xproto
+    run:
+        python? ( gnome-bindings/gnome-python[gconf][gnome][gnomevfs] )
 "
 
 src_prepare()
