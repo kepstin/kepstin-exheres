@@ -14,7 +14,7 @@ internet radio, and includes plugins for several online music stores.
 "
 HOMEPAGE="http://projects.gnome.org/rhythmbox/"
 BUGS_TO="calvin.walton@gmail.com"
-UPSTREAM_CHANGELOG="http://ftp.gnome.org/pub/GNOME/sources/rhythmbox/$(ever range 1-2)/rhythmbox-${PV}.changes"
+UPSTREAM_CHANGELOG="http://ftp.gnome.org/pub/GNOME/sources/$PN/$(ever range 1-2)/$PN-$PV.changes"
 
 RESTRICT="test" # TODO: Requires X
 
