@@ -1,0 +1,8 @@
+The primary thing that I keep in here is scm or development versions of various gnome-related packages. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
+
+Packages in here:
+* @media-sound/rhythmbox@: Both a release version and scm version of rhythmbox. Some of the options can't be enabled because of missing deps, but all the basic features work fine. I should see about getting the release version into the media-unofficial repo, some day.
+* @net-libs/webkit-gtk@: A scm version of webkit-gtk. Based on compnerd's exheres, I just updated it a bit.
+* @net-www/epiphany@: A scm package for epiphany, to go with the webkit-gtk package.
+* @sys-utisl/mdadm@: Release and scm versions of mdadm, the linux software raid tool. I really should get the release one in a more public repo. The scm version supports starting raid from udev, without init scripts or manual configuration!
+* @x11-libs/cairo@: A scm package for cairo. This package has an extra patch for LCD filtering, but this shouldn't affect normal use (unless you customize a few settings, in which case your fonts will look nicer!). The patch is the main reason that I created the exheres; there's not _that_ much exciting stuff going on in cairo git.
