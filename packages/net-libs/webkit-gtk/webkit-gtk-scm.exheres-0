@@ -1,0 +1,53 @@
+# Copyright 2008 Saleem Abdulrasool <compnerd@compnerd.org>
+# Distributed under the terms of the GNU General Purpose License v2
+
+require webkit-gtk
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.10 ] ]
+
+DOWNLOADS=""
+SCM_REPOSITORY="git://git.webkit.org/WebKit.git"
+require scm-git
+
+SLOT="1"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="html5 icon-database keyring"
+
+DEPENDENCIES="
+    build+run:
+        >=media-libs/jpeg-6b
+        >=media-libs/libpng-1.2
+        >=dev-libs/glib-2.0:2
+          dev-libs/icu
+        >=dev-libs/libxml2-2.6
+        >=x11-libs/cairo-1.4
+        >=x11-libs/gtk+-2.8:2
+        >=dev-libs/libxslt-1.1.7
+        >=gnome-desktop/libsoup-2.25.4:2.4
+        >=x11-libs/pango-1.0[X]
+        >=media-libs/fontconfig-2.4
+        >=media-libs/freetype-2.3.5:=
+        html5? ( >=dev-db/sqlite-3.0:3
+                 >=media-libs/gstreamer-0.10:0.10
+                   media-plugins/gst-plugins-base:0.10 )
+        icon-database? ( >=dev-db/sqlite-3.0:3 )
+        keyring? ( gnome-desktop/gnome-keyring:1 )
+    build:
+        >=dev-doc/gtk-doc-1.10
+          dev-util/gperf
+        >=dev-util/pkg-config-0.20
+"
+
+AT_M4DIR="autotools"
+
+src_prepare() {
+    gtkdocize --copy
+    eautoreconf
+}
+
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'html5 offline-web-applications'
+                                       'html5 dom-storage'
+                                       'html5 database'
+                                       'html5 video'
+                                       'icon-database'
+                                       'keyring gnomekeyring' )
+
