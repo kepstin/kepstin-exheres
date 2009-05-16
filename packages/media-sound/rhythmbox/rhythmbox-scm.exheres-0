@@ -54,8 +54,8 @@ DEPENDENCIES="
         >=gnome-desktop/totem-pl-parser-2.22.0 [[ note = [ totem-pl-parser must have podcast support ] ]]
         gnome-platform/GConf:2
         gnome-platform/libglade:2
-        >=media-libs/gstreamer-0.10.12:0.10
-        >=media-plugins/gst-plugins-base-0.10.12:0.10 [[ note = [ needs libgstcdda ] ]]
+        >=media-libs/gstreamer-0.10.15:0.10
+        >=media-plugins/gst-plugins-base-0.10.15:0.10 [[ note = [ needs libgstcdda ] ]]
         sys-libs/zlib
         >=x11-libs/gtk+-2.16.0:2 [[ note = [ Older gtk+ works, but then it requires libgnomeui automagically when <2.12, and libsexy when <2.16 ] ]]
         brasero? ( >=app-cdr/brasero-0.9.1 )
