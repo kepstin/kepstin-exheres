@@ -1,4 +1,4 @@
 The primary thing that I keep in here is scm or development versions of various gnome-related packages. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
 
 Packages in here:
-* Nothing. Go away. I'm keeping this around just in case I want to use it for something later.
+* notify-python, with a patch to compile agains libnotify-0.7
