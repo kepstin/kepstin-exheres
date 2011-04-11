@@ -24,7 +24,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=( --hates=docdir )
 
 src_prepare() {
     # libnotify-0.7 support from Gentoo patch
-    expatch "${FILES}/${PNV}-libnotify-0.7.patch"
+    expatch -p0 "${FILES}/${PNV}-libnotify-0.7.patch"
     # regenerate pynotify.c as described on http://trac.galago-project.org/ticket/121
     edo rm -f src/pynotify.c
 }
