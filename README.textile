@@ -1,4 +1,5 @@
 The primary thing that I keep in here is scm or development versions of various gnome-related packages. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
 
 Packages in here:
+* libbs2b, an audio filter that converts stereo audio to binaural to improve headphone listening. Can be used by mplayer.
 * notify-python, with a patch to compile agains libnotify-0.7
