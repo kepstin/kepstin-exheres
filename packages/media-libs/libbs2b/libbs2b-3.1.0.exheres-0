@@ -1,8 +1,6 @@
 # Copyright 2011 Calvin Walton
 # Distributed under the GNU General Public License v2
 
-require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.10 ] ]
-
 SUMMARY="The Bauer stereophonic-to-binaural DSP (bs2b) is designed to improve headphone listening of stereo audio records."
 HOMEPAGE="http://bs2b.sourceforge.net/"
 DOWNLOADS="mirror://sourceforge/${PN}/${PNV}.tar.bz2"
