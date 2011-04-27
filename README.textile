@@ -2,4 +2,5 @@ The primary thing that I keep in here is scm or development versions of various 
 
 Packages in here:
 * libbs2b, an audio filter that converts stereo audio to binaural to improve headphone listening. Can be used by mplayer.
+* A slightly modified mplayer exheres, with libbs2b support added
 * notify-python, with a patch to compile agains libnotify-0.7
