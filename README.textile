@@ -4,3 +4,4 @@ Packages in here:
 * libbs2b, an audio filter that converts stereo audio to binaural to improve headphone listening. Can be used by mplayer.
 * A slightly modified mplayer exheres, with libbs2b support added
 * notify-python, with a patch to compile agains libnotify-0.7
+* Development and beta versions of Musicbrainz Picard.
