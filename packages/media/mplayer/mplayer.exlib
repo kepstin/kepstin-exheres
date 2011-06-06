@@ -18,8 +18,6 @@
 #    directfb xvr100 neon (arm)
 #  * Missing audio output drivers: esd openal nas sgiaudio sunaudio
 
-require multilib
-
 if ever is_scm; then
     SCM_REPOSITORY=svn://svn.mplayerhq.hu/mplayer
     SCM_TYPE=svn
@@ -34,7 +32,10 @@ if ever is_scm; then
 
     require scm
 else
-    DOWNLOADS="http://dev.exherbo.org/~arkanoid/distfiles/${PNV}.tar.bz2"
+    DOWNLOADS="
+        http://dev.exherbo.org/~philantrop/distfiles/${PNV}.tar.xz
+        ftp://188.40.155.44/distfiles/${PNV}.tar.xz
+    "
 fi
 
 SUMMARY="MPlayer is a popular movie player and encoder (mencoder)"
@@ -61,8 +62,9 @@ UPSTREAM_DOCUMENTATION="http://www.mplayerhq.hu/design7/info.html#docs"
 
 LICENCES="GPL-2"
 SLOT="0"
+LANG=(bg cs de dk el en es fr hu it ja ko mk nb nl pl ro ru sk sv tr uk pt_BR zh_CN zh_TW)
 MYOPTIONS="X a52 aac aalib blinkenlights bs2b cddb cdparanoia debug dga dirac dts
-    dvd fbdev fribidi ftp gtk h264 jack joystick jpeg2000 ladspa live lzo matrixview md5sum mga mng
+    dvd fbdev fribidi gtk h264 jack joystick jpeg2000 ladspa live lzo matrixview md5sum mga mng
     mp2 mp3 mpeg2 musepack opengl oss pnm pulseaudio pvr s3fb samba schroedinger sdl speex ass
     tdfxfb tdfxvid tga theora truetype tv tv-v4l vdpau vesa vidix vorbis vp8 xinerama xshape xv xvid
     xvmc
@@ -74,7 +76,7 @@ MYOPTIONS="X a52 aac aalib blinkenlights bs2b cddb cdparanoia debug dga dirac dt
     pvr [[ requires = tv-v4l ]]
     ass [[ requires = truetype ]]
     tv-v4l [[ requires = tv ]]
-    ( dga opengl vidix xshape xv xvmc xinerama ) [[ requires = X ]]
+    ( dga opengl vdpau vidix xshape xv xvmc xinerama ) [[ requires = X ]]
     xvmc [[ requires = xv ]]
 
     blinkenlights [[ description = [ Build the Blinkenlights video output. See http://blinkenlights.net ] ]]
@@ -109,6 +111,12 @@ MYOPTIONS="X a52 aac aalib blinkenlights bs2b cddb cdparanoia debug dga dirac dt
     vp8           [[ description = [ Enable support for the VP8 video compression format ] ]]
     xshape        [[ description = [ XShape support for themes ] ]]
     xvmc          [[ description = [ Enable XvMC acceleration ] ]]
+
+    amd64_cpu_features: 3dnow 3dnowext ssse3
+    ppc_cpu_features: altivec
+    x86_cpu_features: 3dnow 3dnowext mmx mmxext sse sse2 ssse3
+
+    linguas: ( ${LANG[@]} ) [[ number-selected = exactly-one ]]
 "
 
 DEPENDENCIES="
@@ -130,7 +138,7 @@ DEPENDENCIES="
             media-libs/faad2
             media-libs/faac
         )
-	bs2b? ( media-libs/libbs2b )
+        bs2b? ( media-libs/libbs2b )
         cdparanoia? ( media/cdparanoia )
         dirac? ( media-libs/dirac )
         dga? ( x11-proto/xf86dgaproto )
@@ -197,7 +205,6 @@ OPTION_DISABLES=(
     cdparanoia
     fbdev
     fribidi
-    ftp
     jack
     joystick
     ladspa
@@ -277,6 +284,7 @@ src_configure() {
     # just have to trust mplayer's autodetection.
     local o myconf=(
         --enable-menu
+        --enable-ftp
         --enable-gif
         --enable-iconv
         --enable-jpeg
@@ -286,17 +294,12 @@ src_configure() {
         --enable-sortsub
     )
 
-    # --enable-largefiles is not optional any more in scm
-    # http://lists.mplayerhq.hu/pipermail/mplayer-cvslog/2011-April/041865.html
-    if ! ever is_scm; then
-        myconf+=( --enable-largefiles )
-    fi
-
+    # TODO: crystalhd
     for o in ass-internal bluray enca esd faac-lavc  gtk1 ivtv libgsm \
                libopencore_amrnb libopencore_amrwb libcdio libmpeg2-internal libnut librtmp lirc lircc \
                mp3lame-lavc mpg123 nas nemesi openal qtx radio-v4l2  sgiaudio sunaudio \
                toolame tremor tv-v4l1 vstream win32dll x264-lavc xmms xvid-lavc \
-               dvdread-internal; do
+               dvdread-internal libdvdcss-internal crystalhd; do
         myconf+=( --disable-${o} )
     done
 
@@ -313,6 +316,47 @@ src_configure() {
         myconf+=( --disable-xmga )
     fi
 
+    # LINGUAS
+    for o in "${LANG[@]}"; do
+        if optionq "linguas:${o}"; then
+            myconf+=( "--language=$(optionfmt linguas:${o})" )
+        fi
+    done
+
+    # CPU features
+    myconf+=(
+        '--disable-armv5te' # ARM
+        '--disable-armv6' # ARM
+        '--disable-armv6t2' # ARM
+        '--disable-armvfp' # ARM
+        '--disable-neon' # ARM
+        '--disable-iwmmxt' # ARM
+
+        $(option_enable ppc_cpu_features:altivec)
+    )
+
+    if option platform:amd64; then
+        myconf+=(
+            '--enable-mmx'
+            '--enable-mmxext'
+            '--enable-sse'
+            '--enable-sse2'
+            $(option_enable amd64_cpu_features:3dnow)
+            $(option_enable amd64_cpu_features:3dnowext)
+            $(option_enable amd64_cpu_features:ssse3)
+        )
+    elif option platform:x86; then
+        myconf+=(
+            $(option_enable x86_cpu_features:3dnow)
+            $(option_enable x86_cpu_features:3dnowext)
+            $(option_enable x86_cpu_features:mmx)
+            $(option_enable x86_cpu_features:mmxext)
+            $(option_enable x86_cpu_features:sse)
+            $(option_enable x86_cpu_features:sse2)
+            $(option_enable x86_cpu_features:ssse3)
+        )
+    fi
+
     CFLAGS= edo \
         ./configure \
         --cc="${CC}" \
@@ -320,7 +364,7 @@ src_configure() {
         --prefix=/usr \
         --confdir=/etc/mplayer \
         --datadir=/usr/share/mplayer \
-        --libdir=/usr/$(get_libdir) \
+        --libdir=/usr/${LIBDIR} \
         "${myconf[@]}"
 }
 
@@ -328,7 +372,7 @@ src_install() {
     default
 
     # FIXME: stupid make target always creates libdir
-    edo rmdir "${IMAGE}"/usr/$(get_libdir)
+    edo rmdir "${IMAGE}"/usr/${LIBDIR}
 
     insinto /etc/mplayer
     newins "${WORK}/etc/example.conf" mplayer.conf
