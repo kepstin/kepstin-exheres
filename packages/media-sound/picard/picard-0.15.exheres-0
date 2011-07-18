@@ -12,7 +12,7 @@ MY_PNV="${PN}-`ever delete _ ${PV}`"
 DOWNLOADS="http://ftp.musicbrainz.org/pub/musicbrainz/${PN}/${MY_PNV}.tar.gz"
 WORK="${WORKBASE}/${MY_PNV}"
 
-BUGS_TO="michael@obberon.com"
+BUGS_TO="calvin.walton@kepstin.ca"
 
 LICENCES="GPL-2"
 SLOT="0"
