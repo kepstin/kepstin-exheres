@@ -1,7 +1,7 @@
 # Copyright 2008 Saleem Abdulrasool <compnerd@compnerd.org>
 # Distributed under the terms of the GNU General Purpose License v2
 
-require gnome.org
+require gsettings
 
 SUMMARY="A tool designed to extract information and metadata about your personal data"
 HOMEPAGE="http://www.tracker-project.org/"
@@ -138,10 +138,9 @@ src_test() {
 }
 
 src_install() {
-    default
+    gsettings_src_install
     keepdir "/usr/${LIBDIR}/tracker-${SLOT}/writeback-modules"
     edo rm "${IMAGE}"/usr/share/tracker-tests/01-writeback.py
     edo rmdir "${IMAGE}"/usr/share/tracker-tests/ \
               "${IMAGE}"/usr/share/tracker/icons
 }
-
