@@ -16,7 +16,6 @@ MYOPTIONS="
 album-art [[ description = [ use gdk-pixbuf for mp3 album art ] ]]
 evolution exif
 flac [[ description = [ use libflac for flac extraction ] ]]
-gobject-introspection
 gstreamer [[ description = [ use gstreamer for audio extraction ] ]]
 gtk-doc
 jpeg [[ description = [ use libjpeg for jpeg extraction ] ]]
@@ -37,12 +36,13 @@ linguas: ru"
 
 DEPENDENCIES="
     build:
-	sys-devel/autoconf:2.5[>=2.64]
-	sys-devel/automake:1.11
+	sys-devel/autoconf:2.5[>=2.64] [[ note = [ scm version only ] ]]
+	sys-devel/automake:1.11 [[ note = [ scm version only ] ]]
+	dev-lang/vala:0.12 [[ note = [ scm version only ] ]]
         dev-util/pkg-config[>=0.20]
-        dev-util/intltool[>=0.35.0]
-        gtk-doc? ( dev-doc/gtk-doc[>=1.8] )
-        gobject-introspection? ( gnome-desktop/gobject-introspection[>=0.9.5] )
+        dev-util/intltool[>=0.40.0]
+        dev-doc/gtk-doc[>=1.8] [[ note = [ needed for m4 macros in scm even if docs not built ] ]]
+        gnome-desktop/gobject-introspection[>=0.9.5]
     build+run:
         media-libs/libpng[>=1.2]
         dev-libs/glib:2[>=2.26.0]
@@ -118,7 +118,7 @@ DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'album-art gdkpixbuf'
                                        'tiff libtiff'
                                        'upower' )
 
-DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( 'gobject-introspection introspection' 'linguas:ru enca' )
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( 'linguas:ru enca' )
 
 src_prepare() {
     NOCONFIGURE=1 ./autogen.sh
