@@ -1,0 +1,11 @@
+# Copyright 2009 Marvin Schmidt <marv@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Personal/groupwork information manager (e-mail, adressbook, calendar, tasks etc.)"
+HOMEPAGE="http://projects.gnome.org/${PN}"
+
+SLOT="0"
+LICENCES="( LGPL-2 LGPL-3 )"
+
+BUGS_TO="marv@exherbo.org"
+
