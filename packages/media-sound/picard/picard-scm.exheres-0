@@ -3,9 +3,9 @@
 # Based in part upon 'picard-0.11.ebuild' from Gentoo, which is:
 #     Copyright 1999-2009 Gentoo Foundation
 
-SCM_REPOSITORY="http://bazaar.launchpad.net/~musicbrainz-developers/picard"
-SCM_BRANCH="trunk"
-require scm-bzr
+SCM_REPOSITORY="git://git.musicbrainz.org/picard"
+SCM_BRANCH="master"
+require scm-git
 
 require distutils [ has_bin=true ]
 
@@ -18,7 +18,7 @@ LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
-    fingerprint [[ description = [ Support for finding fingerprints of audio files with ffmpeg and libofa ] ]]
+    puid [[ description = [ Support for finding PUID fingerprints of audio files with ffmpeg and libofa ] ]]
 "
 
 DEPENDENCIES="
@@ -27,16 +27,21 @@ DEPENDENCIES="
         dev-python/mutagen[>=1.11]
         media-libs/libdiscid
         x11-libs/qt:4[>=4.5]
-        fingerprint? (
+        puid? (
             media/ffmpeg
             media-libs/libofa
         )
+    suggestion:
+        media-libs/chromaprint[examples] [[
+	    description = [ Support for finding AcoustID fingerprints of audio files ]
+	    group-name = [ acoustid ]
+	]]
 "
 
 src_configure() {
     edo ${PYTHON} -B setup.py config
-    edo sed -e "s:\(with-avcodec =\).*:\1 $(optionq fingerprint && echo True || echo False):" \
-            -e "s:\(with-libofa =\).*:\1 $(optionq fingerprint && echo True || echo False):" \
+    edo sed -e "s:\(with-avcodec =\).*:\1 $(optionq puid && echo True || echo False):" \
+            -e "s:\(with-libofa =\).*:\1 $(optionq puid && echo True || echo False):" \
             -i "${WORK}"/build.cfg
 }
 
