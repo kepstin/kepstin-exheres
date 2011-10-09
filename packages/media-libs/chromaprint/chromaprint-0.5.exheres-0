@@ -1,0 +1,31 @@
+# Copyright © 2011 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require cmake
+
+SLOT="0"
+DOWNLOADS="https://github.com/downloads/lalinsky/chromaprint/chromaprint-0.5.tar.gz"
+HOMEPAGE="http://acoustid.org/chromaprint"
+LICENCES="LGPL-2.1"
+SUMMARY="A library that implements an algorithm for extracting fingerprints from any audio source."
+PLATFORMS="~amd64"
+DEPENDENCIES="
+	build+run:
+		media/ffmpeg
+		tools? (
+			media-libs/taglib
+		)
+"
+MYOPTIONS="
+	examples [[ description = [ Build the example scanning tool fpcalc ] ]]
+	tools [[ description = [ Build standard tools ] ]]
+"
+BUGS_TO="calvin.walton@kepstin.ca"
+
+CMAKE_SRC_CONFIGURE_PARAMS="
+	-DWITH_AVFFT=1
+"
+CMAKE_SRC_CONFIGURE_OPTION_BUILDS="
+	examples EXAMPLES
+	tools TOOLS
+"
