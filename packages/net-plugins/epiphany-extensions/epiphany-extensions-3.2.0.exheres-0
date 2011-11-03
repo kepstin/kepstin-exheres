@@ -24,7 +24,7 @@ DEPENDENCIES="
         dev-libs/libxml2:2.0[>=2.6.0]
         dev-libs/glib:2[>=2.26.0]
         x11-libs/gtk+:3[>=2.90.4]
-        net-www/epiphany:3.0[>=2.27.4]
+        net-www/epiphany:3.0[=3.2*]
         net-libs/webkit:3.0
         epiphany_extensions:rss? ( sys-apps/dbus[>=0.34]
                                    dev-libs/dbus-glib:1[>=0.34] )
