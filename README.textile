@@ -1,7 +1,4 @@
-The primary thing that I keep in here is scm or development versions of various gnome-related packages. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
+The primary thing that I keep in here is various MusicBrainz-related libraries and packages, including scm or development versions. In addition, there's a few development versions of gnome-related packages which sneak in now and then. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
 
 Packages in here:
-* libbs2b, an audio filter that converts stereo audio to binaural to improve headphone listening. Can be used by mplayer.
-* A slightly modified mplayer exheres, with libbs2b support added. This may be out of date...
-* notify-python, with a patch to compile agains libnotify-0.7
 * Development and beta versions of Musicbrainz Picard.
