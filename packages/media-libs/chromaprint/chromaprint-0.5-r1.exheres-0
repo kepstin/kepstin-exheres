@@ -12,13 +12,9 @@ PLATFORMS="~amd64"
 DEPENDENCIES="
 	build+run:
 		media/ffmpeg
-		tools? (
-			media-libs/taglib
-		)
 "
 MYOPTIONS="
 	examples [[ description = [ Build the example scanning tool fpcalc ] ]]
-	tools [[ description = [ Build standard tools ] ]]
 "
 BUGS_TO="calvin.walton@kepstin.ca"
 
@@ -27,5 +23,4 @@ CMAKE_SRC_CONFIGURE_PARAMS="
 "
 CMAKE_SRC_CONFIGURE_OPTION_BUILDS="
 	examples EXAMPLES
-	tools TOOLS
 "
