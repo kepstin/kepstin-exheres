@@ -1,0 +1,29 @@
+# Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require gnome.org
+
+SUMMARY="A simple GNOME 3 application to access remote or virtual systems."
+HOMEPAGE="http://live.gnome.org/Boxes"
+
+LICENCES="|| ( LGPL-2 LGPL-2.1 LGPL-3 ) [[ note = [ LGPL-2 or later ] ]]"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build:
+        dev-util/intltool[>=0.40.0]
+        dev-util/pkg-config[>=0.22]
+        gnome-desktop/gobject-introspection:1[>=0.9.6]
+    build+run:
+        app-pim/tracker:0.14[>=0.13.1]
+        dev-libs/glib:2[>=2.29.90]
+        dev-libs/gtk-vnc:2.0[>=0.4.4]
+        dev-libs/libxml2[>=2.7.8]
+        sys-fs/udev[>=147][glib]
+        sys-libs/libosinfo:1.0[>=0.0.6]
+        virtualization-lib/libvirt-glib[>=0.0.5]
+        virtualization-ui/spice-gtk:3.0[>=0.9]
+        x11-libs/clutter-gtk:1.0[>=1.0.1]
+        x11-libs/gtk+:3[>=3.3.5]
+"
