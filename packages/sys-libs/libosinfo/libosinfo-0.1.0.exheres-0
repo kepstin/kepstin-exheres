@@ -1,0 +1,43 @@
+# Copyright © Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="libosinfo is a GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support."
+HOMEPAGE="https://fedorahosted.org/libosinfo/"
+
+LICENCES="GPL-2 LGPL-2.1"
+SLOT="1.0"
+PLATFORMS="~amd64"
+
+MYOPTIONS="
+    gobject-introspection
+    udev [[ description = [ Scan removable media for OS installers ] ]]
+    vala [[ description = [ Install vala bindings ] ]]
+    
+    vala [[ requires = [ gobject-introspection ] ]]
+"
+DOWNLOADS="https://fedorahosted.org/releases/l/i/${PN}/${PNV}.tar.gz"
+
+DEPENDENCIES="
+    build:
+        gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=0.9.0] )
+        vala? ( dev-lang/vala[>=0.14.1] )
+    build+run:
+        dev-libs/glib:2
+        dev-libs/libxml2[>=2.6.0]
+    test:
+        dev-libs/check
+"
+
+src_configure() {
+    if expecting_tests ; then
+        CONFIGURE_TESTS="--enable-tests"
+    else
+        CONFIGURE_TESTS="--disable-tests"
+    fi
+    econf \
+        --with-udev-rulesdir=/${LIBDIR}/udev/rules.d \
+        $(option_enable gobject-introspection introspection) \
+        $(option_enable udev) \
+        $(option_enable vala) \
+        ${CONFIGURE_TESTS}
+}
