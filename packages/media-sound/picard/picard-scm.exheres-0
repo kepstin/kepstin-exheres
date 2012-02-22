@@ -34,7 +34,6 @@ DEPENDENCIES="
     suggestion:
         media-libs/chromaprint[examples] [[
 	    description = [ Support for finding AcoustID fingerprints of audio files ]
-	    group-name = [ acoustid ]
 	]]
 "
 
