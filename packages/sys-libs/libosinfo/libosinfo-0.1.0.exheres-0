@@ -1,7 +1,7 @@
 # Copyright © Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-SUMMARY="libosinfo is a GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support."
+SUMMARY="A library API for information about hardware supported by operating systems and hypervisors"
 HOMEPAGE="https://fedorahosted.org/libosinfo/"
 
 LICENCES="GPL-2 LGPL-2.1"
