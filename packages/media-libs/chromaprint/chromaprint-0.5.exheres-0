@@ -4,7 +4,7 @@
 require cmake
 
 SLOT="0"
-DOWNLOADS="https://github.com/downloads/lalinsky/chromaprint/chromaprint-0.5.tar.gz"
+DOWNLOADS="https://github.com/downloads/lalinsky/${PN}/${PNV}.tar.gz"
 HOMEPAGE="http://acoustid.org/chromaprint"
 LICENCES="LGPL-2.1"
 SUMMARY="A library that implements an algorithm for extracting fingerprints from any audio source."
