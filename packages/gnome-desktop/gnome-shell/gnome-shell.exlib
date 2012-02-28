@@ -1,0 +1,22 @@
+# Copyright 2011 Saleem Abdulrasool <compnerd@compnerd.org>
+# Distributed under the terms of the GNU General Public License v2
+
+if ever at_least 3.2 ; then
+    require gnome.org [ suffix=.tar.xz ]
+else
+    require gnome.org
+fi
+
+require gsettings
+
+SUMMARY="GNOME Shell provides core interface functions for GNOME 3"
+DESCRIPTION="
+GNOME Shell is the defining technology of the GNOME 3 desktop user experience. It provides core
+interface functions like switching to windows and launching applications. GNOME Shell takes
+advantage of the capabilities of modern graphics hardware and introduces innovative user interface
+concepts to provide a delightful and easy to use experience
+"
+HOMEPAGE="http://live.gnome.org/GnomeShell"
+
+BUGS_TO="spoonb@exherbo.org"
+
