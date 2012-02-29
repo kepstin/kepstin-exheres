@@ -10,14 +10,14 @@ MYOPTIONS="gtk-doc systemd"
 
 DEPENDENCIES="
     build:
-	app-doc/gtk-doc-autotools[>=1.15]
+        app-doc/gtk-doc-autotools[>=1.15]
         dev-util/intltool[>=0.40]
         dev-util/pkg-config[>=0.22]
-	gnome-base/gnome-common
-	sys-devel/autoconf:2.5[>=2.53]
-	sys-devel/automake:1.11
+        gnome-base/gnome-common
+        sys-devel/autoconf:2.5[>=2.53]
+        sys-devel/automake:1.11
         sys-devel/gettext[>=0.17]
-	sys-devel/libtool[>=1.4.3]
+        sys-devel/libtool[>=1.4.3]
         gtk-doc? ( dev-doc/gtk-doc[>=1.15] )
     build+run:
         x11-libs/clutter:1[>=1.9.11][gobject-introspection]
@@ -89,7 +89,7 @@ DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( gtk-doc )
 DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( systemd )
 
 src_prepare() {
-	default
+    default
 
-	NOCONFIGURE=1 ./autogen.sh
+    NOCONFIGURE=1 edo ./autogen.sh
 }
