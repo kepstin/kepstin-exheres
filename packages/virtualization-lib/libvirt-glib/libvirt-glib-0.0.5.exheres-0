@@ -1,0 +1,37 @@
+# Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SLOT="0"
+DOWNLOADS="http://libvirt.org/sources/glib/${PNV}.tar.gz"
+HOMEPAGE="http://libvirt.org/"
+LICENCES="LGPL-2.1"
+SUMMARY="GObject-based wrapper API for libvirt"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    gobject-introspection
+    vala [[ description = [ Install vala bindings ] ]]
+
+    vala [[ requires = gobject-introspection ]]
+"
+DEPENDENCIES="
+    build:
+        gobject-introspection? (
+            gnome-desktop/gobject-introspection:1[>=0.10.8]
+        )
+        vala? (
+            dev-lang/vala:*[>=0.13]
+        )
+    build+run:
+        virtualization-lib/libvirt[>=0.9.10]
+        dev-libs/glib:2[>=2.22.0]
+        dev-libs/libxml2:2.0
+"
+
+DEFAULT_SRC_CONFIGURE_PARAMS=(
+    "--disable-static"
+    "--without-python"
+)
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    "gobject-introspection introspection"
+    "vala"
+)
