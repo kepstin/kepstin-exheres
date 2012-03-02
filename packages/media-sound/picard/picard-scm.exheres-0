@@ -28,7 +28,7 @@ DEPENDENCIES="
         media-libs/libdiscid
         x11-libs/qt:4[>=4.5]
         puid? (
-            media/ffmpeg
+            virtual/ffmpeg
             media-libs/libofa
         )
     suggestion:

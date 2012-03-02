@@ -11,7 +11,7 @@ SUMMARY="A library that implements an algorithm for extracting fingerprints from
 PLATFORMS="~amd64"
 DEPENDENCIES="
 	build+run:
-		media/ffmpeg
+		virtual/ffmpeg
 "
 MYOPTIONS="
 	examples [[ description = [ Build the example scanning tool fpcalc ] ]]
