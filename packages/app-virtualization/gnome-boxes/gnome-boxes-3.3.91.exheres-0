@@ -1,7 +1,7 @@
 # Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require gnome.org [ suffix=.tar.xz ] gsettings
+require gnome.org [ suffix=.tar.xz ] gsettings gtk-icon-cache
 
 SUMMARY="A simple GNOME 3 application to access remote or virtual systems."
 HOMEPAGE="http://live.gnome.org/Boxes"
@@ -32,3 +32,13 @@ DEPENDENCIES="
 DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
     "logos"
 )
+
+pkg_postinst() {
+	gtk_icon_cache_exlib_update_theme_cache
+	gsettings_exlib_compile_gsettings_schemas
+}
+
+pkg_postrm() {
+	gtk_icon_cache_exlib_update_theme_cache
+	gsettings_exlib_compile_gsettings_schemas
+}
