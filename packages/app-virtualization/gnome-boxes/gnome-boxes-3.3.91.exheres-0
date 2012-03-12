@@ -9,6 +9,7 @@ HOMEPAGE="http://live.gnome.org/Boxes"
 LICENCES="|| ( LGPL-2 LGPL-2.1 LGPL-3 ) [[ note = [ LGPL-2 or later ] ]]"
 SLOT="0"
 PLATFORMS="~amd64"
+MYOPTIONS="logos [[ description = [ Install non-free OS logo images ] ]]"
 
 DEPENDENCIES="
     build:
@@ -22,8 +23,12 @@ DEPENDENCIES="
         dev-libs/libxml2[>=2.7.8]
         sys-fs/udev[>=147][glib]
         sys-libs/libosinfo:1.0[>=0.0.6]
-        virtualization-lib/libvirt-glib[>=0.0.5]
+        virtualization-lib/libvirt-glib[>=0.0.6]
         virtualization-ui/spice-gtk:3.0[>=0.9]
         x11-libs/clutter-gtk:1.0[>=1.0.1]
         x11-libs/gtk+:3[>=3.3.5]
 "
+
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    "logos"
+)
