@@ -1,7 +1,7 @@
 # Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require gnome.org [ suffix=.tar.xz ]
+require gnome.org [ suffix=.tar.xz ] gsettings
 
 SUMMARY="A simple GNOME 3 application to access remote or virtual systems."
 HOMEPAGE="http://live.gnome.org/Boxes"
