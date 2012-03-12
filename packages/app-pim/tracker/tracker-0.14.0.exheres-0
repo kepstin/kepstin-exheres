@@ -1,0 +1,195 @@
+# Copyright 2008 Saleem Abdulrasool <compnerd@compnerd.org>
+# Distributed under the terms of the GNU General Purpose License v2
+
+require gnome.org [ suffix=.tar.xz ]
+require gsettings
+
+SUMMARY="A tool designed to extract information and metadata about your personal data"
+HOMEPAGE="http://www.tracker-project.org/"
+
+LICENCES="GPL-2"
+SLOT="0.14"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="
+album-art [[ description = [ use gdk-pixbuf for mp3 album art ] ]]
+cue [[ description = [ parse cuesheet files ] ]]
+evolution exif
+firefox [[ description = [ build firefox miner ] ]]
+flac [[ description = [ use libflac for flac extraction ] ]]
+flickr [[ description = [ build flickr miner ] ]]
+gif [[ description = [ use giflib for gif extraction ] ]]
+gobject-introspection
+gstreamer [[ description = [ use gstreamer for media extraction ] ]]
+gtk-doc
+iptc [[ description = [ extract IPTC information from photos ] ]]
+jpeg [[ description = [ use libjpeg for jpeg extraction ] ]]
+keyring
+ms-office [[ description = [ use libgsf for Office document extraction ] ]]
+nautilus
+needle [[ description = [ build tracker-needle ] ]]
+networkmanager
+osinfo [[ description = [ extract information from bootable ISO images ] ]]
+pdf [[ description = [ support PDF extraction ] ]]
+playlist [[ description = [ use libtotm-pl-parser for playlist extraction ] ]]
+preferences [[ description = [ build tracker-preferences ] ]]
+search-bar [[ description = [ build tracker-search-bar ] ]]
+taglib [[ description = [ support taglib for auto writeback ] ]]
+thunderbird [[ description = [ build thunderbird miner ] ]]
+tiff [[ description = [ use libtiff for tiff extraction ] ]]
+upower [[ description = [ support battery/power detection ] ]]
+vorbis [[ description = [ use libvorbis for vorbis extraction ] ]]
+xmp [[ description = [ Extractor for XMP data ] ]]
+linguas: ru"
+
+DEPENDENCIES="
+    build:
+        dev-lang/vala[>=0.13.4]
+        dev-util/pkg-config[>=0.20]
+        dev-util/intltool[>=0.40.0]
+        gtk-doc? ( dev-doc/gtk-doc[>=1.8] )
+        gobject-introspection? ( gnome-desktop/gobject-introspection[>=0.9.5] )
+    build+run:
+        media-libs/libpng[>=1.2]
+        dev-libs/glib:2[>=2.28.0]
+        dev-db/sqlite:3[>=3.7.0]
+        sys-apps/dbus[>=1.3.1]
+        sys-apps/util-linux [[ note = [ for libuuid ] ]]
+        base/libgee:1.0[>=0.3] [[ note = [ automagic dependency for tracker-resdump ] ]]
+        dev-libs/libunistring [[ note = [ preferred over icu by upstream ] ]]
+        x11-libs/pango[>=1.0.0]
+        dev-libs/libxml2:2.0[>=2.6] [[ note = [ for xml/html extraction, perhaps optionalise? ] ]]
+        album-art? ( x11-libs/gdk-pixbuf:2.0[>=2.12.0] )
+        cue? ( media-libs/libcue )
+        evolution? ( mail-client/evolution[>=3.0.0]
+                     gnome-desktop/evolution-data-server:1.2[>=2.32.0] )
+        exif? ( media-libs/libexif[>=0.6] )
+        firefox? ( net-www/firefox[=5.0*] )
+        flac? ( media-libs/flac[>=1.2.1] )
+        flickr? ( net-libs/rest[>=0.7] )
+        gif? ( media-libs/giflib )
+        gstreamer? ( media-libs/gstreamer:0.10[>=0.10.31]
+                     media-plugins/gst-plugins-base:0.10[>=0.10.31] )
+        iptc? ( media-libs/libiptcdata )
+        jpeg? ( media-libs/jpeg )
+        keyring? ( gnome-desktop/gnome-keyring:1[>=2.26] )
+        ms-office? ( office-libs/libgsf:1[>=1.13] )
+        nautilus? ( gnome-desktop/nautilus )
+        needle? ( x11-libs/gtk+:3[>=3.0.0] )
+        networkmanager? ( net-apps/NetworkManager[>=0.8] )
+        osinfo? ( sys-libs/libosinfo:1.0[>=0.0.2] )
+        pdf? ( app-text/poppler[glib][>=0.16.0] )
+        playlist? ( gnome-desktop/totem-pl-parser )
+        preferences? ( x11-libs/gtk+:3[>=3.0.0] )
+        search-bar? ( x11-libs/gtk+:3[>=3.0.0]
+                      x11-libs/gdk-pixbuf:2.0[>=2.12.0]
+                      x11-libs/pango[>=1.0.0]
+                      base/libgee[>=0.3]
+                      gnome-desktop/gnome-panel:4.0 )
+        taglib? ( media-libs/taglib[>=1.6] )
+        thunderbird? ( mail-client/thunderbird[=5.0*] )
+        tiff? ( media-libs/tiff )
+        upower? ( sys-apps/upower[>=0.9.0] )
+        vorbis? ( media-libs/libvorbis[>=0.22] )
+        xmp? ( media-libs/exempi:2.0[>=2.1.0] )
+        linguas:ru? ( app-text/enca[>=1.9] )
+       !app-pim/tracker[<0.14] [[ description = [ Many file collisions ] ]]
+"
+
+# tracker-miner-rss requires libgrss:0
+
+# TODO (compnerd) figure out why the password tests just hang
+#DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}/disable-tracker-password-tests.patch"
+#                              "${FILES}/0001-tests-only-run-exif-tests-if-exif-support-is-enabled.patch" )
+
+DEFAULT_SRC_CONFIGURE_PARAMS=( '--disable-maemo'
+                               '--enable-journal'
+                               '--enable-tracker-fts'
+                               '--disable-hal'
+                               '--with-unicode-support=libunistring'
+                               '--disable-meegotouch'
+                               '--disable-miner-rss'
+                               '--disable-tracker-explorer'
+                               '--disable-libstreamanalyzer'
+                               '--enable-libxml2'
+                               '--disable-qt'
+                               '--enable-unzip-psgz-files'
+                               '--disable-guarantee-metadata' )
+
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'album-art gdkpixbuf'
+                                       'cue libcue'
+                                       'evolution miner-evolution'
+                                       'exif libexif'
+                                       'firefox miner-firefox'
+                                       'flac libflac'
+                                       'flickr miner-flickr'
+                                       'gif libgif'
+                                       'gobject-introspection introspection'
+                                       'gstreamer generic-media-extractor gstreamer'
+                                       'gtk-doc'
+                                       'iptc libiptcdata'
+                                       'jpeg libjpeg'
+                                       'keyring gnome-keyring'
+                                       'ms-office libgsf'
+                                       'nautilus nautilus-extension'
+                                       'needle tracker-needle'
+                                       'networkmanager network-manager'
+                                       'pdf poppler'
+                                       'playlist'
+                                       'preferences tracker-preferences'
+                                       'search-bar tracker-search-bar'
+                                       'taglib'
+                                       'thunderbird miner-thunderbird'
+                                       'tiff libtiff'
+                                       'upower'
+                                       'vorbis libvorbis'
+                                       'xmp exempi' )
+
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( 'gstreamer gstreamer-backend discoverer' 'linguas:ru enca' )
+
+src_test() {
+    local success=
+
+    unset DISPLAY
+    unset DBUS_SESSION_BUS_PID
+    unset DBUS_SESSION_BUS_ADDRESS
+
+    # redirect any configuration and user settings to temp via XDG variables
+    export XDG_DATA_HOME=${TEMP}
+    export XDG_CACHE_HOME=${TEMP}
+    export XDG_CONFIG_HOME=${TEMP}
+
+    # G_DBUS_COOKIE_SHA1_KEYRING_DIR requires 0700, ${TEMP} is 0755
+    export G_DBUS_COOKIE_SHA1_KEYRING_DIR_IGNORE_PERMISSION=1
+    export G_DBUS_COOKIE_SHA1_KEYRING_DIR=${TEMP}
+
+    # use the memory backend for settings to ensure that the system settings in dconf remain
+    # untouched by the tests
+    export GSETTINGS_BACKEND=memory
+
+    esandbox allow_net 'unix-abstract:/tmp/dbus-*'
+    esandbox allow_net "unix:${TEMP%/}/keyring-*/control"
+
+    echo "Launching DBus session bus..."
+    eval $(dbus-launch --sh-syntax)
+    [[ -n ${DBUS_SESSION_BUS_PID} ]] || die "failed to launch DBus session bus"
+
+    nonfatal emake TZ=UTC LANG=C LC_ALL=C HOME="${TEMP}" check
+    success=${?}
+
+    edo kill ${DBUS_SESSION_BUS_PID}
+
+    esandbox disallow_net "unix:${TEMP%/}/keyring-*/control"
+    esandbox disallow_net 'unix-abstract:/tmp/dbus-*'
+
+    [[ ${success} == 0 ]] || die "emake check failed"
+}
+
+src_install() {
+    gsettings_src_install
+
+    keepdir "/usr/${LIBDIR}/tracker-${SLOT}/writeback-modules"
+    edo rm "${IMAGE}"/usr/share/tracker-tests/01-writeback.py
+    edo rmdir "${IMAGE}"/usr/share/tracker-tests/
+    option flickr || edo rmdir "${IMAGE}"/usr/share/tracker/icons
+}
+
