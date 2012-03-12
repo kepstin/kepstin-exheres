@@ -1,7 +1,7 @@
 # Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require gnome.org
+require gnome.org [ suffix=.tar.xz ]
 
 SUMMARY="A simple GNOME 3 application to access remote or virtual systems."
 HOMEPAGE="http://live.gnome.org/Boxes"
@@ -16,7 +16,7 @@ DEPENDENCIES="
         dev-util/pkg-config[>=0.22]
         gnome-desktop/gobject-introspection:1[>=0.9.6]
     build+run:
-        app-pim/tracker:0.14[>=0.13.1]
+        app-pim/tracker:0.14[>=0.13.1][osinfo(-)]
         dev-libs/glib:2[>=2.29.90]
         dev-libs/gtk-vnc:2.0[>=0.4.4]
         dev-libs/libxml2[>=2.7.8]
