@@ -9,7 +9,7 @@ HOMEPAGE="http://live.gnome.org/Boxes"
 LICENCES="|| ( LGPL-2 LGPL-2.1 LGPL-3 ) [[ note = [ LGPL-2 or later ] ]]"
 SLOT="0"
 PLATFORMS="~amd64"
-MYOPTIONS="logos [[ description = [ Install non-free OS logo images ] ]]"
+MYOPTIONS="logos [[ description = [ Install unredistributable OS logo images ] ]]"
 
 DEPENDENCIES="
     build:
