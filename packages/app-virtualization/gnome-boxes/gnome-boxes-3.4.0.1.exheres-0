@@ -23,7 +23,7 @@ DEPENDENCIES="
         dev-libs/libxml2[>=2.7.8]
         sys-fs/udev[>=165][glib]
         sys-libs/libosinfo:1.0[>=0.0.6]
-        virtualization-lib/libvirt-glib[>=0.0.6]
+        virtualization-lib/libvirt-glib[>=0.0.7]
         virtualization-ui/spice-gtk:3.0[>=0.9]
         x11-libs/clutter-gtk:1.0[>=1.0.1]
         x11-libs/gtk+:3[>=3.3.5]
@@ -34,11 +34,11 @@ DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
 )
 
 pkg_postinst() {
-	gtk_icon_cache_exlib_update_theme_cache
-	gsettings_exlib_compile_gsettings_schemas
+    gtk_icon_cache_exlib_update_theme_cache
+    gsettings_exlib_compile_gsettings_schemas
 }
 
 pkg_postrm() {
-	gtk_icon_cache_exlib_update_theme_cache
-	gsettings_exlib_compile_gsettings_schemas
+    gtk_icon_cache_exlib_update_theme_cache
+    gsettings_exlib_compile_gsettings_schemas
 }
