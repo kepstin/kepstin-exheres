@@ -1,0 +1,17 @@
+# Copyright (c) 2009 Jan Meier
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ suffix="tar.gz" ]
+
+SUMMARY="A simple set of tools to help you author a DVD."
+SLOT="0"
+LICENCES="GPL-2"
+PLATFORMS="~amd64 ~x86"
+DEPENDENCIES="
+    dev-libs/fribidi
+"
+WORK="${WORKBASE}/${PN}"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}/${PNV}-libpng-1.5.patch"
+)
