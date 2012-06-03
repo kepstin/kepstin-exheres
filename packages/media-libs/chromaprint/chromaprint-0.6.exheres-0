@@ -1,7 +1,7 @@
 # Copyright © 2011 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require cmake
+require cmake [ api=2 ]
 
 SLOT="0"
 DOWNLOADS="https://github.com/downloads/lalinsky/${PN}/${PNV}.tar.gz"
