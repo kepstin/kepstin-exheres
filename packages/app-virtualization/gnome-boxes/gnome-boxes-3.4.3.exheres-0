@@ -25,8 +25,8 @@ DEPENDENCIES="
             sys-apps/systemd[>=183-r2]
             sys-fs/udev[>=165][glib]
         )
-        sys-libs/libosinfo:1.0[>=0.0.6]
-        virtualization-lib/libvirt-glib[>=0.0.7]
+        sys-libs/libosinfo:1.0[>=0.1.1]
+        virtualization-lib/libvirt-glib[>=0.0.8]
         virtualization-ui/spice-gtk:3.0[>=0.9]
         x11-libs/clutter-gtk:1.0[>=1.0.1]
         x11-libs/gtk+:3[>=3.3.5]
