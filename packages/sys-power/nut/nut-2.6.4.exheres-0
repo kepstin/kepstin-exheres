@@ -1,0 +1,82 @@
+# Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require systemd-service udev-rules
+
+SUMMARY="Network UPS Tools"
+DESCRIPTION="
+Network UPS Tools (NUT) is a client/server monitoring system that allowsi
+computers to share uninterruptible power supply (UPS) and power distribution
+unit (PDU) hardware. Clients access the hardware through the server, and are
+notified whenever the power status changes.
+"
+HOMEPAGE="http://www.networkupstools.com/"
+DOWNLOADS="http://www.networkupstools.org/source/2.6/nut-2.6.4.tar.gz"
+
+LICENCES="GPL-2"
+# Note: The Python library is GPL-3, and the Perl module is GPL-1+/Artistic
+
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    avahi [[ description = [ Scan for remote networked NUT UPSes ] ]]
+    doc [[ description = [ Build and install documentation ] ]]
+    ssl [[ description = [ Encrypt and authenticate network UPS connections ] ]]
+    systemd [[ description = [ Install unit files for systemd ] ]]
+    tcpd
+
+    serial [[ description = [ drivers for serial (RS-232) UPS devices ] ]]
+    usb [[ description = [ drivers for USB UPS devices ] ]]
+    snmp [[ description = [ drivers for UPS devices with SNMP interface ] ]]
+    xml [[ description = [ drivers for UPS devices with XML/HTTP interface ] ]]
+    powerman [[ description = [ driver for Powerman PDU ] ]]
+"
+# Currently, the following features aren't enabled:
+# ipmi driver - needs FreeIPMI (and not OpenIPMI...)
+# cgi - web interface to NUT. Needs external web server and gd.
+# Python and Perl libraries
+
+DEPENDENCIES="
+    build:
+        dev-util/pkg-config
+        doc? ( app-doc/asciidoc[>=8.6.3] )
+    build+run:
+        user/nut
+        avahi? ( net-dns/avahi[>=0.6.30] )
+        ssl? ( dev-libs/openssl )
+        tcpd? ( sys-apps/tcp-wrappers )
+
+        usb? ( dev-libs/libusb:0.1 )
+        snmp? ( net/net-snmp )
+        xml? ( net-misc/neon[>=0.25.0] )
+        powerman? ( sys-power/powerman )
+"
+
+BUGS_TO=""
+
+DEFAULT_SRC_CONFIGURE_PARAMS=(
+    --disable-static
+
+    --without-hal
+    --without-ipmi
+    --with-libltdl
+
+    --with-user=nut
+    --with-group=nut
+
+    --without-hotplug-dir
+    --with-udev-dir=${UDEVRULESDIR}
+)
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
+    avahi
+    doc
+    "systemd systemdsystemunitdir ${SYSTEMDSYSTEMUNITDIR}"
+    "tcpd wrap"
+    serial
+    usb
+    snmp
+    "xml neon"
+    powerman
+)
+
+
