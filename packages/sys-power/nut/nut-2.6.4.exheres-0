@@ -24,12 +24,12 @@ MYOPTIONS="
     ssl [[ description = [ Encrypt and authenticate network UPS connections ] ]]
     systemd [[ description = [ Install unit files for systemd ] ]]
     tcpd
-
-    serial [[ description = [ drivers for serial (RS-232) UPS devices ] ]]
-    usb [[ description = [ drivers for USB UPS devices ] ]]
-    snmp [[ description = [ drivers for UPS devices with SNMP interface ] ]]
-    xml [[ description = [ drivers for UPS devices with XML/HTTP interface ] ]]
-    powerman [[ description = [ driver for Powerman PDU ] ]]
+    nut_drivers:
+        serial [[ description = [ serial (RS-232) UPS devices ] ]]
+        usb [[ description = [ USB-connected UPS devices ] ]]
+        snmp [[ description = [ UPS devices with SNMP interface ] ]]
+        xml [[ description = [ UPS devices with XML/HTTP interface ] ]]
+        powerman [[ description = [ Powerman PDU ] ]]
 "
 # Currently, the following features aren't enabled:
 # ipmi driver - needs FreeIPMI (and not OpenIPMI...)
@@ -46,10 +46,10 @@ DEPENDENCIES="
         ssl? ( dev-libs/openssl )
         tcpd? ( sys-apps/tcp-wrappers )
 
-        usb? ( dev-libs/libusb:0.1 )
-        snmp? ( net/net-snmp )
-        xml? ( net-misc/neon[>=0.25.0] )
-        powerman? ( sys-power/powerman )
+        nut_drivers:usb? ( dev-libs/libusb:0.1 )
+        nut_drivers:snmp? ( net/net-snmp )
+        nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
+        nut_drivers:powerman? ( sys-power/powerman )
 "
 
 BUGS_TO=""
@@ -57,6 +57,7 @@ BUGS_TO=""
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --sysconfdir=/etc/nut
     --datarootdir=/usr/share/nut
+    --datadir=/usr/share/nut
 
     --with-drvpath=/usr/libexec/nut
     --with-statepath=/var/lib/nut
@@ -80,11 +81,27 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     doc
     "systemd systemdsystemunitdir ${SYSTEMDSYSTEMUNITDIR}"
     "tcpd wrap"
-    serial
-    usb
-    snmp
-    "xml neon"
-    powerman
+    nut_drivers:serial
+    nut_drivers:usb
+    nut_drivers:snmp
+    "nut_drivers:xml neon"
+    nut_drivers:powerman
 )
 
+src_install() {
+    default
 
+    # Rename the 'sample' config files; config-protect will stop overwrites.
+    for conf in ${IMAGE}/etc/nut/*.sample; do
+        edo mv $conf ${IMAGE}/etc/nut/$(basename $file .sample)
+    done
+
+    # Workaround the hardcoded install path for the system-shutdown script
+    if option systemd; then
+        edo mv ${IMAGE}/lib/systemd/system-shutdown/nutshutdown \
+               ${IMAGE}/${SYSTEMDSYSTEMUNITDIR}/../system-shutdown
+        edo rmdir ${IMAGE}/lib/systemd/system-shutdown
+        edo rmdir ${IMAGE}/lib/systemd
+        edo rmdir ${IMAGE}/lib
+    fi
+}
