@@ -59,7 +59,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --datadir=/usr/share/nut
     --htmldir=/usr/share/doc/${PNVR}/html
 
-    --with-drvpath=/usr/libexec/nut
+    --with-drvpath=/usr/sbin
     --with-statepath=/var/lib/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
@@ -93,7 +93,7 @@ src_install() {
 
     # Rename the 'sample' config files; config-protect will stop overwrites.
     for conf in ${IMAGE}/etc/nut/*.sample; do
-        edo mv $conf ${IMAGE}/etc/nut/$(basename $file .sample)
+        edo mv $conf ${IMAGE}/etc/nut/$(basename $conf .sample)
     done
 
     # Workaround the hardcoded install path for the system-shutdown script
