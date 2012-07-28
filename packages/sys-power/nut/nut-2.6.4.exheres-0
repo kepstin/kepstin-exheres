@@ -20,7 +20,6 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
     avahi [[ description = [ Scan for remote networked NUT UPSes ] ]]
-    doc [[ description = [ Build and install documentation ] ]]
     ssl [[ description = [ Encrypt and authenticate network UPS connections ] ]]
     systemd [[ description = [ Install unit files for systemd ] ]]
     tcpd
@@ -35,11 +34,11 @@ MYOPTIONS="
 # ipmi driver - needs FreeIPMI (and not OpenIPMI...)
 # cgi - web interface to NUT. Needs external web server and gd.
 # Python and Perl libraries
+# Compile html/pdf documentation
 
 DEPENDENCIES="
     build:
         dev-util/pkg-config
-        doc? ( app-doc/asciidoc[>=8.6.3] )
     build+run:
         user/nut
         avahi? ( net-dns/avahi[>=0.6.30] )
@@ -76,10 +75,10 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --without-hal
     --without-ipmi
     --with-libltdl
+    --without-doc
 )
 DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     avahi
-    doc
     "systemd systemdsystemunitdir ${SYSTEMDSYSTEMUNITDIR}"
     "tcpd wrap"
     nut_drivers:serial
@@ -109,9 +108,7 @@ src_install() {
     edo rmdir ${IMAGE}/usr/share/man/man1
 
     # installs empty html directory if docs are disabled
-    if !option doc; then
-        edo rmdir ${IMAGE}/usr/share/doc/${PNVR}/html
-    fi
+    edo rmdir ${IMAGE}/usr/html
 
     # installs empty cgi-bin directory if cgi is disabled
     edo rmdir ${IMAGE}/usr/cgi-bin
