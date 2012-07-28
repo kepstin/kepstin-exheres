@@ -58,6 +58,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --sysconfdir=/etc/nut
     --datarootdir=/usr/share/nut
     --datadir=/usr/share/nut
+    --htmldir=/usr/share/doc/${PNVR}/html
 
     --with-drvpath=/usr/libexec/nut
     --with-statepath=/var/lib/nut
@@ -98,10 +99,20 @@ src_install() {
 
     # Workaround the hardcoded install path for the system-shutdown script
     if option systemd; then
-        edo mv ${IMAGE}/lib/systemd/system-shutdown/nutshutdown \
-               ${IMAGE}/${SYSTEMDSYSTEMUNITDIR}/../system-shutdown
-        edo rmdir ${IMAGE}/lib/systemd/system-shutdown
-        edo rmdir ${IMAGE}/lib/systemd
-        edo rmdir ${IMAGE}/lib
+        edo mv ${IMAGE}/lib/systemd/system-shutdown \
+               ${IMAGE}/${SYSTEMDSYSTEMUNITDIR}/../
+        edo rmdir ${IMAGE}/lib/systemd \
+                  ${IMAGE}/lib
     fi
+
+    # man1 only used if pkg-config is disabled
+    edo rmdir ${IMAGE}/usr/share/man/man1
+
+    # installs empty html directory if docs are disabled
+    if !option doc; then
+        edo rmdir ${IMAGE}/usr/share/doc/${PNVR}/html
+    fi
+
+    # installs empty cgi-bin directory if cgi is disabled
+    edo rmdir ${IMAGE}/usr/cgi-bin
 }
