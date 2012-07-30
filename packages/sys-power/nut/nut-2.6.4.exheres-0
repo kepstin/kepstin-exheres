@@ -15,6 +15,7 @@ DOWNLOADS="http://www.networkupstools.org/source/2.6/nut-2.6.4.tar.gz"
 
 LICENCES="GPL-2"
 # Note: The Python library is GPL-3, and the Perl module is GPL-1+/Artistic
+# Neither is currently installed.
 
 SLOT="0"
 PLATFORMS="~amd64"
