@@ -80,7 +80,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
 )
 DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     avahi
-    "systemd systemdsystemunitdir $(dirname ${SYSTEMDSYSTEMUNITDIR})"
+    "systemd systemdsystemunitdir ${SYSTEMDSYSTEMUNITDIR}"
     "tcpd wrap"
     nut_drivers:serial
     nut_drivers:usb
@@ -103,7 +103,7 @@ src_install() {
     if option systemd; then
         # Workaround the hardcoded install path for the system-shutdown script
         edo mv ${IMAGE}/lib/systemd/system-shutdown \
-               ${IMAGE}/${SYSTEMDSYSTEMUNITDIR}/../
+               ${IMAGE}/$(dirname ${SYSTEMDSYSTEMUNITDIR})
         edo rmdir ${IMAGE}/lib/systemd \
                   ${IMAGE}/lib
 
