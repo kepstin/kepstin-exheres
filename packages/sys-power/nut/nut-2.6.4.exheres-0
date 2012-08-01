@@ -64,7 +64,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --with-statepath=/var/lib/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
-    --with-udev-dir=${UDEVRULESDIR}
+    --with-udev-dir=$(dirname ${UDEVRULESDIR})
     --without-hotplug-dir
 
     --with-user=nut
