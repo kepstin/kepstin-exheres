@@ -131,6 +131,8 @@ src_install() {
 
 pkg_postinst() {
     if option systemd; then
-        systemd-tmpfiles --create /etc/tmpfiles.d/nut.conf
+        # Create the /run/nut directory right away so people can start the
+        # services without rebooting or a manual step.
+        edo systemd-tmpfiles --create /etc/tmpfiles.d/nut.conf
     fi
 }
