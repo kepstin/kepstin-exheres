@@ -128,3 +128,9 @@ src_install() {
     # Installs empty cgi-bin directory if cgi is disabled
     edo rmdir ${IMAGE}/usr/cgi-bin
 }
+
+pkg_postinst() {
+    if option systemd; then
+        systemd-tmpfiles --create /etc/tmpfiles.d/nut.conf
+    fi
+}
