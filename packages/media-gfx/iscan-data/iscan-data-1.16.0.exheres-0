@@ -1,0 +1,64 @@
+# Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require udev-rules
+
+# Set this to match the arbitrary package build number on the archive.
+P_REV="3"
+
+SUMMARY="Image Scan! for Linux data files"
+DESCRIPTION="
+Provides the necessary support files for Image Scan! for Linux,
+including device information and policy file generation logic.
+
+Image Scan! for Linux will not function without this package.
+"
+HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
+
+DOWNLOADS="manual: ${PN}_${PV}-${P_REV}.tar.gz"
+RESTRICT="fetch"
+
+LICENCES="GPL-2"
+SLOT="0"
+
+PLATFORMS="~amd64 ~x86"
+
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        dev-libs/libxslt
+        || ( sys-fs/udev sys-apps/systemd )
+"
+
+BUGS_TO="calvin.walton@kepstin.ca"
+
+pkg_nofetch()
+{
+    if ! [[ -f "${FETCHEDDIR}/${ARCHIVES}" ]] ; then
+        echo "Please go to:"
+        echo "  http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
+        echo "and enter your printer model. Click download next to the"
+        echo "\"core package & data package\" module, then download the file:"
+        echo "  ${ARCHIVES}"
+        echo "and save it to your distfiles directory."
+    fi
+}
+
+src_compile()
+{
+    default
+
+    # Rather than generate the udev rules in postinstall like they do in the
+    # Debian and RedHat packaging, build and install them now.
+    sh policy/make-policy-file --mode=udev --desc-file=epkowa.desc \
+                               --out-file=70-iscan.rules
+}
+
+src_install()
+{
+    default
+
+    insinto ${UDEVRULESDIR}
+    doins 70-iscan.rules
+}
