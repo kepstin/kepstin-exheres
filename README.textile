@@ -4,3 +4,5 @@ Packages in here:
 * Development and beta versions of Musicbrainz Picard.
 * Libraries and tools for chromaprint/acoustid
 * Work in progress packaging for gnome-boxes (and dependencies)
+* The 'epkowa' (iscan) drivers for EPSON scanners.
+* The NUT (Network UPS Tools) package.
