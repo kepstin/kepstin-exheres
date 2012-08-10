@@ -89,5 +89,6 @@ src_install()
     if ! option frontend
     then
         rmdir ${IMAGE}/usr/bin
+        rmdir ${IMAGE}/usr/share/man/man1
     fi
 }
