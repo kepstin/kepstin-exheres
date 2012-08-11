@@ -1,8 +1,6 @@
 # Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-# This exheres has the frontend/gui code temporarily disabled.
-
 # Set this to match the arbitrary package build number on the archive.
 P_REV="5"
 
@@ -24,12 +22,21 @@ HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
 DOWNLOADS="manual: ${PN}_${PV}-${P_REV}.tar.gz"
 RESTRICT="fetch"
 
-LICENCES="GPL-2"
+LICENCES="GPL-2 frontend? ( AVASYSPL ) "
 SLOT="0"
 
+# The frontend links to a binary library that is shipped only for x86 and amd64
+# The backend may build on other platforms, but some scanners require binary
+# plugins that are amd64/x86-only
 PLATFORMS="~amd64 ~x86"
 
-MYOPTIONS=""
+MYOPTIONS="
+    frontend [[ description = [ the EPSON-specific graphical interface ] ]]
+    gimp [[ description = [ GIMP plugin for the EPSON-specific frontend ] ]]
+    tiff
+    
+    gimp [[ requires = frontend ]]
+"
 
 DEPENDENCIES="
     build+run:
@@ -37,6 +44,13 @@ DEPENDENCIES="
         dev-libs/libusb:1
         media-gfx/sane-backends
         sys-devel/libtool [[ note = [ Uses libltdl ] ]]
+        frontend? (
+            x11-libs/gtk+:2
+            media-libs/libpng
+            media-libs/jpeg
+        )
+        gimp? ( media-gfx/gimp[<3] )
+        tiff? ( media-libs/tiff )
     run:
         media-gfx/iscan-data
 "
@@ -46,8 +60,10 @@ BUGS_TO="calvin.walton@kepstin.ca"
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --disable-rpath
     --disable-static
-    --disable-frontend
+    --enable-jpeg
+    --enable-png
 )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( frontend gimp tiff )
 
 pkg_nofetch()
 {
@@ -61,10 +77,18 @@ pkg_nofetch()
     fi
 }
 
+src_prepare()
+{
+    expatch -p0 "${FILES}/iscan-2.28.1.3+libpng-1.5.patch"
+}
+
 src_install()
 {
     default
 
-    rmdir ${IMAGE}/usr/bin
-    rmdir ${IMAGE}/usr/share/man/man1
+    if ! option frontend
+    then
+        rmdir ${IMAGE}/usr/bin
+        rmdir ${IMAGE}/usr/share/man/man1
+    fi
 }
