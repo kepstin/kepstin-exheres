@@ -3,6 +3,9 @@
 
 require udev-rules
 
+# Set this to match the arbitrary package build number on the archive.
+P_REV="3"
+
 SUMMARY="Image Scan! for Linux data files"
 DESCRIPTION="
 Provides the necessary support files for Image Scan! for Linux,
@@ -12,8 +15,7 @@ Image Scan! for Linux will not function without this package.
 "
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
 
-DOWNLOADS="manual: ${PN}_$(ever replace 3 -).tar.gz"
-WORK="${PN}-$(ever range -3)"
+DOWNLOADS="manual: ${PN}_${PV}-${P_REV}.tar.gz"
 RESTRICT="fetch"
 
 LICENCES="GPL-2"
