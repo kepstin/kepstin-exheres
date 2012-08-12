@@ -1,0 +1,60 @@
+Source: Rebased from https://bugs.gentoo.org/show_bug.cgi?id=302624 with more fixes
+Upstream: no, proprietary upstream.
+Reason: Fix build against libpng-1.5
+
+diff --git a/lib/pngstream.cc b/lib/pngstream.cc
+index b7a2a20..6cd011f 100644
+--- a/lib/pngstream.cc
++++ b/lib/pngstream.cc
+@@ -83,7 +83,8 @@ namespace iscan
+ #if HAVE_PNG_H
+     set_error_handler (_png, _info);
+ 
+-    if (_header && !_footer && _png->num_rows == _png->flush_rows)
++/* when not interlacing (ie, only one pass), number of rows is image height:  _v_sz */
++     if (!_footer && _v_sz == lib->get_current_row_number(_png))
+       {
+         lib->write_end (_png, _info);
+         _footer = true;
+@@ -167,6 +168,8 @@ namespace iscan
+     funcsym (write_row);
+     funcsym (write_flush);
+     funcsym (write_end);
++    funcsym (get_current_row_number);
++    funcsym (set_longjmp_fn);
+ 
+     if (lib->access_version_number
+         && lib->create_write_struct
+@@ -176,6 +179,8 @@ namespace iscan
+         && lib->set_IHDR
+         && lib->set_pHYs
+         && lib->set_invert_mono
++        && lib->get_current_row_number
++        && lib->set_longjmp_fn
+         && lib->write_info
+         && lib->write_row
+         && lib->write_flush
+diff --git a/lib/pngstream.hh b/lib/pngstream.hh
+index 77d4f54..91958bb 100644
+--- a/lib/pngstream.hh
++++ b/lib/pngstream.hh
+@@ -108,6 +108,10 @@ namespace iscan
+                png_structp);
+       fundecl (void, write_end,
+                png_structp, png_infop);
++      fundecl (png_uint_32, get_current_row_number,
++               png_structp);
++      fundecl (jmp_buf*, set_longjmp_fn,
++               png_structp, png_longjmp_ptr, size_t);
+ #endif /* HAVE_PNG_H */
+     };
+     static png_lib_handle *lib;
+@@ -130,7 +134,7 @@ namespace iscan
+ #if HAVE_PNG_H
+ #define set_error_handler(png, info)                            \
+   {                                                             \
+-    if (!png || !info || setjmp (png_jmpbuf (png)))             \
++    if (!png || !info || setjmp (*pngstream::lib->set_longjmp_fn(png, longjmp, sizeof (jmp_buf))))             \
+       {                                                         \
+         pngstream::lib->destroy_write_struct (&png, &info);     \
+         png = NULL;                                             \
