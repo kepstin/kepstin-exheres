@@ -103,7 +103,7 @@ src_install() {
         edo rmdir "${IMAGE}"/lib/{systemd,}
 
         # Automatically create the /run/nut directory
-        insinto /etc/tmpfiles.d
+        insinto /usr/${LIBDIR}/tmpfiles.d
         doins "${FILES}"/tmpfiles.d/nut.conf
     fi
 
