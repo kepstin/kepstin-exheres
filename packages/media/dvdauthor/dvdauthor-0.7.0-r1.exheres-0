@@ -11,8 +11,8 @@ DEPENDENCIES="
     dev-libs/fribidi
     media-libs/libpng[>=1.5]
 "
-WORK="${WORKBASE}/${PN}"
+WORK=${WORKBASE}/${PN}
 
 DEFAULT_SRC_PREPARE_PATCHES=(
-    "${FILES}/${PNV}-libpng-1.5.patch"
+    "${FILES}"/${PNV}-libpng-1.5.patch
 )
