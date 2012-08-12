@@ -105,3 +105,13 @@ src_install()
         dosym /usr/bin/iscan "${plugindir}"
     fi
 }
+
+pkg_postinst()
+{
+    if ! grep epkowa /etc/sane.d/dll.conf >/dev/null 2>&1
+    then
+        elog "To use this driver from other sane frontends, you must enable the 'epkowa'"
+        elog "backend:"
+        elog "  echo epkowa >>/etc/sane.d/dll.conf"
+    fi
+}
