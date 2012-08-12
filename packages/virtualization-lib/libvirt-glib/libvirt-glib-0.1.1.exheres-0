@@ -1,7 +1,7 @@
 # Copyright © 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-SLOT="0"
+SLOT="1.0"
 DOWNLOADS="http://libvirt.org/sources/glib/${PNV}.tar.gz"
 HOMEPAGE="http://libvirt.org/"
 LICENCES="LGPL-2.1"
@@ -25,6 +25,8 @@ DEPENDENCIES="
         virtualization-lib/libvirt[>=0.9.10]
         dev-libs/glib:2[>=2.22.0]
         dev-libs/libxml2:2.0
+
+	!virtualization-lib/libvirt-glib:0 [[ note = [ Old version didn't set SLOT ] ]]
 "
 
 DEFAULT_SRC_CONFIGURE_PARAMS=(
