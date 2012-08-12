@@ -20,9 +20,9 @@ LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
-    avahi [[ description = [ Scan for remote networked NUT UPSes ] ]]
-    ssl [[ description = [ Encrypt and authenticate network UPS connections ] ]]
-    systemd [[ description = [ Install unit files for systemd ] ]]
+    avahi
+    ssl
+    systemd
     tcpd
     nut_drivers:
         serial [[ description = [ serial (RS-232) UPS devices ] ]]
@@ -90,41 +90,32 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
 src_install() {
     default
 
-    # Rename the 'sample' config files; config-protect will stop overwrites.
-    for conf in ${IMAGE}/etc/nut/*.sample; do
-        edo mv $conf ${IMAGE}/etc/nut/$(basename $conf .sample)
-    done
-
     # Fix permissions on config files that shouldn't be world-readable.
-    chmod 0640 ${IMAGE}/etc/nut/upsd.conf \
-               ${IMAGE}/etc/nut/upsd.users
-    chgrp nut ${IMAGE}/etc/nut/upsd.conf \
-              ${IMAGE}/etc/nut/upsd.users
+    chmod 0640 "${IMAGE}/etc/nut/upsd.conf.example" \
+               "${IMAGE}/etc/nut/upsd.users"
+    chgrp nut "${IMAGE}/etc/nut/upsd.conf" \
+              "${IMAGE}/etc/nut/upsd.users"
 
     if option systemd; then
         # Workaround the hardcoded install path for the system-shutdown script
-        edo mv ${IMAGE}/lib/systemd/system-shutdown \
-               ${IMAGE}/$(dirname ${SYSTEMDSYSTEMUNITDIR})
-        edo rmdir ${IMAGE}/lib/systemd \
-                  ${IMAGE}/lib
+        edo mv "${IMAGE}/lib/systemd/system-shutdown" \
+               "${IMAGE}/$(dirname ${SYSTEMDSYSTEMUNITDIR})"
+        edo rmdir "${IMAGE}"/lib/{systemd,}
 
         # Automatically create the /run/nut directory
         insinto /etc/tmpfiles.d
-        doins $FILES/tmpfiles.d/nut.conf
-    else
-        elog "Please ensure that your init scripts create a /run/nut directory"
-        elog "owned by the 'nut' user before starting nut."
+        doins ${FILES}/tmpfiles.d/nut.conf
     fi
 
     # The man1 directory is only used if pkg-config is disabled, and we have it
     # hard-enabled.
-    edo rmdir ${IMAGE}/usr/share/man/man1
+    edo rmdir "${IMAGE}/usr/share/man/man1"
 
     # Installs empty html directory if docs are disabled
-    edo rmdir ${IMAGE}/usr/html
+    edo rmdir "${IMAGE}/usr/html"
 
     # Installs empty cgi-bin directory if cgi is disabled
-    edo rmdir ${IMAGE}/usr/cgi-bin
+    edo rmdir "${IMAGE}/usr/cgi-bin"
 }
 
 pkg_postinst() {
