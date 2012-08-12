@@ -4,7 +4,6 @@
 #     Copyright 1999-2009 Gentoo Foundation
 
 SCM_REPOSITORY="git://git.musicbrainz.org/picard"
-SCM_BRANCH="master"
 require scm-git
 
 require distutils [ has_bin=true ]
