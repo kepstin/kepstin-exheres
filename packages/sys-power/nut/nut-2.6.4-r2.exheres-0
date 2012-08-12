@@ -91,10 +91,10 @@ src_install() {
     default
 
     # Set permissions on config files that shouldn't be world-readable.
-    edo chmod 0640 "${IMAGE}"/etc/nut/upsd.conf.example \
-                   "${IMAGE}"/etc/nut/upsd.users.example
-    edo chgrp nut "${IMAGE}"/etc/nut/upsd.conf.example \
-                  "${IMAGE}"/etc/nut/upsd.users.example
+    edo chmod 0640 "${IMAGE}"/etc/nut/upsd.conf.sample \
+                   "${IMAGE}"/etc/nut/upsd.users.sample
+    edo chgrp nut "${IMAGE}"/etc/nut/upsd.conf.sample \
+                  "${IMAGE}"/etc/nut/upsd.users.sample
 
     if option systemd; then
         # Workaround the hardcoded install path for the system-shutdown script
@@ -122,6 +122,6 @@ pkg_postinst() {
     if option systemd; then
         # Create the /run/nut directory right away so people can start the
         # services without rebooting or a manual step.
-        edo systemd-tmpfiles --create /etc/tmpfiles.d/nut.conf
+        edo systemd-tmpfiles --create /usr/${LIBDIR}/tmpfiles.d/nut.conf
     fi
 }
