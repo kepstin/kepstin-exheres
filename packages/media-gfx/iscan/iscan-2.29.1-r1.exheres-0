@@ -22,7 +22,8 @@ be used with this software.
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
 
 DOWNLOADS="manual: ${PN}_${PV}-${P_REV}.tar.gz"
-RESTRICT="fetch"
+# Frontend tests are known to be broken...
+RESTRICT="fetch test"
 
 LICENCES="GPL-2 frontend? ( AVASYSPL ) "
 SLOT="0"
