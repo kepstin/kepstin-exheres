@@ -21,7 +21,7 @@ RESTRICT="fetch"
 LICENCES="GPL-2"
 SLOT="0"
 
-PLATFORMS="~amd64 ~x86"
+PLATFORMS="~amd64"
 
 MYOPTIONS=""
 

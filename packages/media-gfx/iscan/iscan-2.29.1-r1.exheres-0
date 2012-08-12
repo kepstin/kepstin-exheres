@@ -28,7 +28,7 @@ SLOT="0"
 # The frontend links to a binary library that is shipped only for x86 and amd64
 # The backend may build on other platforms, but some scanners require binary
 # plugins that are amd64/x86-only
-PLATFORMS="~amd64 ~x86"
+PLATFORMS="~amd64"
 
 MYOPTIONS="
     frontend [[ description = [ the EPSON-specific graphical interface ] ]]

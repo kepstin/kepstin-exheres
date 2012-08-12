@@ -6,7 +6,7 @@ require sourceforge [ suffix="tar.gz" ]
 SUMMARY="A simple set of tools to help you author a DVD."
 SLOT="0"
 LICENCES="GPL-2"
-PLATFORMS="~amd64 ~x86"
+PLATFORMS="~amd64"
 DEPENDENCIES="
     dev-libs/fribidi
     media-libs/libpng[>=1.5]
