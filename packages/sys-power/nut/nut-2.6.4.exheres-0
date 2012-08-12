@@ -11,7 +11,7 @@ unit (PDU) hardware. Clients access the hardware through the server, and are
 notified whenever the power status changes.
 "
 HOMEPAGE="http://www.networkupstools.com/"
-DOWNLOADS="http://www.networkupstools.org/source/2.6/nut-2.6.4.tar.gz"
+DOWNLOADS="http://www.networkupstools.org/source/$(ever range 1-2)/${PNV}.tar.gz"
 
 LICENCES="GPL-2"
 # Note: The Python library is GPL-3, and the Perl module is GPL-1+/Artistic
