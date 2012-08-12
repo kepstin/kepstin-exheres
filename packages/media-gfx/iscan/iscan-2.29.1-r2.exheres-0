@@ -97,4 +97,11 @@ src_install()
     then
         edo rmdir ${IMAGE}/usr/bin ${IMAGE}/usr/share/man/man1
     fi
+
+    if option gimp
+    then
+        plugindir="$(gimptool-2.0 --gimpplugindir)/plug-ins"
+        dodir "${plugindir}"
+        dosym /usr/bin/iscan "${plugindir}"
+    fi
 }
