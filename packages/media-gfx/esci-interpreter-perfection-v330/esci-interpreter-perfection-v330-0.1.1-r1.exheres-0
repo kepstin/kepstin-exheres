@@ -70,3 +70,17 @@ src_install()
 {
     edo cp -rT "${WORK}" "${IMAGE}"
 }
+
+pkg_postinst()
+{
+    edo iscan-registry --add interpreter usb 0x04b8 0x0142 \
+        /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
+        /usr/share/esci/esfwad.bin
+}
+
+pkg_prerm()
+{
+    edo iscan-registry --remove interpreter usb 0x04b8 0x0142 \
+        /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
+        /usr/share/esci/esfwad.bin
+}
