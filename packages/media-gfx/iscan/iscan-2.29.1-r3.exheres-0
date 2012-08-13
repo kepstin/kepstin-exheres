@@ -93,6 +93,14 @@ src_install()
 {
     default
 
+    # Install the sane configuration files
+    insinto /etc/sane.d
+    doins backend/epkowa.conf
+
+    # Enable the sane epkowa backend via the 'dll' loader
+    dodir /etc/sane.d/dll.d
+    cp "${FILES}"/dll.conf "${IMAGE}"/etc/sane.d/dll.d/epkowa.conf
+
     if ! option frontend
     then
         edo rmdir ${IMAGE}/usr/bin ${IMAGE}/usr/share/man/man1
@@ -103,15 +111,5 @@ src_install()
         plugindir="$(gimptool-2.0 --gimpplugindir)/plug-ins"
         dodir "${plugindir}"
         dosym /usr/bin/iscan "${plugindir}"
-    fi
-}
-
-pkg_postinst()
-{
-    if ! grep epkowa /etc/sane.d/dll.conf >/dev/null 2>&1
-    then
-        elog "To use this driver from other sane frontends, you must enable the 'epkowa'"
-        elog "backend:"
-        elog "  echo epkowa >>/etc/sane.d/dll.conf"
     fi
 }
