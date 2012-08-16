@@ -52,7 +52,7 @@ DEPENDENCIES="
             media-libs/libpng
             media-libs/jpeg
         )
-        gimp? ( media-gfx/gimp[<3] )
+        gimp? ( media-gfx/gimp[~>2.0] )
         tiff? ( media-libs/tiff )
     run:
         media-gfx/iscan-data
@@ -101,7 +101,7 @@ src_install()
 
     # Enable the sane epkowa backend via the 'dll' loader
     dodir /etc/sane.d/dll.d
-    cp "${FILES}"/dll.conf "${IMAGE}"/etc/sane.d/dll.d/epkowa.conf
+    edo cp "${FILES}"/dll.conf "${IMAGE}"/etc/sane.d/dll.d/epkowa.conf
 
     if ! option frontend
     then
