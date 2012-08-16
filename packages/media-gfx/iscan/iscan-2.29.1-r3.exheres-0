@@ -6,7 +6,7 @@ require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.10 ] ]
 # Set this to match the arbitrary package build number on the archive.
 P_REV="5"
 
-SUMMARY="simple, easy to use scanner utility for EPSON scanners"
+SUMMARY="EPSON Image Scan! utility and epkowa sane backend"
 DESCRIPTION="
 Image Scan! is a graphical scanner utility for people that do not need
 all the bells and whistles provided by several of the other utilities
@@ -56,6 +56,8 @@ DEPENDENCIES="
         tiff? ( media-libs/tiff )
     run:
         media-gfx/iscan-data
+    suggestion:
+        media-gfx/esci-interpreter-perfection-v330
 "
 
 BUGS_TO="calvin.walton@kepstin.ca"
