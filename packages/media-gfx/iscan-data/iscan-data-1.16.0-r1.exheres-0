@@ -28,6 +28,7 @@ MYOPTIONS=""
 DEPENDENCIES="
     build+run:
         dev-libs/libxslt
+        media-gfx/sane-backends
         || ( sys-fs/udev sys-apps/systemd )
 "
 
@@ -51,8 +52,11 @@ src_compile()
 
     # Rather than generate the udev rules in postinstall like they do in the
     # Debian and RedHat packaging, build and install them now.
-    edo sh policy/make-policy-file --mode=udev --desc-file=epkowa.desc \
-                               --out-file=70-iscan.rules
+    edo sh policy/make-policy-file \
+               --mode=udev \
+               --desc-file=epkowa.desc \
+               --template=${UDEVRULESDIR}/70-libsane.rules \
+               --out-file=70-iscan.rules
 }
 
 src_install()
