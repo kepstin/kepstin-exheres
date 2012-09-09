@@ -78,7 +78,7 @@ DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/iscan-2.25.0-fix-g++-test.patch
     "${FILES}"/iscan-2.29.1-drop-ltdl.patch
     "${FILES}"/iscan-2.29.1-libpng-1.5.patch
-    "${FILES}"/iscan-2.29.1-cut-gtk-1.patch
+    "${FILES}"/iscan-2.29.1-make-gtk-conditional.patch
 )
 
 pkg_nofetch()

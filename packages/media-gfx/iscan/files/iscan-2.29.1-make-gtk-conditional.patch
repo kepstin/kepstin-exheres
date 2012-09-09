@@ -1,0 +1,33 @@
+Source: written by Calvin Walton <calvin.walton@kepstin.ca> for Exherbo
+Upstream: no, proprietary upstream
+Reason: Fix hard check for gtk+ that applies even when frontend is disabled
+
+diff --git a/configure.ac b/configure.ac
+index 08354cf..e62ff31 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -105,11 +105,12 @@ dnl  checks for modules
+ 
+ PKG_CHECK_MODULES(GTK, gtk+-2.0,
+    [
++    HAVE_GTK=yes
+     AC_DEFINE([HAVE_GTK_2], 1,
+ 	      [Define to 1 if you have the gtk+-2.0 library.])
+    ],[
+-    PKG_CHECK_MODULES(GTK, gtk+) 
+-    PKG_CHECK_MODULES(GDK_IMLIB, imlibgdk)
++    PKG_CHECK_MODULES([GTK], [gtk+], [HAVE_GTK=yes], [HAVE_GTK=no])
++    PKG_CHECK_MODULES([GDK_IMLIB], [imlibgdk], [], [HAVE_GTK=no])
+    ])
+ 
+ AC_ARG_ENABLE(dependency-reduction,
+@@ -336,6 +337,9 @@ AC_ARG_ENABLE(frontend,
+ 		 x86_64) enable_frontend=yes ;;
+ 		 *)      enable_frontend=no  ;;
+ 	       esac])
++if test x$HAVE_GTK != xyes && test x$enable_frontend = xyes; then
++  AC_MSG_ERROR([frontend enabled, but gtk+ was not found])
++fi
+ AC_MSG_RESULT([$enable_frontend])
+ AM_CONDITIONAL(ENABLE_FRONTEND, test x$enable_frontend = xyes)
+ 
