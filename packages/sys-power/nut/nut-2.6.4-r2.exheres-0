@@ -25,11 +25,11 @@ MYOPTIONS="
     systemd
     tcpd
     nut_drivers:
-        serial [[ description = [ serial (RS-232) UPS devices ] ]]
-        usb [[ description = [ USB-connected UPS devices ] ]]
-        snmp [[ description = [ UPS devices with SNMP interface ] ]]
-        xml [[ description = [ UPS devices with XML/HTTP interface ] ]]
         powerman [[ description = [ Powerman PDU ] ]]
+        serial [[ description = [ serial (RS-232) UPS devices ] ]]
+        snmp [[ description = [ UPS devices with SNMP interface ] ]]
+        usb [[ description = [ USB-connected UPS devices ] ]]
+        xml [[ description = [ UPS devices with XML/HTTP interface ] ]]
 "
 # Currently, the following features aren't enabled:
 # ipmi driver - needs FreeIPMI (and not OpenIPMI...)
@@ -46,10 +46,10 @@ DEPENDENCIES="
         ssl? ( dev-libs/openssl )
         tcpd? ( sys-apps/tcp-wrappers )
 
-        nut_drivers:usb? ( dev-libs/libusb:0.1 )
-        nut_drivers:snmp? ( net/net-snmp )
-        nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
         nut_drivers:powerman? ( sys-power/powerman )
+        nut_drivers:snmp? ( net/net-snmp )
+        nut_drivers:usb? ( dev-libs/libusb:0.1 )
+        nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
 "
 
 DEFAULT_SRC_CONFIGURE_PARAMS=(
@@ -62,7 +62,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --with-statepath=/run/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
-    --with-udev-dir=$(dirname ${UDEVRULESDIR})
+    --with-udev-dir=${UDEVRULESDIR%/rules.d}
     --without-hotplug-dir
 
     --with-user=nut
@@ -80,11 +80,11 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     avahi
     "systemd systemdsystemunitdir ${SYSTEMDSYSTEMUNITDIR}"
     "tcpd wrap"
-    nut_drivers:serial
-    nut_drivers:usb
-    nut_drivers:snmp
-    "nut_drivers:xml neon"
     nut_drivers:powerman
+    nut_drivers:serial
+    nut_drivers:snmp
+    nut_drivers:usb
+    "nut_drivers:xml neon"
 )
 
 src_install() {
@@ -99,7 +99,7 @@ src_install() {
     if option systemd; then
         # Workaround the hardcoded install path for the system-shutdown script
         edo mv "${IMAGE}"/lib/systemd/system-shutdown \
-               "${IMAGE}"/$(dirname ${SYSTEMDSYSTEMUNITDIR})
+               "${IMAGE}"/${SYSTEMDSYSTEMUNITDIR%/system}
         edo rmdir "${IMAGE}"/lib/{systemd,}
 
         # Automatically create the /run/nut directory
