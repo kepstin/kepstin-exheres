@@ -39,6 +39,7 @@ MYOPTIONS="
     tiff
     
     gimp [[ requires = frontend ]]
+    tiff [[ requires = frontend ]]
 "
 
 DEPENDENCIES="
@@ -65,10 +66,14 @@ BUGS_TO="calvin.walton@kepstin.ca"
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --disable-rpath
     --disable-static
-    --enable-jpeg
-    --enable-png
 )
-DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( frontend gimp tiff )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    frontend
+    "frontend jpeg"
+    "frontend png"
+    gimp
+    tiff
+)
 DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/iscan-2.25.0-fix-g++-test.patch
     "${FILES}"/iscan-2.29.1-drop-ltdl.patch
