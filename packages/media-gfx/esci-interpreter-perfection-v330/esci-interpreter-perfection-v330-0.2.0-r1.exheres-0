@@ -1,7 +1,7 @@
 # Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-P_REV="2"
+P_REV="1"
 
 SUMMARY="Plugin for the GT-F730/S630 and Perfection V33/V330 Photo"
 DESCRIPTION="

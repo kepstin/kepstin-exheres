@@ -4,7 +4,7 @@
 require udev-rules
 
 # Set this to match the arbitrary package build number on the archive.
-P_REV="2"
+P_REV="1"
 
 SUMMARY="Image Scan! for Linux data files"
 DESCRIPTION="
