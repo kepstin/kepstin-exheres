@@ -10,7 +10,7 @@ computers to share uninterruptible power supply (UPS) and power distribution
 unit (PDU) hardware. Clients access the hardware through the server, and are
 notified whenever the power status changes.
 "
-HOMEPAGE="http://www.networkupstools.com/"
+HOMEPAGE="http://www.networkupstools.org/"
 DOWNLOADS="http://www.networkupstools.org/source/$(ever range 1-2)/${PNV}.tar.gz"
 
 LICENCES="GPL-2"
@@ -97,11 +97,6 @@ src_install() {
                   "${IMAGE}"/etc/nut/upsd.users.sample
 
     if option systemd; then
-        # Workaround the hardcoded install path for the system-shutdown script
-        edo mv "${IMAGE}"/lib/systemd/system-shutdown \
-               "${IMAGE}"/${SYSTEMDSYSTEMUNITDIR%/system}
-        edo rmdir "${IMAGE}"/lib/{systemd,}
-
         # Automatically create the /run/nut directory
         insinto /usr/${LIBDIR}/tmpfiles.d
         doins "${FILES}"/tmpfiles.d/nut.conf
