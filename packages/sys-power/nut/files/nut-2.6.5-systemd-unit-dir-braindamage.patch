@@ -1,0 +1,14 @@
+Source: written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: https://alioth.debian.org/tracker/index.php?func=detail&aid=313927&group_id=30602&atid=411544
+Reason: Fix installation path for systemd unit files
+diff -u nut-2.6.5.orig/configure.in nut-2.6.5/configure.in
+--- nut-2.6.5.orig/configure.in	2012-12-16 10:08:44.773348212 -0500
++++ nut-2.6.5/configure.in	2012-12-16 10:10:22.249063212 -0500
+@@ -988,7 +988,6 @@
+ if test -n "${systemdsystemunitdir}"; then
+ 	systemdsystemshutdowndir="${libdir}/systemd/system-shutdown"
+ 	AC_MSG_RESULT(using ${systemdsystemunitdir})
+-	systemdsystemunitdir="`echo ${systemdsystemunitdir} | sed 's/\/lib/\${libdir}/'`"
+ else
+ 	AC_MSG_RESULT(no)
+ fi
