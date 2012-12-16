@@ -86,7 +86,7 @@ pkg_nofetch()
     if ! [[ -f "${FETCHEDDIR}/${ARCHIVES}" ]] ; then
         echo "Please go to:"
         echo "  http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-        echo "and enter your printer model. Click download next to the"
+        echo "and enter your scanner model. Click download next to the"
         echo "\"core package & data package\" module, then download the file:"
         echo "  ${ARCHIVES}"
         echo "and save it to your distfiles directory."
