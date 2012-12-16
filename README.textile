@@ -1,7 +1,9 @@
-The primary thing that I keep in here is various MusicBrainz-related libraries and packages, including scm or development versions. In addition, there's a few development versions of gnome-related packages which sneak in now and then. I try to keep the scm packages masked, but there's probably not much in here that you really want to use. Let me know if you try and find problems, though!
+Calvin Walton (kepstin)'s personal package repository.
+
+I try to keep everything here either in working order or masked appropriately.
+Feel free to send me patches, either as pull requests on Github or via zebrapig.
 
 Packages in here:
 * Development and beta versions of Musicbrainz Picard.
-* Libraries and tools for chromaprint/acoustid
 * The 'epkowa' (iscan) drivers for EPSON scanners.
 * The NUT (Network UPS Tools) package.
