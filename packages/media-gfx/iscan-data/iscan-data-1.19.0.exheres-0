@@ -29,7 +29,7 @@ DEPENDENCIES="
     build+run:
         dev-libs/libxslt
         media-gfx/sane-backends
-        || ( sys-fs/udev sys-apps/systemd )
+        sys-apps/systemd
 "
 
 BUGS_TO="calvin.walton@kepstin.ca"
