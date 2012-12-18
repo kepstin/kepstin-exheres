@@ -1,8 +1,6 @@
 # Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-P_REV="1"
-
 SUMMARY="Plugin for the GT-F730/S630 and Perfection V33/V330 Photo"
 DESCRIPTION="
 This plugin converts between the native protocol of the supported
@@ -20,8 +18,8 @@ You only need this plugin if you have one of the following models:
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
 DOWNLOADS="
     manual:
-        platform:amd64? ( ${PNV}-${P_REV}.x86_64.rpm )
-        platform:x86? ( ${PNV}-${P_REV}.i386.rpm )
+        platform:amd64? ( ${PN}-${PV/_p/-}.x86_64.rpm )
+        platform:x86? ( ${PN}-${PV/_p/-}.i386.rpm )
 "
 RESTRICT="fetch strip"
 
@@ -74,14 +72,18 @@ src_install()
 
 pkg_postinst()
 {
-    edo iscan-registry --add interpreter usb 0x04b8 0x0142 \
-        /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
-        /usr/share/esci/esfwad.bin
+    if [[ -n ${REPLACING_IDS} ]] ; then
+        edo iscan-registry --add interpreter usb 0x04b8 0x0142 \
+            /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
+            /usr/share/esci/esfwad.bin
+    fi
 }
 
 pkg_prerm()
 {
-    edo iscan-registry --remove interpreter usb 0x04b8 0x0142 \
-        /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
-        /usr/share/esci/esfwad.bin
+    if [[ -n ${REPLACED_BY_ID} ]] ; then
+        edo iscan-registry --remove interpreter usb 0x04b8 0x0142 \
+            /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
+            /usr/share/esci/esfwad.bin
+    fi
 }
