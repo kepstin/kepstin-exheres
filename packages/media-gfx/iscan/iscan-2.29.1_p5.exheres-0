@@ -3,9 +3,6 @@
 
 require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.10 ] ]
 
-# Set this to match the arbitrary package build number on the archive.
-P_REV="5"
-
 SUMMARY="EPSON Image Scan! utility and epkowa sane backend"
 DESCRIPTION="
 Image Scan! is a graphical scanner utility for people that do not need
@@ -21,7 +18,7 @@ be used with this software.
 "
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
 
-DOWNLOADS="manual: ${PN}_${PV}-${P_REV}.tar.gz"
+DOWNLOADS="manual: ${PN}_${PV/_p/-}.tar.gz"
 # Frontend tests are known to be broken...
 RESTRICT="fetch test"
 
