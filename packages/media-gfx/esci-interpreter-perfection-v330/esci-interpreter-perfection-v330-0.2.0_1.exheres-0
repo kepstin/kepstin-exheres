@@ -18,8 +18,8 @@ You only need this plugin if you have one of the following models:
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
 DOWNLOADS="
     manual:
-        platform:amd64? ( ${PN}-${PV/_p/-}.x86_64.rpm )
-        platform:x86? ( ${PN}-${PV/_p/-}.i386.rpm )
+        platform:amd64? ( ${PN}-${PV/_/-}.x86_64.rpm )
+        platform:x86? ( ${PN}-${PV/_/-}.i386.rpm )
 "
 RESTRICT="fetch strip"
 
@@ -72,8 +72,7 @@ src_install()
 
 pkg_postinst()
 {
-    echo "'${REPLACING_IDS}'"
-    if [[ -n ${REPLACING_IDS} ]] ; then
+    if [[ -z ${REPLACING_IDS} ]] ; then
         edo iscan-registry --add interpreter usb 0x04b8 0x0142 \
             /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
             /usr/share/esci/esfwad.bin
@@ -82,8 +81,7 @@ pkg_postinst()
 
 pkg_prerm()
 {
-    echo "'${REPLACED_BY_ID}'"
-    if [[ -n ${REPLACED_BY_ID} ]] ; then
+    if [[ -z ${REPLACED_BY_ID} ]] ; then
         edo iscan-registry --remove interpreter usb 0x04b8 0x0142 \
             /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
             /usr/share/esci/esfwad.bin
