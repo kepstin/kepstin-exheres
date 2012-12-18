@@ -63,6 +63,8 @@ BUGS_TO="calvin.walton@kepstin.ca"
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --disable-rpath
     --disable-static
+    # The package 'helpfully' adds the /lib on its own
+    --localstatedir=/var
 )
 DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
     frontend
