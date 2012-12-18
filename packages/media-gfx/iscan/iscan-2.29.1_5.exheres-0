@@ -18,7 +18,8 @@ be used with this software.
 "
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
 
-DOWNLOADS="manual: ${PN}_${PV/_p/-}.tar.gz"
+DOWNLOADS="manual: ${PN}_${PV/_/-}.tar.gz"
+WORK="${WORKBASE}"/${PN}-$(ever range 1-3 ${PV})
 # Frontend tests are known to be broken...
 RESTRICT="fetch test"
 
