@@ -1,0 +1,36 @@
+# Copyright © 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Delete files from a backup set while maintaining a time distribution"
+DESCRIPTION="
+Fileprune will delete files from the specified set targetting a given
+distribution of the files within time as well as size, number, and age
+constraints. Its main purpose is to keep a set of daily-created backup files
+in managable size, while still providing reasonable access to older versions.
+"
+HOMEPAGE="http://www.dmst.aueb.gr/dds/sw/unix/${PN}"
+DOWNLOADS="http://www.dmst.aueb.gr/dds/sw/unix/${PN}/${PNV}.tar.gz"
+
+# The licence text is based on the as-is family of licences, but the language
+# permitting modifications has been removed. The result doesn't meet the FSF's
+# definition of a free licence.
+LICENCES="fileprune"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+"
+
+BUGS_TO=""
+
+src_compile() {
+    edo ${CC} ${CFLAGS} ${LDFLAGS} -o fileprune fileprune.c -lm
+}
+
+src_install() {
+    dobin fileprune
+    doman fileprune.1
+}
