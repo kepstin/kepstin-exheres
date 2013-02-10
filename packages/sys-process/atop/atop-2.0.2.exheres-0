@@ -1,0 +1,28 @@
+# Copyright © 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Advanced System & Process Monitor"
+DESCRIPTION="
+Atop is an ASCII full-screen performance monitor that is capable of reporting
+the activity of all processes (even if processes have finished during the
+interval), daily logging of system and process activity for long-term analysis,
+highlighting overloaded system resources by using colors, etc. At regular
+intervals, it shows system-level activity related to the CPU, memory, swap,
+disks and network layers, and for every process (and thread) it shows a.o. the
+CPU utilization, memory growth, disk utilization, priority, username, state,
+and exit code.
+In combination with the optional kernel module netatop, it even shows network
+activity per process/thread.
+"
+HOMEPAGE="http://www.atoptool.nl/"
+DOWNLOADS="http://www.atoptool.nl/download/${PNV}.tar.gz"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+"
+
+BUGS_TO="Calvin Walton <calvin.walton@kepstin.ca>"
