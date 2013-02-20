@@ -2,6 +2,7 @@ Calvin Walton (kepstin)'s personal package repository.
 
 I try to keep everything here either in working order or masked appropriately.
 Feel free to send me patches, either as pull requests on Github or via zebrapig.
+(use the ::kepstin tag on zebrapig)
 
 Packages in here:
 * Development and beta versions of Musicbrainz Picard.
