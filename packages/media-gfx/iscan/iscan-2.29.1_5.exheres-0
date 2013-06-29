@@ -43,7 +43,7 @@ MYOPTIONS="
 DEPENDENCIES="
     build+run:
         dev-libs/libxml2
-        dev-libs/libusb:1
+        virtual/usb:1
         media-gfx/sane-backends
         sys-devel/libtool [[ note = [ Uses libltdl ] ]]
         frontend? (
