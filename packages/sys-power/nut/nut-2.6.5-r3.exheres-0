@@ -50,7 +50,7 @@ DEPENDENCIES="
 
         nut_drivers:powerman? ( sys-power/powerman )
         nut_drivers:snmp? ( net/net-snmp )
-        nut_drivers:usb? ( virtual/usb:1 )
+        nut_drivers:usb? ( dev-libs/libusb:0.1 )
         nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
 "
 
