@@ -35,7 +35,7 @@ DEPENDENCIES="
     build:
         dev-util/pkg-config[>=0.16]
         doc? ( dev-doc/gtk-doc[>=1.4] )
-        gobject-introspection? ( gobject-introspection:1[>=1.30.0] )
+        gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=1.30.0] )
     build+run:
         app-arch/bzip2[>=1.0.0]
         app-arch/xz[>=5.0.0]
