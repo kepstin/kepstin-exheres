@@ -15,6 +15,8 @@ DESCRIPTION="
     * Various utility functions for converting address from/to LBA and MSF, interleaving and deinterleaving subchannel data, ECC/EDC generation, etc.
 "
 
+require cmake [ api=2 ] freedesktop-mime
+
 LICENCES="GPL-2"
 HOMEPAGE="http://cdemu.sourceforge.net/about/${PN}"
 UPSTREAM_DOCUMENTATION="http://cdemu.sourceforge.net/reference/index.html [[ description = [ API reference ] ]]"
@@ -22,21 +24,44 @@ REMOTE_IDS="sourceforge:cdemu freecode:cdemu"
 
 DOWNLOADS="mirror://sourceforge/cdemu/${PNV}.tar.bz2"
 
-MYOPTIONS="doc [[ description = [ API reference ] ]]"
+MYOPTIONS="
+    doc [[ description = [ Use gtk-doc to build API reference ] ]]
+    gobject-introspection
+"
 
 SLOT="0"
 
 DEPENDENCIES="
     build:
-        dev-util/pkg-config
-        doc? ( dev-doc/gtk-doc )
+        dev-util/pkg-config[>=0.16]
+        doc? ( dev-doc/gtk-doc[>=1.4] )
+        gobject-introspection? ( gobject-introspection:1[>=1.30.0] )
     build+run:
-        dev-libs/glib[>=2.6]
+        app-arch/bzip2[>=1.0.0]
+        app-arch/xz[>=5.0.0]
+        dev-libs/glib[>=2.24]
         media-libs/libsndfile[>=1.0.0]
-        sys-libs/zlib
+        sys-libs/zlib[>=1.2.0]
     run:
         !app-emulation/cdemu[<2.0.0]
         !app-emulation/cdemud[<2.0.0]
 "
 
-DEFAULT_SRC_CONFIGURE_OPTION_ENABLES+=( 'doc gtk-doc' )
+cmake_simple_option() {
+    local flag
+    if [[ -n $2 ]]; then
+        flag=$2
+    else
+        flag=$1
+    fi
+    echo "-D${1}:BOOL=$(option "${flag}" && echo TRUE || echo FALSE)"
+}
+
+src_configure() {
+    CMAKE_SRC_CONFIGURE_PARAMS=(
+        $(cmake_simple_option GTKDOC_ENABLED doc)
+        $(cmake_simple_OPTION INTROSPECTION_ENABLED gobject-introspection)
+        -DPOST_INSTALL_HOOKS:BOOL=FALSE
+    )
+    default
+}
