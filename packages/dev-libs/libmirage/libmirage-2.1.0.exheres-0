@@ -40,6 +40,7 @@ DEPENDENCIES="
         app-arch/bzip2[>=1.0.0]
         app-arch/xz[>=5.0.0]
         dev-libs/glib[>=2.24]
+        media-libs/libsamplerate[>=0.1.0]
         media-libs/libsndfile[>=1.0.0]
         sys-libs/zlib[>=1.2.0]
     run:
