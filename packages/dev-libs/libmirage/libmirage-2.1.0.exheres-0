@@ -60,8 +60,8 @@ cmake_simple_option() {
 src_configure() {
     CMAKE_SRC_CONFIGURE_PARAMS=(
         $(cmake_simple_option GTKDOC_ENABLED doc)
-        $(cmake_simple_OPTION INTROSPECTION_ENABLED gobject-introspection)
+        $(cmake_simple_option INTROSPECTION_ENABLED gobject-introspection)
         -DPOST_INSTALL_HOOKS:BOOL=FALSE
     )
-    default
+    cmake_src_configure
 }
