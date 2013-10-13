@@ -7,7 +7,7 @@
 SCM_REPOSITORY="git://github.com/musicbrainz/picard.git"
 require scm-git
 
-require distutils [ python_dep='[>=2.6]' python_sup="2.6 2.7" has_bin=true ]
+require distutils [ python_dep='[>=2.6]' python_sup="2.6 2.7" multibuild=false ]
 
 SUMMARY="Picard is the next generation MusicBrainz tagging application"
 HOMEPAGE="http://musicbrainz.org/doc/Picard_Tagger"
