@@ -1,4 +1,4 @@
-# Copyright 2012 Calvin Walton
+# Copyright 2012, 2013 Calvin Walton
 # Copyright 2009, 2010 Michael Forney
 # Distributed under the terms of the GNU General Public License v2
 # Based in part upon 'picard-0.11.ebuild' from Gentoo, which is:
@@ -7,12 +7,15 @@
 SCM_REPOSITORY="git://github.com/musicbrainz/picard.git"
 require scm-git
 
-require distutils [ python_dep='[>=2.6]' python_sup="2.6 2.7" multibuild=false ]
+require setup-py [ import=distutils blacklist=3 multibuild=false ] freedesktop-desktop gtk-icon-cache
 
 SUMMARY="Picard is the next generation MusicBrainz tagging application"
 HOMEPAGE="http://musicbrainz.org/doc/Picard_Tagger"
 
 BUGS_TO="calvin.walton@kepstin.ca"
+
+# Tests only work if you do a special "in-place" build
+RESTRICT="test"
 
 LICENCES="GPL-2"
 SLOT="0"
@@ -22,11 +25,19 @@ MYOPTIONS=""
 DEPENDENCIES="
     build+run:
         dev-python/PyQt4[>=4.5][python_abis:*(?)?]
-        dev-python/mutagen[>=1.20][python_abis:*(?)?]
+        dev-python/mutagen[>=1.20][python_abis:*(-)?]
     suggestion:
         media-libs/chromaprint[examples] [[ description = [ Look up recordings from AcoustID fingerprints of audio files ] ]]
-        || (
-            dev-python/python-libdiscid[python_abis:*(-)?]
-            dev-python/python-discid[python-abis:*(-)?]
-        ) [[ description = [ Look up releases from audio CDs in a CD-ROM drive ] ]]
+        dev-python/python-libdiscid[python_abis:*(-)?] [[ description = [ Look up releases from audio CDs in a CD-ROM drive ] ]]
 "
+
+pkg_postinst() {
+    freedesktop-desktop_pkg_postinst
+    gtk-icon-cache_pkg_postinst
+}
+
+pkg_postrm() {
+    freedesktop-desktop_pkg_postrm
+    gtk-icon-cache_pkg_postrm
+}
+
