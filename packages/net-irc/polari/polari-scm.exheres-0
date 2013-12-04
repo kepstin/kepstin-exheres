@@ -17,6 +17,9 @@ SLOT="0"
 PLATFORMS="~amd64"
 
 DEPENDENCIES="
+    build: 
+        dev-util/intltool[>=0.25]
+        virtual/pkg-config[>=0.14]
     build+run:
         dev-libs/glib:2
         gnome-desktop/gobject-introspection:1
@@ -30,6 +33,12 @@ DEPENDENCIES="
         gnome-desktop/libsoup[gobject-introspection]
         net-im/telepathy-idle
 "
+
+src_prepare() {
+    default
+    edo intltoolize --force --copy --automake
+    eautoreconf
+}
 
 pkg_postinst() {
     default
