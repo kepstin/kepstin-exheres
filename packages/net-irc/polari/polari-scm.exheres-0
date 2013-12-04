@@ -36,8 +36,9 @@ DEPENDENCIES="
 
 src_prepare() {
     default
+    edo mkdir m4
     edo intltoolize --force --copy --automake
-    eautoreconf
+    AT_M4DIR=m4 eautoreconf
 }
 
 pkg_postinst() {
