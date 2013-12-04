@@ -31,11 +31,6 @@ DEPENDENCIES="
         net-im/telepathy-idle
 "
 
-src_prepare() {
-    default
-    AT_M4DIR="m4" eautoreconf
-}
-
 pkg_postinst() {
     default
     gsettings_pkg_postinst
