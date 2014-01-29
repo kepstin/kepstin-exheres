@@ -61,6 +61,7 @@ src_compile() {
 }
 
 src_install() {
+    exeinto /usr/bin
     doexe src/gmic
 
     dobashcompletion src/gmic_bashcompletion.sh gmic
@@ -69,7 +70,7 @@ src_install() {
     doman man/gmic.1
 
     if option gimp; then
-        exeinto $(gimptool-2.0 --gimpplugindir)/plug-ins
+        exeinto "$(gimptool-2.0 --gimpplugindir)"/plug-ins
         doexe src/gmic_gimp
     fi
 }
