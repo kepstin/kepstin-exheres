@@ -37,5 +37,12 @@ DEPENDENCIES="
         media-sound/mp3gain [[ description = [ Calculate volume normalization for players that support it ] ]]
 "
 
+src_install() {
+    default
+
+    doman man/beet.1
+    doman man/beetsconfig.5
+}
+
 BUGS_TO=""
 
