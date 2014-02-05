@@ -23,7 +23,7 @@ DEPENDENCIES="
     build+run:
         dev-python/mutagen[>=1.22][python_abis:*(-)?]
         dev-python/munkres[python_abis:*(-)?]
-        dev-python/unidecode[python_abis:*(-)?]
+        dev-python/Unidecode[python_abis:*(-)?]
         dev-python/musicbrainzngs[>=0.4][python_abis:*(-)?]
         dev-python/PyYAML[python_abis:*(-)?]
     suggestion:
