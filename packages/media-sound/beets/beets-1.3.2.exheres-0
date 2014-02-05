@@ -1,7 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require setup-py [ import=setuptools blacklist="3" has_bin=true has_lib=true ]
+require setup-py [ import=setuptools blacklist="3" has_bin=true has_lib=true multibuild=false ]
 require pypi
 
 SUMMARY="The media library management system for obsessive-compulsive music geeks"
