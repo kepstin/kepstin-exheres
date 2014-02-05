@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require setup-py [ import=setuptools blacklist="3" has_bin=true has_lib=true ]
+require pypi
 
 SUMMARY="The media library management system for obsessive-compulsive music geeks"
 DESCRIPTION="
@@ -11,7 +12,6 @@ as it goes using the MusicBrainz database. Then it provides a bouquet
 of tools for manipulating and accessing your music.
 "
 HOMEPAGE="http://beets.radbox.org/"
-DOWNLOADS="https://github.com/sampsyo/${PN}/releases/download/v${PV}/${PNV}.tar.gz"
 
 LICENCES="MIT"
 SLOT="0"
