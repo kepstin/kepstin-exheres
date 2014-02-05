@@ -1,0 +1,41 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require setup-py [ import=setuptools blacklist="3" has_bin=true has_lib=true ]
+
+SUMMARY="The media library management system for obsessive-compulsive music geeks"
+DESCRIPTION="
+The purpose of beets is to get your music collection right once and for
+all. It catalogs your collection, automatically improving its metadata
+as it goes using the MusicBrainz database. Then it provides a bouquet
+of tools for manipulating and accessing your music.
+"
+HOMEPAGE="http://beets.radbox.org/"
+DOWNLOADS="https://github.com/sampsyo/${PN}/releases/download/v${PV}/${PNV}.tar.gz"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+        dev-python/mutagen[>=1.22][python_abis:*(-)?]
+        dev-python/munkres[python_abis:*(-)?]
+        dev-python/unidecode[python_abis:*(-)?]
+        dev-python/musicbrainzngs[>=0.4][python_abis:*(-)?]
+        dev-python/PyYAML[python_abis:*(-)?]
+    suggestion:
+        dev-python/Flask[python_abis:*(-)?] [[ description = [ An experimental Web-based GUI for beets ] ]]
+        dev-python/discogs-client[python_abis:*(-)?] [[ description = [ Search for releases in the Discogs database ] ]]
+        dev-python/gst-python[python_abis:*(-)?] [[ description = [ A music player for your beets library that emulates MPD and is compatible with MPD clients ] ]]
+        dev-python/pyechonest[python_abis:*(-)?] [[ description = [ Automatically fetch acoustic attributes from the Echo Nest ] ]]
+        dev-python/pylast[python_abis:*(-)?] [[ description = [ Fetch genres based on Last.fm tags ] ]]
+        dev-python/requests[python_abis:*(-)?] [[ description = [ Beatport Plugin ] ]]
+        media/ffmpeg [[ description = [ Transcode music and embed album art ] ]]
+        media-sound/mp3gain [[ description = [ Calculate volume normalization for players that support it ] ]]
+"
+
+BUGS_TO=""
+
