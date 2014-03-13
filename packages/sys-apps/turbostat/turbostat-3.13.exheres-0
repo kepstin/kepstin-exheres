@@ -1,0 +1,35 @@
+# Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Report processor frequency and idle statistics"
+DESCRIPTION="
+Report processor topology, frequency, idle power-state statistics, temperature
+and power on modern X86 processors.
+"
+DOWNLOADS="mirror://kernel/linux/kernel/v$(ever major).x/linux-${PV}.tar.xz"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+WORK="${WORKBASE}"/linux-${PV}
+# Kernel makefile errors out on 'check' target with unconfigured source
+RESTRICT="test"
+
+DEPENDENCIES=""
+
+BUGS_TO=""
+
+src_compile() {
+    edo pushd tools/power/x86/turbostat
+    default
+    edo popd
+}
+
+src_install() {
+    edo pushd tools/power/x86/turbostat
+    default
+    edo popd
+}
+

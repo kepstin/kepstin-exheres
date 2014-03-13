@@ -1,0 +1,77 @@
+# Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [[ pnv=${PN}_${PV} suffix=tar.gz ]]
+require bash-completion
+
+SUMMARY="GREYC's Magic for Image Converting"
+DESCRIPTION="
+G'MIC is an open and full-featured framework for image processing, providing
+several different user interfaces to convert/manipulate/filter/visualize
+generic image datasets, from 1d scalar signals to 3d+t sequences of
+multi-spectral volumetric images.
+"
+
+LICENCES="CeCILL-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    gimp [[ description = [ install a plugin for The Gimp ] ]]
+"
+
+# The defaults are the "Minimal" dependencies + jpeg + XShm
+DEPENDENCIES="
+    build+run:
+        x11-libs/libX11
+        x11-libs/libXext
+        media-libs/libpng
+        media-libs/jpeg
+        media-libs/tiff
+        sys-libs/zlib
+        sci-libs/fftw[=3*]
+        gimp? ( media-gfx/gimp[=2*] )
+"
+
+BUGS_TO=""
+
+src_prepare() {
+    # Disable stripping
+    edo sed -i '/^\s\+strip/d' src/Makefile
+}
+
+src_configure() {
+    :
+}
+
+src_compile() {
+    edo pushd src
+
+    GMIC_CFLAGS='$(MINIMAL_UNIX_CFLAGS) $(JPEG_CFLAGS) $(XSHM_CFLAGS)'
+    GMIC_LDFLAGS='$(MINIMAL_UNIX_LDFLAGS) $(JPEG_LDFLAGS) $(XSHM_LDFLAGS)'
+
+    # Command-line tool
+    emake CUST_UNIX_CFLAGS="${GMIC_CFLAGS}" OPT_CFLAGS="${CFLAGS}" CUST_UNIX_LDFLAGS="${GMIC_LDFLAGS} ${LDFLAGS}" custom
+
+    # Gimp plugin
+    if option gimp; then
+        emake OPT_CFLAGS="${CFLAGS}" OPT_LDFLAGS="${LDFLAGS}" gimp
+    fi
+
+    edo popd
+}
+
+src_install() {
+    exeinto /usr/bin
+    doexe src/gmic
+
+    dobashcompletion src/gmic_bashcompletion.sh gmic
+
+    edo gunzip man/gmic.1.gz
+    doman man/gmic.1
+
+    if option gimp; then
+        exeinto "$(gimptool-2.0 --gimpplugindir)"/plug-ins
+        doexe src/gmic_gimp
+    fi
+}
+
