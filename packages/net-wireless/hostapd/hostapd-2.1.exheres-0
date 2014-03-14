@@ -57,7 +57,7 @@ src_configure() {
 }
 
 src_compile() {
-    default
+    emake V=1
 
     emake nt_password_hash || die "emake nt_password_hash failed"
     emake hlr_auc_gw || die "emake hlr_auc_gw failed"
