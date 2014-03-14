@@ -51,7 +51,7 @@ src_configure() {
     edo sed -i -e 's/#\(CONFIG_IEEE80211AC.*\)/\1/' "${CONFIG}"
 
     # Enable automatic channel selection (currently nl80211 atheros only)
-    edo sed -i -e 's/#\(CONFIG_ACS.*\)/\1/' "#{CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_ACS.*\)/\1/' "${CONFIG}"
 
     default
 }
