@@ -40,15 +40,18 @@ src_configure() {
     # toolchain setup
     echo "CC = ${CC}" >> ${CONFIG}
 
+    # To enable additional features over the defconfig, uncomment the
+    # appropriate lines in the config file:
+
     # We are using libnl-3.2
-    edo sed -i -e 's/#(CONFIG_LIBNL32.*)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_LIBNL32.*\)/\1/' "${CONFIG}"
 
     # Enable support for 802.11n & ac
-    edo sed -i -e 's/#(CONFIG_IEEE80211N.*)/\1/' "${CONFIG}"
-    edo sed -i -e 's/#(CONFIG_IEEE80211AC.*)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_IEEE80211N.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_IEEE80211AC.*\)/\1/' "${CONFIG}"
 
-    # Enable automatic channel selection
-    edo sed -i -e 's/#(CONFIG_ACS.*)/\1/' "#{CONFIG}"
+    # Enable automatic channel selection (currently nl80211 atheros only)
+    edo sed -i -e 's/#\(CONFIG_ACS.*\)/\1/' "#{CONFIG}"
 
     default
 }
