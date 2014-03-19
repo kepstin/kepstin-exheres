@@ -27,9 +27,9 @@ DEPENDENCIES="
         dev-python/musicbrainzngs[>=0.4][python_abis:*(-)?]
         dev-python/PyYAML[python_abis:*(-)?]
     test:
-        dev-python/Flask[python_abis:*(-)?]
+        dev-python/Flask[python_abis:*(?)?]
     suggestion:
-        dev-python/Flask[python_abis:*(-)?] [[ description = [ An experimental Web-based GUI for beets ] ]]
+        dev-python/Flask[python_abis:*(?)?] [[ description = [ An experimental Web-based GUI for beets ] ]]
         dev-python/discogs-client[python_abis:*(-)?] [[ description = [ Search for releases in the Discogs database ] ]]
         dev-python/gst-python[python_abis:*(-)?] [[ description = [ A music player for your beets library that emulates MPD and is compatible with MPD clients ] ]]
         dev-python/pyechonest[python_abis:*(-)?] [[ description = [ Automatically fetch acoustic attributes from the Echo Nest ] ]]
