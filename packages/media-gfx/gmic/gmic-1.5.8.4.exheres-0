@@ -16,7 +16,7 @@ LICENCES="CeCILL-2.0"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
-    gimp [[ description = [ install a plugin for The Gimp ] ]]
+    gimp [[ description = [ install a filter plugin for The Gimp ] ]]
 "
 
 # The defaults are the "Minimal" dependencies + jpeg + XShm
