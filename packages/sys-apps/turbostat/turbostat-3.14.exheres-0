@@ -21,10 +21,6 @@ DEPENDENCIES=""
 
 BUGS_TO=""
 
-DEFAULT_SRC_PREPARE_PATCHES=(
-    "${FILES}"/3.13.3-cpuid-pic-support.patch
-)
-
 src_compile() {
     edo pushd tools/power/x86/turbostat
     default
