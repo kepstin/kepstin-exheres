@@ -1,0 +1,112 @@
+# Copyright 2009 Saleem Abdulrasool <compnerd@compnerd.org>
+# Copyright 2011 Brett Witherspoon <spoonb@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+
+#require gnome.org [ suffix=".tar.xz" ]
+require gsettings
+
+SCM_REPOSITORY="git://git.gnome.org/mutter.git"
+SCM_BRANCH="wayland"
+SCM_CHECKOUT_TO="mutter"
+SCM_weston_REPOSITORY="git://anongit.freedesktop.org/wayland/weston"
+SCM_weston_BRANCH="master"
+SCM_SECONDARY_REPOSITORIES="weston"
+
+require scm-git autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.13 1.12 1.11 ] ]
+
+SUMMARY="Clutter and metacity based wayland compositor"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="gobject-introspection
+    sound [[ description = [ Enable the use of libcanberra for event sounds ] ]]
+    ( linguas:
+        am ar as ast az be be@latin bg bn bn_IN br bs ca ca@valencia cs cy da
+        de dz el en_CA en_GB eo es et eu fa fi fr ga gl gu ha he hi hr hu hy id
+        ig is it ja ka kk kn ko ku la lt lv mai mg mk ml mn mr ms nb nds ne nl
+        nn oc or pa pl pt pt_BR ro ru rw si sk sl sq sr sr@latin sv ta te tg th
+        tk tr ug uk vi wa xh yo zh_CN zh_HK zh_TW )
+"
+
+DEPENDENCIES="
+    build:
+        app-doc/gtk-doc-autotools [[ note = [ for scm version ] ]]
+        gnome-desktop/gnome-common [[ note = [ for scm version ] ]]
+        sys-devel/gettext
+        dev-util/intltool[>=0.35.0]
+        virtual/pkg-config[>=0.20]
+    build+run:
+        x11-libs/gtk+:3[>=3.9.11][gobject-introspection?]
+        dev-libs/glib:2[>=2.25.10]
+        x11-libs/pango[>=1.2.0]
+        x11-libs/cairo[>=1.10.0]
+        gnome-desktop/gsettings-desktop-schemas[>=3.7.3][gobject-introspection?]
+        x11-libs/libXcomposite[>=0.2]
+        x11-libs/libXfixes
+        x11-libs/libXrender
+        x11-libs/libXdamage
+        x11-libs/libXi[>=1.6.99.1]
+        x11-libs/libXcursor
+        x11-libs/libX11
+        x11-libs/libXinerama
+        x11-libs/libXext
+        x11-libs/libXrandr
+        x11-libs/libSM
+        x11-libs/libICE
+        x11-libs/clutter:1[>=1.15.90][gobject-introspection?]
+        x11-libs/cogl:1.0[>=1.17.1]
+        x11-libs/startup-notification[>=0.7]
+        sys-apps/upower[>=0.99.0]
+        gnome-desktop/gnome-desktop:3.0
+        x11-dri/libdrm
+        sys-apps/systemd [[ note = [ for libsystemd-logind ] ]]
+        x11-libs/clutter[wayland]
+        sys-libs/wayland
+        sound? ( media-libs/libcanberra[gtk3][>=0.26] )
+        gnome-desktop/zenity
+        gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=0.9.5] )
+    run:
+        x11-server/xorg-server[xwayland]
+        gnome-desktop/mutter[gobject-introspection?]
+    recommendation:
+        gnome-desktop/gnome-themes-standard [[
+            description = [ Provides default GNOME 3 theme (Adwaita) ]
+        ]]
+"
+
+DEFAULT_SRC_CONFIGURE_PARAMS=(
+    '--enable-sm' '--enable-startup-notification' '--enable-xsync'
+    '--enable-shape' '--disable-debug'
+    '--disable-static' '--disable-gtk-doc'
+    # need to reduce default compiler warnings due to deprecation errors
+    '--enable-compile-warnings=maximum'
+    # weston protocol files are required for build, but don't get installed
+    '--with-wayland-protocols="${WORKBASE}/weston/protocol'
+)
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    'gobject-introspection introspection'
+)
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( 'sound libcanberra' )
+
+src_prepare() {
+    edo mkdir m4
+    edo glib-gettextize --force --copy
+    edo gtkdocize --copy
+    edo gnome-doc-common --copy
+    edo intltoolize --force --copy --automake
+    autotools_src_prepare
+    default
+}
+
+src_install() {
+    default
+
+    # Remove files that collide with mutter
+    edo rm -r "${IMAGE}"/usr/share/GConf
+    edo rm "${IMAGE}"/usr/share/glib-2.0/schemas/org.gnome.mutter.gschema.xml
+    edo rm -r "${IMAGE}"/usr/share/gnome-control-center
+    ever is_scm || edo rm -r "${IMAGE}"/usr/share/gtk-doc
+    edo rm -r "${IMAGE}"/usr/share/man
+}
+
