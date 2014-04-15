@@ -1,0 +1,99 @@
+# Copyright 2010-2011 Brett Witherspoon <spoonb@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+
+require gnome-shell
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.13 1.12 1.11 ] ]
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="browser-plugin [[ description = [ build browser plugin to manage extensions ] ]]
+gtk-doc man-pages
+systemd [[ description = [ integrate with journald ] ]]
+wayland
+    ( linguas: af an ar as ast be bg bn bn_IN ca ca@valencia cs da de el en_GB eo es et eu fa fi fr
+               fur ga gl gu he hi hu ia id it ja kk kn ko ku ky lt lv mk ml mr ms nb nl nn or pa pl
+               pt pt_BR ro ru si sk sl sr sr@latin sv ta te tg th tr ug uk vi zh_CN zh_HK zh_TW )
+"
+
+DEPENDENCIES="
+    build:
+        dev-util/intltool[>=0.40]
+        virtual/pkg-config[>=0.22]
+        gnome-desktop/gnome-control-center [[ note = [ for gnome-keybindings.pc ] ]]
+        sys-devel/gettext[>=0.17]
+        gtk-doc? ( dev-doc/gtk-doc[>=1.15] )
+        man-pages? ( dev-libs/libxslt )
+    build+run:
+        x11-libs/clutter:1[>=1.13.4][gobject-introspection]
+        x11-dri/mesa
+        gnome-bindings/gjs:1[>=1.39.0]
+        dev-lang/python:*[>=2.5] [[ note = [ for gnome-shell-extension-tool ] ]]
+        dev-libs/glib:2[>=2.37.0]
+        dev-libs/libcroco[>=0.6.8]
+        dev-libs/libxml2:2.0
+        gnome-desktop/evolution-data-server:1.2[>=3.5.3][calendar(+)][gobject-introspection]
+        gnome-desktop/gnome-bluetooth:1[>=3.9.0][gobject-introspection] [[
+            note = [ automagic and crashes without introspection ]
+        ]]
+        gnome-desktop/gobject-introspection:1[>=0.10.1]
+        gnome-desktop/gsettings-desktop-schemas[>=3.7.4]
+        gnome-desktop/caribou:1.0[>=0.4.8]
+        gnome-desktop/libsoup:2.4[gobject-introspection]
+        gnome-desktop/mutter[>=$(ever range 1-2 ${PV})][gobject-introspection]
+        wayland? ( gnome-desktop/mutter-wayland[>=$(ever range 1-2 ${PV})][gobject-introspection] )
+        gnome-desktop/network-manager-applet[>=0.9.6][gobject-introspection] [[ note = [ provides NMGtk ] ]]
+        media-libs/gstreamer:1.0[>=0.11.92] [[ note = automagic ]]
+        media-libs/libcanberra[gtk3]
+        media-plugins/gst-plugins-base:1.0[>=0.11.92] [[ note = automagic ]]
+        media-sound/pulseaudio[>=2.0]
+        net-im/telepathy-glib[>=0.17.5][gobject-introspection]
+        net-im/telepathy-logger:0.2[>=0.2.4][gobject-introspection]
+        sys-auth/polkit:1[>=0.100][gobject-introspection]
+        x11-libs/gdk-pixbuf:2.0[gobject-introspection]
+        x11-libs/gtk+:3[>=3.7.9][gobject-introspection]
+        x11-libs/libX11
+        net-apps/NetworkManager[>=0.9.8][gobject-introspection]
+        dev-libs/libsecret:1
+        gnome-desktop/gcr[>=3.7.5][gobject-introspection]
+        gnome-desktop/gnome-desktop:3.0[>=3.7.90][gobject-introspection]
+        gnome-desktop/gnome-menus[gobject-introspection]
+        x11-libs/libXtst
+        x11-libs/startup-notification[>=0.11]
+        dev-libs/at-spi2-core[gobject-introspection]
+        dev-libs/at-spi2-atk [[ note = [ provides atk-bridge which is required ] ]]
+        browser-plugin? ( core/json-glib[>=0.13.2] )
+        systemd? ( sys-apps/systemd )
+    run:
+        sys-apps/upower[gobject-introspection]
+        gnome-desktop/gnome-settings-daemon:3.0
+        gnome-desktop/libgnomekbd[gobject-introspection] [[ note = [ for keyboard status applet ] ]]
+        gnome-desktop/caribou
+        gnome-desktop/gdm[gobject-introspection]
+        x11-libs/pango[gobject-introspection] [[ note = [ silent dependency in userMenu.js ] ]]
+    recommendation:
+        fonts/cantarell-fonts [[
+            description = [ The default font for GNOME3 ]
+        ]]
+        gnome-desktop/gnome-icon-theme-symbolic[>=2.91.0] [[
+            description = [ Symbolic icons are preferred for GNOME Shell ]
+        ]]
+        media-plugins/gst-plugins-good:1.0[gstreamer_plugins:vpx] [[
+            description = [ Required for the screen recorder feature ]
+        ]]
+    suggestion:
+        gnome-desktop/gnome-tweak-tool [[
+            description = [ Provides a tool for changing themes ]
+        ]]
+        gnome-desktop/gnome-shell-extensions [[
+            description = [ Extensions to modify and extend GNOME Shell functionality and behavior ]
+        ]]
+"
+
+DEFAULT_SRC_CONFIGURE_PARAMS=( '--enable-introspection'
+                               '--enable-networkmanager'
+                               '--disable-jhbuild-wrapper-script'
+                               '--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt' )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'browser-plugin' gtk-doc 'man-pages man' 'systemd' wayland )
+DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}"/gnome-shell-3.12-automagic-wayland.patch )
+
