@@ -1,0 +1,51 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge qmake [ slot=4 ] gtk-icon-cache
+
+SUMMARY="QTScrobbler is tool for submitting from portable players to Last.fm & Libre.fm."
+DESCRIPTION="
+Read playcounts from various types of portable players, including Apple iPod
+Play Counts, Microsoft MTP (aka PlaysForSure), and Rockbox .scrobbler.log
+files, and submit the plays to Last.fm and Libre.fm via the AudioScrobbler
+protocol 1.2. Supports recalculating play times for players with incorrect or
+no clock.
+"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+    build+run:
+        x11-libs/qt:4[>=4.6]
+        media-libs/libmtp
+"
+
+BUGS_TO=""
+
+EQMAKE_PARAMS=(
+    PREFIX=/usr
+)
+
+src_configure() {
+    edo pushd src
+    qmake_src_configure
+    edo popd
+}
+
+src_compile() {
+    edo pushd src
+    default
+    edo popd
+}
+
+src_install() {
+    edo pushd src
+    default
+    edo popd
+}
+
