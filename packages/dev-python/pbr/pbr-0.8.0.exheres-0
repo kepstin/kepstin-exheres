@@ -18,6 +18,10 @@ LICENCES="Apache-2.0"
 SLOT="0"
 PLATFORMS="~amd64"
 
+# A bunch of the test dependencies are unresolvable; it requires a few
+# specific older versions of packages
+RESTRICT="test"
+
 DEPENDENCIES="
     build+run:
         dev-python/pip[python_abis:*(-)?]
