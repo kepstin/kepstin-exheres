@@ -25,7 +25,7 @@ DEPENDENCIES="
         dev-python/coverage[>=3.6][python_abis:*(-)?]
         dev-python/discover[python_abis:*(-)?]
         dev-python/fixtures[>=0.3.14][python_abis:*(-)?]
-        dev-python/flake8[>=2.0.0]][python_abis:*(-)?]
+        dev-python/flake8[>=2.0.0][python_abis:*(-)?]
         dev-python/mock[>=0.8.0][python_abis:*(-)?]
         dev-python/python-subunit[>=0.0.18][python_abis:*(-)?]
         dev-python/Sphinx[>=1.1.2&<1.2][python_abis:*(-)?]
