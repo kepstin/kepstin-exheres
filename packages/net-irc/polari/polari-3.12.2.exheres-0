@@ -15,6 +15,9 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Polari"
 LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
+MYOPTIONS="linguas: ar ca ca@valencia cs da de el es eu fi fr gl he hu id it ko
+                    lv lt nb pa pl pt pt_BR ru sk sl sr sr@latin te uk zh_CN
+                    zh_HK zh_TW"
 
 DEPENDENCIES="
     build: 
