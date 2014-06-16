@@ -3,7 +3,6 @@
 
 require gnome.org [ suffix=.tar.xz ]
 require gsettings freedesktop-desktop gtk-icon-cache
-require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
 
 SUMMARY="An IRC Client for GNOME"
 DESCRIPTION="
@@ -19,12 +18,13 @@ PLATFORMS="~amd64"
 
 DEPENDENCIES="
     build: 
-        dev-util/intltool[>=0.25]
+        dev-util/intltool[>=0.50]
         virtual/pkg-config[>=0.14]
+        dev-util/desktop-file-utils
     build+run:
-        dev-libs/glib:2
+        dev-libs/glib:2[>=2.39.0]
         gnome-desktop/gobject-introspection:1
-        x11-libs/gtk+:3[>=3.9.12][gobject-introspection]
+        x11-libs/gtk+:3[>=3.11.5][gobject-introspection]
         net-im/telepathy-glib[gobject-introspection]
         gnome-bindings/gjs:1
     run:
@@ -34,13 +34,6 @@ DEPENDENCIES="
         gnome-desktop/libsoup[gobject-introspection]
         net-im/telepathy-idle
 "
-
-src_prepare() {
-    default
-    edo mkdir m4
-    edo intltoolize --force --copy --automake
-    AT_M4DIR=m4 eautoreconf
-}
 
 pkg_preinst() {
     default
