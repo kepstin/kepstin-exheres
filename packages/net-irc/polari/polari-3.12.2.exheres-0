@@ -38,11 +38,6 @@ DEPENDENCIES="
         net-im/telepathy-idle
 "
 
-src_install() {
-    default
-    [[ -z $LINGUAS ]] && edo rm -r "${IMAGE}"/usr/share/locale
-}
-
 pkg_preinst() {
     default
     gtk-icon-cache_pkg_preinst
