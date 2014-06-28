@@ -1,8 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require setup-py [ import=distutils has_lib=true has_bin=false ]
-require pypi
+require setup-py [ import=distutils ] pypi
 
 SUMMARY="ASCII transliterations of Unicode text"
 DESCRIPTION="
