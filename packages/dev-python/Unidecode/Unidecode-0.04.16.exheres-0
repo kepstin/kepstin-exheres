@@ -16,3 +16,7 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
+setup-py_test_one_multibuild() {
+    edo ${PYTHON} -B setup.py test
+}
+
