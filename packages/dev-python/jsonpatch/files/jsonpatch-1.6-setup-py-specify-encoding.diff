@@ -1,0 +1,22 @@
+Common subdirectories: jsonpatch-1.6.orig/bin and jsonpatch-1.6/bin
+Common subdirectories: jsonpatch-1.6.orig/jsonpatch.egg-info and jsonpatch-1.6/jsonpatch.egg-info
+diff -u jsonpatch-1.6.orig/setup.py jsonpatch-1.6/setup.py
+--- jsonpatch-1.6.orig/setup.py	2014-06-29 08:42:54.499499400 -0400
++++ jsonpatch-1.6/setup.py	2014-06-29 08:44:25.875219000 -0400
+@@ -3,6 +3,7 @@
+ import sys
+ import re
+ import warnings
++import io
+ try:
+     from setuptools import setup
+     has_setuptools = True
+@@ -10,7 +11,7 @@
+     from distutils.core import setup
+     has_setuptools = False
+ 
+-src = open('jsonpatch.py').read()
++src = io.open('jsonpatch.py', encoding='utf-8').read()
+ metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", src))
+ docstrings = re.findall('"""([^"]*)"""', src, re.MULTILINE | re.DOTALL)
+ 
