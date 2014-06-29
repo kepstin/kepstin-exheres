@@ -20,7 +20,13 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
-DEPENDENCIES=""
+DEPENDENCIES="
+    suggestions:
+        dev-python/rfc3987[python_abis:*(-)?] [[ description = [ Enable the uri format checker ] ]]
+        dev-python/strict-rfc3339[python_abis:*(-)?] [[ description = [ Enable the date-time format checker ] ]]
+        dev-python/webcolors[python_abis:*(-)?] [[ description = [ Enable the color format checker ] ]]
+        
+"
 
 BUGS_TO=""
 
