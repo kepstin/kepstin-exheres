@@ -23,8 +23,11 @@ DEPENDENCIES="
 
 BUGS_TO=""
 
-DEFAULT_SRC_CONFIGURE_PARAMS=( )
-DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( )
-DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( )
-
+setup-py_test_one_multibuild() {
+    PYTEST="py.test-$(python_get_abi)"
+    case $(python_get_abi) in
+    2*) PYTHONPATH="$(echo ${PWD}/build/lib*)" edo ${PYTEST} ;;
+    3*) echo "Tests are broken in python3; skipping" ;;
+    esac
+}
 
