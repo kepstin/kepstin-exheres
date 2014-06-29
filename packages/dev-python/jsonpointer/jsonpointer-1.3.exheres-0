@@ -1,0 +1,21 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi setup-py [ import=setuptools blacklist=3.1 has_bin=true ]
+
+SUMMARY="Identify specific nodes in a JSON document (RFC 6901)"
+HOMEPAGE="https://github.com/stefankoegl/python-json-pointer"
+
+LICENCES="BSD-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES=""
+
+BUGS_TO=""
+
+setup-py_test_one_multibuild() {
+    PYTHONPATH="$(echo ${PWD}/build/lib*} edo ${PYTHON} tests.py
+}
+
