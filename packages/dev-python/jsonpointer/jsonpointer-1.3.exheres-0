@@ -16,6 +16,6 @@ DEPENDENCIES=""
 BUGS_TO=""
 
 setup-py_test_one_multibuild() {
-    PYTHONPATH="$(echo ${PWD}/build/lib*} edo ${PYTHON} tests.py
+    PYTHONPATH="$(echo ${PWD}/build/lib*)" edo ${PYTHON} tests.py
 }
 
