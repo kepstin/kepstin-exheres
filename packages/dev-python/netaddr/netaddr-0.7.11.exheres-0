@@ -1,7 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require pypi setup-py [ import=distutils ]
+require pypi setup-py [ import=setuptools ]
 
 SUMMARY="Pythonic manipulation of IPv4, IPv6, CIDR, EUI and MAC network addresses"
 DESCRIPTION="
