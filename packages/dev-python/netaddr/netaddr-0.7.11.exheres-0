@@ -1,7 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require pypi setup-py [ import=setuptools ]
+require pypi setup-py [ import=distutils ]
 
 SUMMARY="Pythonic manipulation of IPv4, IPv6, CIDR, EUI and MAC network addresses"
 DESCRIPTION="
@@ -25,6 +25,6 @@ DEPENDENCIES=""
 BUGS_TO=""
 
 setup-py_test_one_multibuild() {
-    edo ${PYTHON} -B setup_egg.py test
+    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B netaddr/tests/__init__.py
 }
 
