@@ -1,0 +1,28 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi setup-py [ import=setuptools test=pytest ]
+
+SUMMARY="An implementation of JSON Schema validation for Python"
+DESCRIPTION="
+jsonschema is an implementation of JSON Schema for Python.
+
+Features
+  * Full support for Draft 3 and Draft 4 of the schema.
+  * Lazy validation that can iteratively report all validation errors.
+  * Small and extensible
+  * Programmatic querying of which properties or items failed validation.
+"
+HOMEPAGE="http://github.com/Julian/jsonschema"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES=""
+
+BUGS_TO=""
+
+PYTEST_PARAMS=( jsonschema )
+
