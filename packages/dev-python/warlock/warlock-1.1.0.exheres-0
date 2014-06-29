@@ -1,7 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require pypi setup-py [ import=setuptools test=pytest ]
+require pypi setup-py [ import=setuptools test=pytest blacklist=3.1 ]
 
 SUMMARY="Python object model built on JSON schema and JSON patch"
 DESCRIPTION="
