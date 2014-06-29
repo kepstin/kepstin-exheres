@@ -1,5 +1,8 @@
-Common subdirectories: jsonpatch-1.6.orig/bin and jsonpatch-1.6/bin
-Common subdirectories: jsonpatch-1.6.orig/jsonpatch.egg-info and jsonpatch-1.6/jsonpatch.egg-info
+Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: TODO, see https://github.com/stefankoegl/python-json-pointer/issues/8
+Reason: Running setup.py fails with an exception when reading a unicode source
+ file in a non-unicode locale (e.g. "C"). Specify the file encoding explicitly.
+
 diff -u jsonpatch-1.6.orig/setup.py jsonpatch-1.6/setup.py
 --- jsonpatch-1.6.orig/setup.py	2014-06-29 08:42:54.499499400 -0400
 +++ jsonpatch-1.6/setup.py	2014-06-29 08:44:25.875219000 -0400
