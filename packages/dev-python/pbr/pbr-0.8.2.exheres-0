@@ -1,8 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require setup-py [ import=setuptools has_bin=false has_lib=true ]
-require pypi
+require setup-py [ import=setuptools ] pypi
 
 SUMMARY="A library for managing setuptools packaging needs in a consistent manner."
 DESCRIPTION="
@@ -22,9 +21,11 @@ PLATFORMS="~amd64"
 # specific older versions of packages
 RESTRICT="test"
 
+# With distro dependency handling, pip support is not needed.
+# See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
+export SKIP_PIP_INSTALL=1
+
 DEPENDENCIES="
-    build+run:
-        dev-python/pip[python_abis:*(-)?]
     test:
         dev-python/coverage[>=3.6][python_abis:*(-)?]
         dev-python/discover[python_abis:*(-)?]
