@@ -25,6 +25,6 @@ DEPENDENCIES=""
 BUGS_TO=""
 
 setup-py_test_one_multibuild() {
-    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B tests/__init__.py
+    edo ${PYTHON} -B setup_egg.py test
 }
 
