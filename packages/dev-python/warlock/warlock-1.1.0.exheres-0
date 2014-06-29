@@ -1,0 +1,30 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi setup-py [ import=setuptools test=pytest ]
+
+SUMMARY="Python object model built on JSON schema and JSON patch"
+DESCRIPTION="
+Build self-validating python objects using JSON schemas.
+"
+HOMEPAGE="https://github.com/bcwaldon/warlock"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        dev-python/jsonschema[>=0.7&<3][python_abis:*(-)?]
+        dev-python/jsonpatch[>=0.10&<2][python_abis:*(-)?]
+        dev-python/six[python_abis:*(-)?]
+"
+
+BUGS_TO=""
+
+DEFAULT_SRC_CONFIGURE_PARAMS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( )
+
+
