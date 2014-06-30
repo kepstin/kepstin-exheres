@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require pypi
+require setup-py [ import=distutils ]
 
 SUMMARY="Fixtures, reusable state for writing clean tests and more."
 DESCRIPTION="
@@ -22,4 +23,9 @@ DEPENDENCIES="
     build+run:
         dev-python/testtools[>=0.9.22][python_abis:*(-)?]
 "
+
+setup-py_test_one_multibuild() {
+    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B -m testtools.run \
+        fixtures.test_suite
+}
 
