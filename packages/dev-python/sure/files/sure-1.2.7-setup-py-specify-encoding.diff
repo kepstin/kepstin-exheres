@@ -1,0 +1,24 @@
+Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: TODO
+Reason: setup.py fails to read a file when system local is not UTF-8
+
+diff -u -r sure-1.2.7.orig/setup.py sure-1.2.7/setup.py
+--- sure-1.2.7.orig/setup.py	2014-06-30 18:00:50.172098300 -0400
++++ sure-1.2.7/setup.py	2014-06-30 18:01:37.331071100 -0400
+@@ -17,6 +17,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import ast
++import io
+ import os
+ from setuptools import setup, find_packages
+ 
+@@ -42,7 +43,7 @@
+ 
+ 
+ local_file = lambda *f: \
+-    open(os.path.join(os.path.dirname(__file__), *f)).read()
++    io.open(os.path.join(os.path.dirname(__file__), *f), encoding='utf-8').read()
+ 
+ 
+ tests_require = ['nose', 'mock']

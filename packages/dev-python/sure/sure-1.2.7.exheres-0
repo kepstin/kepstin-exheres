@@ -18,3 +18,7 @@ DEPENDENCIES="
         dev-python/six[python_abis:*(-)?]
 "
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/${PNV}-setup-py-specify-encoding.diff
+)
+
