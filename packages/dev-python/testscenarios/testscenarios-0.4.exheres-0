@@ -25,7 +25,9 @@ DEPENDENCIES="
 "
 
 setup-py_test_one_multibuild() {
-    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B -m testtools.run \
+    # Tests reference documentation files in source dir with relative paths,
+    # so they have to be run in the source dir.
+    PYTHONPATH="$(ls -d ${PWD}/lib)" edo ${PYTHON} -B -m testtools.run \
         testscenarios.test_suite
 }
 
