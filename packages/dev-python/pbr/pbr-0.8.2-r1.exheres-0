@@ -36,7 +36,7 @@ DEPENDENCIES="
         dev-python/Sphinx[>=1.1.2&<1.2][python_abis:*(-)?]
         dev-python/testrepository[>=0.0.18][python_abis:*(-)?]
         dev-python/testtools[>=0.9.34][python_abis:*(-)?]
-    suggestion:
+    run:
         dev-python/pip [[ description = [ Handle deps with pip when working with source ] ]]
 "
 
