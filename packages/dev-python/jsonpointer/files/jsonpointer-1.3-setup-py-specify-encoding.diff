@@ -1,21 +1,30 @@
-Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
-Upstream: https://github.com/stefankoegl/python-json-pointer/issues/8
-Reason: Running setup.py fails with an exception when reading a unicode source
- file in a non-unicode locale (e.g. "C"). Specify the file encoding explicitly.
+From ffcafea3a18b34d203f3262150fb0fd48ae67c0c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20K=C3=B6gl?= <stefan@skoegl.net>
+Date: Mon, 30 Jun 2014 22:37:26 +0200
+Subject: [PATCH] [Setup] use utf-8 explicitly in setup.py, fixes #8
 
-diff -u jsonpointer-1.3.orig/setup.py jsonpointer-1.3/setup.py
---- jsonpointer-1.3.orig/setup.py	2014-06-28 21:42:14.116950700 -0400
-+++ jsonpointer-1.3/setup.py	2014-06-28 21:43:51.091683600 -0400
-@@ -3,10 +3,11 @@
+---
+ setup.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 59124fd..36dc457 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,11 +2,12 @@
+ 
  from distutils.core import setup
  import re
- import os.path
 +import io
+ import os.path
  
  dirname = os.path.dirname(os.path.abspath(__file__))
  filename = os.path.join(dirname, 'jsonpointer.py')
 -src = open(filename).read()
-+src = io.open(filename, encoding="utf-8").read()
++src = io.open(filename, encoding='utf-8').read()
  metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", src))
  docstrings = re.findall('"""(.*)"""', src)
  
+-- 
+1.9.3
+
