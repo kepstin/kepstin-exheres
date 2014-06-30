@@ -5,7 +5,6 @@ MY_PN=${PN/-/.}
 MY_PNV=${MY_PN}-${PV}
 
 require pypi [ pn=${MY_PN} pnv=${MY_PNV} ]
-SETUP_CFG_COMMANDS="pbr"
 require setup-py [ import=setuptools work=${MY_PNV} ]
 
 SUMMARY="Oslo Configuration API"
@@ -22,7 +21,7 @@ MYOPTIONS=""
 
 # With distro dependency handling, pip support is not needed.
 # See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
-SETUP_CFG_pbr_PARAMS=( "skip_pip_install = True" )
+export SKIP_PIP_INSTALL=1
 
 DEPENDENCIES="
     build:
