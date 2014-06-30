@@ -12,6 +12,10 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
+# urllib3 tests fail unless they get 100% coverage, and need exact dependencies
+# in order to do so.
+RESTRICT="test"
+
 DEPENDENCIES="
     test:
         dev-python/nose[>=1.3][python_abis:*(-)?]
