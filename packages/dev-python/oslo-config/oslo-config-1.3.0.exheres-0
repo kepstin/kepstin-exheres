@@ -1,0 +1,31 @@
+# Copyright 2014 <name>
+# Distributed under the terms of the GNU General Public License v2
+
+MY_PN=${PN/-/.}
+
+require pypi [ pn=${MY_PN} ]
+require setup-py [ import=setuptools ]
+
+SUMMARY="Oslo Configuration API"
+DESCRIPTION="
+The Oslo configuration API supports parsing command line arguments and
+.ini style configuration files.
+"
+HOMEPAGE="https://launchpad.net/oslo"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+        dev-python/six[>=1.5.2][python_abis:*(-)?]
+    test:
+"
+
+setup-py_test_one_multibuild() {
+    edo ${PYTHON} -B setup.py testr
+}
+
