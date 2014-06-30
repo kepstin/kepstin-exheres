@@ -25,7 +25,7 @@ DEPENDENCIES="
 "
 
 setup-py_test_one_multibuild() {
-    # The tests reference uninstalled documentation files by relative path,
+    # The tests references documentation files by relative path,
     # so they have to be run in the source dir, not build dir.
     PYTHONPATH="$(ls -d ${PWD}/lib)" edo ${PYTHON} -B -m testtools.run \
         fixtures.test_suite
