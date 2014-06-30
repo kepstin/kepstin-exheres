@@ -19,6 +19,10 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
+# With distro dependency handling, pip support is not needed.
+# See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
+export SKIP_PIP_INSTALL=1
+
 DEPENDENCIES="
     build:
     build+run:
