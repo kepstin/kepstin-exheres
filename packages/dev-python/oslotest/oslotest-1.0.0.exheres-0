@@ -17,11 +17,12 @@ DEPENDENCIES="
         dev-python/pbr[python_abis:*(-)?]
     build+run:
         dev-python/fixtures[>=0.3.14][python_abis:*(-)?]
-        dev-python/testscenarios[>=0.4][python_abis:*(-)?]
-        dev-python/testtools[>=0.9.34][python_abis:*(-)?]
         dev-python/mock[>=1.0][python_abis:*(-)?]
         dev-python/mox3[python_abis:*(-)?]
         python_abis:2.7? ( dev-python/mox )
+        dev-python/six[python_abis:*(-)?]
+        dev-python/testscenarios[>=0.4][python_abis:*(-)?]
+        dev-python/testtools[>=0.9.34][python_abis:*(-)?]
 "
 
 # With distro dependency handling, pip support is not needed.
