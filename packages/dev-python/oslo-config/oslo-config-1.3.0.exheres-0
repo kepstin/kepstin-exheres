@@ -3,7 +3,7 @@
 
 MY_PN=${PN/-/.}
 
-require pypi [ pn=${MY_PN} ]
+require pypi [ pn=${MY_PN} pnv=${MY_PN}-${PV} ]
 require setup-py [ import=setuptools ]
 
 SUMMARY="Oslo Configuration API"
