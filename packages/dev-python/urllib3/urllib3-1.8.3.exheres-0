@@ -12,10 +12,6 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
-# urllib3 tests fail unless they get 100% coverage, and need exact dependencies
-# in order to do so.
-RESTRICT="test"
-
 DEPENDENCIES="
     test:
         dev-python/nose[>=1.3][python_abis:*(-)?]
@@ -23,4 +19,9 @@ DEPENDENCIES="
         dev-python/tornado[>=3.1.1][python_abis:*(-)?]
         dev-python/coverage[>=3.6][python_abis:*(-)?]
 "
+
+# The tests normally fail if coverage is <100%, but getting 100% requires
+# specific versions of dependencies.
+# Lower the minimum required coverage so it acts as functional tests only.
+NOSE_TESTS_PARAMS=( --cover-min-percentage=0 )
 
