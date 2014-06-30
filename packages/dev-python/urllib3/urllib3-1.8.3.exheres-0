@@ -23,5 +23,5 @@ DEPENDENCIES="
 # The tests normally fail if coverage is <100%, but getting 100% requires
 # specific versions of dependencies.
 # Lower the minimum required coverage so it acts as functional tests only.
-NOSE_TESTS_PARAMS=( --cover-min-percentage=0 )
+NOSETESTS_PARAMS=( --cover-min-percentage=0 )
 
