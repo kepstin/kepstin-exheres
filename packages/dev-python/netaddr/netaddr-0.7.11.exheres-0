@@ -29,6 +29,6 @@ DEFAULT_SRC_PREPARE_PATCHES=(
 )
 
 setup-py_test_one_multibuild() {
-    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B netaddr/tests/__init__.py
+    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" PYTHONIOENCODING="utf-8" edo ${PYTHON} -B netaddr/tests/__init__.py
 }
 
