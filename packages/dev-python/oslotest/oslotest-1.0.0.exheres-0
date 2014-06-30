@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require pypi
-require setup-py [ import=setuptools ]
+require setup-py [ import=setuptools blacklist="3.2 3.4" ]
 
 SUMMARY="OpenStack test framework and test fixtures"
 HOMEPAGE="http://docs.openstack.org/developer/oslotest/"
