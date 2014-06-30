@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require pypi
-require setup-py [ import=setuptools tests=nose ]
+require setup-py [ import=setuptools test=nose ]
 
 SUMMARY="A testing library for python with powerful and flexible assertions."
 HOMEPAGE="http://falcao.it/sure"
