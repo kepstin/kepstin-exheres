@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 MY_PN=${PN/-/.}
+MY_PNV=${MY_PN}-${PV}
 
-require pypi [ pn=${MY_PN} pnv=${MY_PN}-${PV} ]
-require setup-py [ import=setuptools ]
+require pypi [ pn=${MY_PN} pnv=${MY_PNV} ]
+require setup-py [ import=setuptools work=${MY_PNV} ]
 
 SUMMARY="Oslo Configuration API"
 DESCRIPTION="
