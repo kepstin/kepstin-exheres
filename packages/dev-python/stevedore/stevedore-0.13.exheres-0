@@ -23,5 +23,10 @@ DEPENDENCIES="
 # See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
 export SKIP_PIP_INSTALL=1
 
-NOSETESTS_PARAMS=( stevedore )
+setup-py_test_one_multibuild() {
+    # Need to run tests in source dir, since some files needed for tests
+    # don't get installed.
+    NOSETESTS="nosetests-$(python_get_abi)"
+    edo ${NOSETESTS} stevedore
+}
 
