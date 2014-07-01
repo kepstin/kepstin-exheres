@@ -10,3 +10,4 @@ Packages in here:
 * The NUT (Network UPS Tools) package.
 * The atop process monitor.
 * The handy little 'fileprune' backup helper utility.
+* OpenStack client tools and supporting Python packages.
