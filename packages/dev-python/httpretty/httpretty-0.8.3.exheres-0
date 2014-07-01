@@ -33,7 +33,9 @@ DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/${PNV}-setup-py-encoding.diff
 )
 
+# Skipping bypass test because it runs a server on a TCP port
 NOSE_TESTS_PARAMS=(
+    --exclude=test_bypass
     tests/unit
     tests/functional
 )
