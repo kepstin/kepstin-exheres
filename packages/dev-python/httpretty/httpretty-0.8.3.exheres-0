@@ -36,6 +36,6 @@ DEFAULT_SRC_PREPARE_PATCHES=(
 # Exclude tests which use network interfaces
 NOSETESTS_PARAMS=(
     tests/unit
-    --exclude=fakesocket
+    --exclude=should_not_raise_on_socket_send
 )
 
