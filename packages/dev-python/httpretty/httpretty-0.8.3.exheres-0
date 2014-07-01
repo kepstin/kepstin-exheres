@@ -40,5 +40,6 @@ NOSETESTS_PARAMS=(
     --exclude=fakesock
     tests/functional
     --exclude=bypass
+    --exclude=record
 )
 
