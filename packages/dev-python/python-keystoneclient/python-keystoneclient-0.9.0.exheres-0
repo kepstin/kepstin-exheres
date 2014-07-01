@@ -32,7 +32,6 @@ DEPENDENCIES="
     test:
         dev-python/fixtures[>=0.3.14][python_abis:*(-)?]
         dev-python/httpretty[>=0.8.0][python_abis:*(-)?]
-        dev-python/keyring[>=2.1][python_abis:*(-)?]
         dev-python/mock[>=1.0][python_abis:*(-)?]
         dev-python/mox3[>=0.7.0][python_abis:*(-)?]
         dev-python/oauthlib[>=0.6][python_abis:*(-)?]
