@@ -1,0 +1,27 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi
+require setup-py [ import=setuptools blacklist=3.1 test=nose ]
+
+SUMMARY="Manage dynamic plugins for Python applications"
+HOMEPAGE="https://github.com/dreamhost/stevedore"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        dev-python/pbr[>=0.5.21&<1.0][python_abis:*(-)?]
+    test:
+        dev-python/mock[python_abis:*(-)?]
+"
+
+# With distro dependency handling, pip support is not needed.
+# See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
+export SKIP_PIP_INSTALL=1
+
+NOSETESTS_PARAMS=( stevedore )
+
