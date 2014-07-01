@@ -37,5 +37,6 @@ DEFAULT_SRC_PREPARE_PATCHES=(
 NOSETESTS_PARAMS=(
     tests/unit
     --exclude=should_not_raise_on_socket_send
+    --exclude=fakesock
 )
 
