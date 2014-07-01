@@ -12,6 +12,9 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
+# Tests are missing from the distributed tarball
+RESTRICT="test"
+
 DEPENDENCIES="
     test:
         dev-python/pycrypto[python_abis:*(-)?]
