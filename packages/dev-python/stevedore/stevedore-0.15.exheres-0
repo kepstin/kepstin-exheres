@@ -23,8 +23,5 @@ DEPENDENCIES="
 # See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
 export SKIP_PIP_INSTALL=1
 
-# I can't make the tests do anything useful.
-RESTRICT="test"
-
 NOSETESTS_PARAMS=( stevedore )
 
