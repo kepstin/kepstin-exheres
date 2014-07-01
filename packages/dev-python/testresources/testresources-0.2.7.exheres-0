@@ -26,6 +26,7 @@ DEPENDENCIES="
 "
 
 setup-py_test_one_multibuild() {
-    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B test_all.py
+    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B -m testtools.run \
+        discover lib/testresources/tests
 }
 
