@@ -15,9 +15,9 @@ and get OAuth support for very little effort.
 "
 HOMEPAGE="https://github.com/idan/oauthlib"
 
-LICENCES=""
+LICENCES="BSD-3"
 SLOT="0"
-PLATFORMS=""
+PLATFORMS="~amd64"
 MYOPTIONS=""
 
 DEPENDENCIES="
