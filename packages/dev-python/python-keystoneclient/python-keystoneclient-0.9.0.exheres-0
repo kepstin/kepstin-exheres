@@ -37,7 +37,6 @@ DEPENDENCIES="
         dev-python/oauthlib[>=0.6][python_abis:*(-)?]
         dev-python/pycrypto[>=2.6][python_abis:*(-)?]
         dev-python/stevedore[>=0.14][python_abis:*(-)?]
-        dev-python/testresources[>=0.2.4][python_abis:*(-)?]
         dev-python/testtools[>=0.9.34][python_abis:*(-)?]
         dev-python/WebOb[>=1.2.3][python_abis:*(-)?]
 "
