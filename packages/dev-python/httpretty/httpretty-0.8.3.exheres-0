@@ -39,5 +39,6 @@ NOSETESTS_PARAMS=(
     --exclude=should_not_raise_on_socket_send
     --exclude=fakesock
     tests/functional
+    --exclude=bypass
 )
 
