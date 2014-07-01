@@ -23,5 +23,12 @@ DEPENDENCIES="
 # See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
 export SKIP_PIP_INSTALL=1
 
-NOSETESTS_PARAMS=( stevedore )
+setup-py_test_one_multibuild() {
+    if ! has_version "${CATEGORY}/${PN}[~${PV}]" ; then
+        einfo "stevedore tests only run correctly if stevedore is installed"
+    else
+        NOSETESTS="nosetests-$(python_get_abi)"
+        PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${NOSETESTS} stevedore
+    fi
+}
 
