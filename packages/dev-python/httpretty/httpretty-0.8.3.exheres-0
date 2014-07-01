@@ -34,7 +34,7 @@ DEFAULT_SRC_PREPARE_PATCHES=(
 )
 
 # Exclude tests which use network interfaces
-NOSE_TESTS_PARAMS=(
+NOSETESTS_PARAMS=(
     tests/unit
     tests/functional
     --exclude=bypass
