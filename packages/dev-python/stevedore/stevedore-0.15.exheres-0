@@ -5,7 +5,7 @@ require pypi
 require setup-py [ import=setuptools blacklist=3.1 test=nose ]
 
 SUMMARY="Manage dynamic plugins for Python applications"
-HOMEPAGE="https://github.com/dreamhost/stevedore"
+HOMEPAGE="https://github.com/openstack/stevedore"
 
 LICENCES="Apache-2.0"
 SLOT="0"
