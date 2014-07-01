@@ -29,6 +29,10 @@ DEPENDENCIES="
         dev-python/tornado[>=3.2][python_abis:*(-)?]
 "
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/${PNV}-setup-py-encoding.diff
+)
+
 NOSE_TESTS_PARAMS=(
     tests/unit
     tests/functional
