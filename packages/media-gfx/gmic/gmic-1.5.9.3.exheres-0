@@ -19,12 +19,13 @@ MYOPTIONS="
     gimp [[ description = [ install a filter plugin for The Gimp ] ]]
 "
 
-# The defaults are the "Minimal" dependencies + jpeg + XShm
+# The defaults are the "Standard UNIX" dependencies
 DEPENDENCIES="
     build+run:
         x11-libs/libX11
         x11-libs/libXext
         media-libs/libpng
+        media-libs/openexr
         media-libs/jpeg
         media-libs/tiff
         sys-libs/zlib
@@ -46,15 +47,16 @@ src_configure() {
 src_compile() {
     edo pushd src
 
-    GMIC_CFLAGS='$(MINIMAL_UNIX_CFLAGS) $(JPEG_CFLAGS) $(XSHM_CFLAGS)'
-    GMIC_LDFLAGS='$(MINIMAL_UNIX_LDFLAGS) $(JPEG_LDFLAGS) $(XSHM_LDFLAGS)'
-
     # Command-line tool
-    emake CUST_UNIX_CFLAGS="${GMIC_CFLAGS}" OPT_CFLAGS="${CFLAGS}" CUST_UNIX_LDFLAGS="${GMIC_LDFLAGS} ${LDFLAGS}" custom
+    emake "CFLAGS=\$(STD_UNIX_CFLAGS) ${CFLAGS}" \
+        "LDFLAGS+=\$(STD_UNIX_LDFLAGS) ${LDFLAGS}" \
+        gmic_gmic
 
     # Gimp plugin
     if option gimp; then
-        emake OPT_CFLAGS="${CFLAGS}" OPT_LDFLAGS="${LDFLAGS}" gimp
+        emake "CFLAGS=\$(STD_GIMP_CFLAGS) ${CFLAGS}" \
+            "LDFLAGS+=\$(STD_GIMP_LDFLAGS) ${LDFLAGS}" \
+            gmic_gimp
     fi
 
     edo popd
