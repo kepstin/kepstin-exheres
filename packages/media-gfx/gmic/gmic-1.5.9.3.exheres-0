@@ -28,6 +28,7 @@ DEPENDENCIES="
         media-libs/openexr
         media-libs/jpeg
         media-libs/tiff
+        sys-devel/gcc:*[openmp]
         sys-libs/zlib
         sci-libs/fftw[=3*]
         gimp? ( media-gfx/gimp[=2*] )
@@ -48,15 +49,11 @@ src_compile() {
     edo pushd src
 
     # Command-line tool
-    emake "CFLAGS=\$(STD_UNIX_CFLAGS) ${CFLAGS}" \
-        "LDFLAGS=\$(STD_UNIX_LDFLAGS) ${LDFLAGS}" \
-        gmic
+    emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" linux
 
     # Gimp plugin
     if option gimp; then
-        emake "CFLAGS=\$(STD_GIMP_CFLAGS) ${CFLAGS}" \
-            "LDFLAGS=\$(STD_GIMP_LDFLAGS) ${LDFLAGS}" \
-            gmic_gimp
+        emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
     fi
 
     edo popd
