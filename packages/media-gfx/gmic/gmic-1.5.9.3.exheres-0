@@ -63,7 +63,7 @@ src_install() {
     exeinto /usr/bin
     doexe src/gmic
 
-    dobashcompletion src/gmic_bashcompletion.sh gmic
+    dobashcompletion resources/gmic_bashcompletion.sh gmic
 
     edo gunzip man/gmic.1.gz
     doman man/gmic.1
