@@ -19,7 +19,7 @@ MYOPTIONS="
     gimp [[ description = [ install a filter plugin for The Gimp ] ]]
 "
 
-# The defaults are the "Standard UNIX" dependencies with openmp disabled
+# The defaults are the "Standard UNIX" dependencies
 DEPENDENCIES="
     build+run:
         x11-libs/libX11
@@ -48,33 +48,14 @@ src_compile() {
     edo pushd src
 
     # Command-line tool
-    GMIC_CFLAGS="
-        \$(MANDATORY_CFLAGS) \$(PARALLEL_CFLAGS) \$(X11_CFLAGS)
-        \$(PNG_CFLAGS) \$(JPEG_CFLAGS) \$(TIFF_CFLAGS)
-        \$(ZLIB_CFLAGS) \$(EXR_CFLAGS) \$(FFTW_CFLAGS)
-    "
-    GMIC_LDFLAGS="
-        \$(MANDATORY_LDFLAGS) \$(PARALLEL_LDFLAGS) \$(X11_LDFLAGS)
-        \$(PNG_LDFLAGS) \$(JPEG_LDFLAGS) \$(TIFF_LDFLAGS)
-        \$(ZLIB_LDFLAGS) \$(EXR_LDFLAGS) \$(FFTW_LDFLAGS)
-    "
-    emake "CFLAGS=${GMIC_CFLAGS} ${CFLAGS}" \
-        "LDFLAGS=${GMIC_LDFLAGS} ${LDFLAGS}" \
+    emake "CFLAGS=\$(STD_UNIX_CFLAGS) ${CFLAGS}" \
+        "LDFLAGS=\$(STD_UNIX_LDFLAGS) ${LDFLAGS}" \
         gmic
 
     # Gimp plugin
     if option gimp; then
-        GMIC_GIMP_CFLAGS="
-            \$(MANDATORY_CFLAGS) \$(PARALLEL_CFLAGS)
-            \$(FFTW_CFLAGS) \$(PNG_CFLAGS) \$(ZLIB_CFLAGS)
-            \${IS_BETA_CFLAGS} -Dcimg_display=0 -Dcimg_use_rng
-        "
-        GMIC_GIMP_LDFLAGS="
-            \$(MANDATORY_LDFLAGS) \$(PARALLEL_LDFLAGS)
-            \$(FFTW_LDFLAGS) \$(PNG_LDFLAGS) \$(ZLIB_LDFLAGS)
-        "
-        emake "CFLAGS=${GMIC_GIMP_CFLAGS} ${CFLAGS}" \
-            "LDFLAGS=${GMIC_GIMP_LDFLAGS} ${LDFLAGS}" \
+        emake "CFLAGS=\$(STD_GIMP_CFLAGS) ${CFLAGS}" \
+            "LDFLAGS=\$(STD_GIMP_LDFLAGS) ${LDFLAGS}" \
             gmic_gimp
     fi
 
