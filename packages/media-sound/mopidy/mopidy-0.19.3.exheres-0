@@ -23,10 +23,15 @@ DEPENDENCIES="
         dev-python/tornado[>=2.3][python_abis:*(-)?]
         media-libs/gstreamer:0.10[>=0.10.31]
         dev-python/gst-python:0.10[python_abis:*(-)?]
-    run:
-        media-plugins/gst-plugins-good:0.10
-        media-plugins/gst-plugins-ugly:0.10
     test:
         dev-python/mock[>=1.0][python_abis:*(-)?]
+        media-plugins/gst-plugins-base:0.10[ogg][vorbis]
+    suggestion:
+        media-plugins/gst-plugins-base:0.10[ogg][vorbis] [[ description = [
+            Support Ogg Vorbis audio files ] ]]
+        media-plugins/gst-plugins-good:0.10[flac] [[ description = [
+            Support FLAC audio files ] ]]
+        media-plugins/gst-plugins-ugly:0.10[mp3] [[ description = [
+            Support MP3 audio files ] ]]
 "
 
