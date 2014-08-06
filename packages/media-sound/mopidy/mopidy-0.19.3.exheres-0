@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require pypi [ pn=${PN^} pnv=${PNV^} ]
-require setup-py [ import=setuptools blacklist=3 test=nose has_bin=true ]
+require setup-py [ import=setuptools blacklist=3 test=nose has_bin=true work=${PNV^} ]
 
 SUMMARY="Mopidy is an extensible music server written in Python."
 DESCRIPTION="
