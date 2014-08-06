@@ -18,10 +18,10 @@ RESTRICT="test"
 
 DEPENDENCIES="
     test:
-        dev-python/nose[>=1.3.3][python_abis:*(-)?]
-        dev-python/mock[>=1.0.1][python_abis:*(-)?]
-        dev-python/tornado[>=3.2.2][python_abis:*(-)?]
-        dev-python/coverage[>=3.7.1][python_abis:*(-)?]
+        dev-python/nose[~1.3.3][python_abis:*(-)?]
+        dev-python/mock[~1.0.1][python_abis:*(-)?]
+        dev-python/coverage[~3.7.1][python_abis:*(-)?]
+        dev-python/tornado[~3.1.1][python_abis:*(-)?]
 "
 
 # The tests normally fail if coverage is <100%, but getting 100% requires
