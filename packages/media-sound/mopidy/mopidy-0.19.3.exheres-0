@@ -1,0 +1,32 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi [ pn=${PN^} pnv=${PNV^} ]
+require setup-py [ import=setuptools blacklist=3 test=nose has_bin=true ]
+
+SUMMARY="Mopidy is an extensible music server written in Python."
+DESCRIPTION="
+Mopidy plays music from local disk, Spotify, SoundCloud, Google Play Music,
+and more. You edit the playlist from any phone, tablet, or computer using a
+range of MPD and web clients.
+"
+HOMEPAGE="http://www.mopidy.com/"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        dev-python/Pykka[>=1.1][python_abis:*(-)?]
+        dev-python/tornado[>=2.3][python_abis:*(-)?]
+        media-libs/gstreamer:0.10[>=0.10.31]
+        dev-python/gst-python:0.10[python_abis:*(-)?]
+    run:
+        media-plugins/gst-plugins-good:0.10
+        media-plugins/gst-plugins-ugly:0.10
+    test:
+        dev-python/mock[>=1.0][python_abis:*(-)?]
+"
+
