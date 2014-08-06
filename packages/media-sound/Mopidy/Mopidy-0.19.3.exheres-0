@@ -25,13 +25,13 @@ DEPENDENCIES="
         dev-python/gst-python:0.10[python_abis:*(-)?]
     test:
         dev-python/mock[>=1.0][python_abis:*(-)?]
-        media-plugins/gst-plugins-base:0.10[ogg][vorbis]
+        media-plugins/gst-plugins-base:0.10[gstreamer_plugins:ogg][gstreamer_plugins:vorbis]
     suggestion:
-        media-plugins/gst-plugins-base:0.10[ogg][vorbis] [[ description = [
+        media-plugins/gst-plugins-base:0.10[gstreamer_plugins:ogg][gstreamer_plugins:vorbis] [[ description = [
             Support Ogg Vorbis audio files ] ]]
-        media-plugins/gst-plugins-good:0.10[flac] [[ description = [
+        media-plugins/gst-plugins-good:0.10[gstreamer_plugins:flac] [[ description = [
             Support FLAC audio files ] ]]
-        media-plugins/gst-plugins-ugly:0.10[mp3] [[ description = [
+        media-plugins/gst-plugins-ugly:0.10[gstreamer_plugins:mp3] [[ description = [
             Support MP3 audio files ] ]]
 "
 
