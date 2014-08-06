@@ -1,5 +1,5 @@
 Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
-Upstream: TODO
+Upstream: https://github.com/gabrielfalcao/HTTPretty/pull/183
 Reason: setup.py fails to read some files when system locale is not UTF-8
 
 diff -u -r httpretty-0.8.3.orig/setup.py httpretty-0.8.3/setup.py
