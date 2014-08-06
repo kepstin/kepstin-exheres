@@ -1,5 +1,5 @@
 Source: written by Calvin Walton <calvin.walton@kepstin.ca>
-Upstream: TODO
+Upstream: https://github.com/drkjam/netaddr/pull/72
 Reason: Ensure the test runner returns an error code when tests fail
 diff -u -r netaddr-0.7.11.orig/netaddr/tests/__init__.py netaddr-0.7.11/netaddr/tests/__init__.py
 --- netaddr-0.7.11.orig/netaddr/tests/__init__.py	2014-06-29 19:43:45.225228400 -0400

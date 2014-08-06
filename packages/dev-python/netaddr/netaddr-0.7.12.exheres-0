@@ -25,7 +25,7 @@ DEPENDENCIES=""
 BUGS_TO=""
 
 DEFAULT_SRC_PREPARE_PATCHES=(
-    "${FILES}"/${PNV}-tests-return-code.diff
+    "${FILES}"/${PN}-tests-return-code.diff
 )
 
 setup-py_test_one_multibuild() {
