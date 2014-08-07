@@ -31,7 +31,7 @@ DEPENDENCIES="
             Support Ogg Vorbis audio files ] ]]
         media-plugins/gst-plugins-good:0.10[gstreamer_plugins:flac] [[ description = [
             Support FLAC audio files ] ]]
-        media-plugins/gst-plugins-ugly:0.10[gstreamer_plugins:mp3] [[ description = [
+        media-plugins/gst-plugins-ugly:0.10[gstreamer_plugins:mad] [[ description = [
             Support MP3 audio files ] ]]
 "
 
