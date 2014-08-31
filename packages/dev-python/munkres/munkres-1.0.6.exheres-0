@@ -1,8 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require setup-py [ import=distutils blacklist=3 has_bin=false has_lib=true ]
-require pypi
+require setup-py [ import=distutils blacklist=3 ] pypi
 
 SUMMARY="munkres algorithm for the Assignment Problem"
 DESCRIPTION="

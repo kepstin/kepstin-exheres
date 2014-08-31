@@ -1,0 +1,33 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi setup-py [ import=setuptools test=pytest blacklist=3.1 ]
+
+SUMMARY="Python object model built on JSON schema and JSON patch"
+DESCRIPTION="
+Build self-validating python objects using JSON schemas.
+"
+HOMEPAGE="https://github.com/bcwaldon/warlock"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        dev-python/jsonschema[>=0.7&<3][python_abis:*(-)?]
+        dev-python/jsonpatch[>=0.10&<2][python_abis:*(-)?]
+        dev-python/six[python_abis:*(-)?]
+"
+
+BUGS_TO=""
+
+setup-py_test_one_multibuild() {
+    PYTEST="py.test-$(python_get_abi)"
+    case $(python_get_abi) in
+    3.4) echo "Tests are broken in python3.4; skipping" ;;
+    *) PYTHONPATH="$(echo ${PWD}/build/lib*)" edo ${PYTEST} ;;
+    esac
+}
+

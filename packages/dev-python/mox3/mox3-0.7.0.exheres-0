@@ -1,0 +1,38 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi
+require setup-py [ import=setuptools blacklist="3.1 3.2 3.4" ]
+
+SUMMARY="Mock object framework for Python"
+DESCRIPTION="
+Mox3 is an unofficial port of the Google mox framework to Python 3. It
+was meant to be as compatible with mox as possible, but small
+enhancements have been made.
+"
+HOMEPAGE="http://www.openstack.org/"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        dev-python/pbr[>=0.5.21&<1.0][python_abis:*(-)?]
+    build+run:
+        dev-python/fixtures[>=0.3.12][python_abis:*(-)?]
+    test:
+        dev-python/testtools[>=0.9.32][python_abis:*(-)?]
+"
+
+# With distro dependency handling, pip support is not needed.
+# See http://docs.openstack.org/developer/pbr/packagers.html#dependencies
+export SKIP_PIP_INSTALL=1
+
+setup-py_test_one_multibuild() {
+    # Test command adapted from the .testr.conf file
+    PYTHONPATH="$(ls -d ${PWD}/build/lib*)" edo ${PYTHON} -B -m testtools.run \
+        discover -t ./ .
+}
+

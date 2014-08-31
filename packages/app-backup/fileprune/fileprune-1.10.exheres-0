@@ -19,10 +19,7 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
-DEPENDENCIES="
-    build:
-    build+run:
-"
+DEPENDENCIES=""
 
 BUGS_TO=""
 

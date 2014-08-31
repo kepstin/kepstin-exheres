@@ -1,0 +1,32 @@
+# Copyright 2012 NAKAMURA Yoshitaka
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require xfont
+
+MY_PNV="mplus-TESTFLIGHT-${PV}"
+PROJ_NAME=mplus-fonts
+SRC_NR=6650
+FONT="M+"
+
+SUMMARY="M+ Japanese outline fonts"
+HOMEPAGE="http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/"
+DOWNLOADS="mirror://sourceforge.jp/${PROJ_NAME}/${SRC_NR}/${MY_PNV}.tar.xz"
+
+LICENCES="as-is"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS=""
+
+DEPENDENCIES=""
+
+BUGS_TO=""
+
+WORK="${WORKBASE}"/${MY_PNV}
+
+src_install() {
+    insinto /usr/share/fonts/X11/${FONT}
+    doins *.ttf
+    fix_fonts
+}
+

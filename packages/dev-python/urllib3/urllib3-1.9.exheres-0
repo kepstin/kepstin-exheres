@@ -1,0 +1,31 @@
+# Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi
+require setup-py [ import=setuptools blacklist=3.1 test=nose ]
+
+SUMMARY="HTTP library with thread-safe connection pooling, file post, and more."
+HOMEPAGE="http://urllib3.readthedocs.org/"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+# Some test files are missing from tarball, so tests can't be run.
+# See https://github.com/shazow/urllib3/issues/440
+RESTRICT="test"
+
+DEPENDENCIES="
+    test:
+        dev-python/nose[~1.3.3][python_abis:*(-)?]
+        dev-python/mock[~1.0.1][python_abis:*(-)?]
+        dev-python/coverage[~3.7.1][python_abis:*(-)?]
+        dev-python/tornado[~3.1.1][python_abis:*(-)?]
+"
+
+# The tests normally fail if coverage is <100%, but getting 100% requires
+# specific versions of dependencies.
+# Lower the minimum required coverage so it acts as functional tests only.
+NOSETESTS_PARAMS=( --cover-min-percentage=0 )
+

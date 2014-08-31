@@ -16,17 +16,19 @@ LICENCES="CeCILL-2.0"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
-    gimp [[ description = [ install a plugin for The Gimp ] ]]
+    gimp [[ description = [ install a filter plugin for The Gimp ] ]]
 "
 
-# The defaults are the "Minimal" dependencies + jpeg + XShm
+# The defaults are the "Standard UNIX" dependencies
 DEPENDENCIES="
     build+run:
         x11-libs/libX11
         x11-libs/libXext
         media-libs/libpng
+        media-libs/openexr
         media-libs/jpeg
         media-libs/tiff
+        sys-devel/gcc:*[openmp]
         sys-libs/zlib
         sci-libs/fftw[=3*]
         gimp? ( media-gfx/gimp[=2*] )
@@ -46,15 +48,12 @@ src_configure() {
 src_compile() {
     edo pushd src
 
-    GMIC_CFLAGS='$(MINIMAL_UNIX_CFLAGS) $(JPEG_CFLAGS) $(XSHM_CFLAGS)'
-    GMIC_LDFLAGS='$(MINIMAL_UNIX_LDFLAGS) $(JPEG_LDFLAGS) $(XSHM_LDFLAGS)'
-
     # Command-line tool
-    emake CUST_UNIX_CFLAGS="${GMIC_CFLAGS}" OPT_CFLAGS="${CFLAGS}" CUST_UNIX_LDFLAGS="${GMIC_LDFLAGS} ${LDFLAGS}" custom
+    emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" linux
 
     # Gimp plugin
     if option gimp; then
-        emake OPT_CFLAGS="${CFLAGS}" OPT_LDFLAGS="${LDFLAGS}" gimp
+        emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
     fi
 
     edo popd
@@ -64,7 +63,7 @@ src_install() {
     exeinto /usr/bin
     doexe src/gmic
 
-    dobashcompletion src/gmic_bashcompletion.sh gmic
+    dobashcompletion resources/gmic_bashcompletion.sh gmic
 
     edo gunzip man/gmic.1.gz
     doman man/gmic.1
