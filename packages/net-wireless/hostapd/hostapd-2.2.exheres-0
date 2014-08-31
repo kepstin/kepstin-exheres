@@ -45,7 +45,7 @@ src_configure() {
 
     # We are using libnl-3.2
     edo sed -i -e 's/#\(CONFIG_LIBNL32=.*\)/\1/' "${CONFIG}"
-    edo sed -i -e 's/#\(CONFIG_VLAN_NETLINK=.*)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_VLAN_NETLINK=.*\)/\1/' "${CONFIG}"
 
     # Enable support for 802.11n & ac
     edo sed -i -e 's/#\(CONFIG_IEEE80211N=.*\)/\1/' "${CONFIG}"
