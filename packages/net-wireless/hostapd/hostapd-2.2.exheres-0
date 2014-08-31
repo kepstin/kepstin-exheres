@@ -19,7 +19,7 @@ PLATFORMS="~amd64 ~x86"
 
 DEPENDENCIES="
     build+run:
-        dev-libs/openssl
+        dev-libs/openssl[>=1.0.1]
         net-libs/libnl:3.0[>=3.2]
 "
 
@@ -44,14 +44,20 @@ src_configure() {
     # appropriate lines in the config file:
 
     # We are using libnl-3.2
-    edo sed -i -e 's/#\(CONFIG_LIBNL32.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_LIBNL32=.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_VLAN_NETLINK=.*)/\1/' "${CONFIG}"
 
     # Enable support for 802.11n & ac
-    edo sed -i -e 's/#\(CONFIG_IEEE80211N.*\)/\1/' "${CONFIG}"
-    edo sed -i -e 's/#\(CONFIG_IEEE80211AC.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_IEEE80211N=.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_IEEE80211AC=.*\)/\1/' "${CONFIG}"
 
     # Enable automatic channel selection (currently nl80211 atheros only)
-    edo sed -i -e 's/#\(CONFIG_ACS.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_ACS=.*\)/\1/' "${CONFIG}"
+
+    # Enable TLSv1.1 & 1.2, to support stronger crypto algorithms
+    # This increases the openssl dep to 1.0.1
+    edo sed -i -e 's/#\(CONFIG_TLSV11=.*\)/\1/' "${CONFIG}"
+    edo sed -i -e 's/#\(CONFIG_TLSV12=.*\)/\1/' "${CONFIG}"
 
     default
 }
