@@ -19,15 +19,18 @@ MYOPTIONS="linguas: ar ca ca@valencia cs da de el es eu fi fr gl he hu id it ko
                     lv lt nb pa pl pt pt_BR ru sk sl sr sr@latin te uk zh_CN
                     zh_HK zh_TW"
 
+# Tests are apparently broken in the released tarball
+RESTRICT="test"
+
 DEPENDENCIES="
     build: 
         dev-util/intltool[>=0.50]
         virtual/pkg-config[>=0.14]
         dev-util/desktop-file-utils
     build+run:
-        dev-libs/glib:2[>=2.39.0]
+        dev-libs/glib:2[>=2.41.0]
         gnome-desktop/gobject-introspection:1
-        x11-libs/gtk+:3[>=3.11.5][gobject-introspection]
+        x11-libs/gtk+:3[>=3.13.4][gobject-introspection]
         net-im/telepathy-glib[gobject-introspection]
         gnome-bindings/gjs:1
     run:
