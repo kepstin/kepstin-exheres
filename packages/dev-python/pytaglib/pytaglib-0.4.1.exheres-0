@@ -1,0 +1,19 @@
+# Copyright 2014 <name>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi
+require setup-py [ import=setuptools ]
+
+SUMMARY="Python bindings for the TagLib audio metadata library"
+HOMEPAGE="https://github.com/supermihi/pytaglib"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build:
+    build+run:
+        media-libs/taglib[>=1.9]
+"
+
