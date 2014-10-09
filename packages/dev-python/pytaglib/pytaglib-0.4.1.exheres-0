@@ -7,6 +7,9 @@ require setup-py [ import=setuptools ]
 SUMMARY="Python bindings for the TagLib audio metadata library"
 HOMEPAGE="https://github.com/supermihi/pytaglib"
 
+# Tests are currently broken in C locale, expect a UTF-8 locale
+RESTRICT="test"
+
 LICENCES="GPL-3"
 SLOT="0"
 PLATFORMS="~amd64"
