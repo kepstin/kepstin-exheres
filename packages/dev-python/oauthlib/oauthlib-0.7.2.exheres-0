@@ -22,24 +22,22 @@ MYOPTIONS=""
 
 DEPENDENCIES="
     test:
+        dev-python/blinker[python-abis:*(-)?]
         dev-python/nose[python_abis:*(-)?]
         dev-python/pycrypto[python_abis:*(-)?]
         dev-python/PyJWT[python_abis:*(-)?]
-        python_abis:2.7? (
-            dev-python/unittest2[python_abis:2.7]
-            dev-python/mock[python_abis:2.7]
-        )
+        python_abis:2.7? ( dev-python/mock[python_abis:2.7] )
     suggestion:
+        dev-python/blinker[python_abis:*(-)?] [[
+            description = [ Announce token changes using blinker ] ]]
         dev-python/pycrypto[python_abis:*(-)?] [[
             description = [ Support the RSA signing algorithm ]
-            group-name = rsa
         ]]
         (
             dev-python/pycrypto[python_abis:*(-)?]
             dev-python/PyJWT[python_abis:*(-)?]
         ) [[
             *description = [ Support signed tokens ]
-            *group-name = signedtoken
         ]]
 "
 
