@@ -1,7 +1,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require pypi setup-py [ import=setuptools test=pytest ]
+require pypi setup-py [ import=setuptools blacklist=3.1 test=pytest ]
 
 SUMMARY="An implementation of JSON Schema validation for Python"
 DESCRIPTION="
@@ -21,6 +21,9 @@ PLATFORMS="~amd64"
 MYOPTIONS=""
 
 DEPENDENCIES="
+    test:
+        dev-python/lxml[python_abis:*(-)?]
+        python_abis:2.7? ( dev-python/mock[python_abis:2.7] )
     suggestion:
         dev-python/rfc3987[python_abis:*(-)?] [[ description = [ Enable the uri format checker ] ]]
         dev-python/strict-rfc3339[python_abis:*(-)?] [[ description = [ Enable the date-time format checker ] ]]
