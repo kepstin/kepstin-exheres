@@ -18,8 +18,11 @@ RESTRICT="test"
 DEPENDENCIES="
     test:
         dev-python/pycrypto[python_abis:*(-)?]
+        dev-python/ecdsa[python_abis:*(-)?]
     suggestion:
         dev-python/pycrypto[python_abis:*(-)?] [[
             description = [ Support the RSASSA-PKCS1-v1_5 algorithms ] ]]
+        dev-python/ecdsa[python_abis:*(-)?] [[
+            description = [ Support the Elliptic Curve Digital Signature algorithms ] ]]
 "
 
