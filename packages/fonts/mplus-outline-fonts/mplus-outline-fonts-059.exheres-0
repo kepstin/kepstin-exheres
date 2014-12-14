@@ -6,7 +6,7 @@ require xfont
 
 MY_PNV="mplus-TESTFLIGHT-${PV}"
 PROJ_NAME=mplus-fonts
-SRC_NR=6650
+SRC_NR=62344
 FONT="M+"
 
 SUMMARY="M+ Japanese outline fonts"

@@ -24,9 +24,9 @@ DEPENDENCIES="
     build+run:
         x11-libs/libX11
         x11-libs/libXext
-        media-libs/libpng
+        media-libs/libpng:=
         media-libs/openexr
-        media-libs/jpeg
+        media-libs/jpeg:=
         media-libs/tiff
         sys-devel/gcc:*[openmp]
         sys-libs/zlib

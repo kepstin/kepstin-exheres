@@ -48,8 +48,8 @@ DEPENDENCIES="
         sys-devel/libtool [[ note = [ Uses libltdl ] ]]
         frontend? (
             x11-libs/gtk+:2
-            media-libs/libpng
-            media-libs/jpeg
+            media-libs/libpng:=
+            media-libs/jpeg:=
         )
         gimp? ( media-gfx/gimp[~>2.0] )
         tiff? ( media-libs/tiff )
