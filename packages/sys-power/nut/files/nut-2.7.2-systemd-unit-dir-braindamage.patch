@@ -1,0 +1,15 @@
+Source: written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: https://github.com/networkupstools/nut/pull/179
+Reason: Fix installation path for systemd unit files
+diff --git a/configure.ac b/configure.ac
+index c746db4..0045c23 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1063,7 +1063,6 @@ dnl files will try to get intalled to the actual system directories
+ if test -n "${systemdsystemunitdir}"; then
+ 	systemdsystemshutdowndir="${libdir}/systemd/system-shutdown"
+ 	AC_MSG_RESULT(using ${systemdsystemunitdir})
+-	systemdsystemunitdir="`echo ${systemdsystemunitdir} | sed 's/\/lib/\${libdir}/'`"
+ else
+ 	AC_MSG_RESULT(no)
+ fi
