@@ -64,7 +64,6 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --with-statepath=/run/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
-    --with-udev-dir=${UDEVRULESDIR%/rules.d}
     --without-hotplug-dir
 
     --with-user=nut
@@ -73,7 +72,6 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --disable-static
 
     --with-dev
-    --without-hal
     --without-ipmi
     --with-libltdl
     --without-doc
@@ -89,10 +87,11 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     nut_drivers:snmp
     nut_drivers:usb
     "nut_drivers:xml neon"
+    "nut_drivers:usb udev-dir ${UDEVRULESDIR%/rules.d}"
 )
 
 src_prepare() {
-    expatch "${FILES}"/nut-2.6.5-systemd-unit-dir-braindamage.patch
+    expatch "${FILES}"/nut-2.7.2-systemd-unit-dir-braindamage.patch
 
     AT_M4DIR=m4 eautoreconf
 }
