@@ -8,7 +8,10 @@ It helps you normalizing the loudness of your audio and video files to
 the same level.
 "
 HOMEPAGE="http://r128gain.sourceforge.net/"
-DOWNLOADS="mirror://sourceforge/${PN}/${PN}/$(ever range 1-2)/${PNV}-src.tar.gz"
+DOWNLOADS="
+    mirror://sourceforge/${PN}/${PN}/$(ever range 1-2)/${PNV}-src.tar.gz
+    mirror://sourceforge/${PN}/${PN}/$(ever range 1-2)/${PNV}-tools.tar.gz
+"
 
 LICENCES="GPL-3"
 SLOT="0"
