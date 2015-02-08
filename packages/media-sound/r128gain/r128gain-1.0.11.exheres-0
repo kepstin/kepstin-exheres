@@ -1,0 +1,32 @@
+# Copyright 2015 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="EBU R128 compliant loudness scanner"
+DESCRIPTION="
+R128GAIN is a FFmpeg and SoX based EBU R128 compliant loudness scanner.
+It helps you normalizing the loudness of your audio and video files to
+the same level.
+"
+HOMEPAGE="http://r128gain.sourceforge.net/"
+DOWNLOADS="mirror://sourceforge/${PN}/${PN}/$(ever range 1-2)/${PNV}-src.tar.gz"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+"
+
+BUGS_TO=""
+
+DEFAULT_SRC_CONFIGURE_PARAMS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( )
+
+src_configure() {
+    die "Unfinished"
+}
+
