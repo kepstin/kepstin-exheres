@@ -29,6 +29,10 @@ DEPENDENCIES="
 
 BUGS_TO="Calvin Walton <calvin.walton@kepstin.ca>"
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}/${PNV}-install-sbin-directory.patch"
+)
+
 src_install() {
     default
 
