@@ -27,8 +27,13 @@ DEPENDENCIES="
 
 BUGS_TO=""
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/${PNV}-cross.patch
+)
+
 EQMAKE_PARAMS=(
-    PREFIX=/usr
+    PREFIX=/usr/$(exhost --target)
+    DATADIR=/usr/share
 )
 
 src_configure() {

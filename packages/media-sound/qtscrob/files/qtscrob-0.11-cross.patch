@@ -1,0 +1,39 @@
+Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: TODO: Contact is via a last.fm discussion group...
+Reason: Compatibility with exherbo 'cross':
+ Removes a hardcoded reference to unprefixed pkg-config, and
+ allows changing the values for BINDIR and DATADIR separately
+
+diff -ru qtscrob-0.11.bak/src/common.pri qtscrob-0.11/src/common.pri
+--- qtscrob-0.11.bak/src/common.pri	2013-01-23 12:17:46.000000000 -0500
++++ qtscrob-0.11/src/common.pri	2015-04-10 18:35:16.298332700 -0400
+@@ -14,8 +14,12 @@
+             message( "Example: PREFIX=\"/usr\" qmake-qt4" )
+         }
+         message( "Scrobbler will be installed in $${PREFIX}" )
+-        BINDIR =  $$PREFIX/bin
+-        DATADIR = $$PREFIX/share
++        isEmpty( BINDIR ) {
++            BINDIR =  $$PREFIX/bin
++        }
++        isEmpty( DATADIR ) {
++            DATADIR = $$PREFIX/share
++        }
+     }
+ }
+ 
+@@ -53,14 +57,9 @@
+         }
+     }
+ } else {
+-    PKGC = $$system(which pkg-config)
+-    !isEmpty(PKGC) {
+         message("using pkg-config")
+         CONFIG += link_pkgconfig
+         PKGCONFIG += libmtp
+         DEFINES += HAVE_LIBMTP
+         MTP = LIBMTP
+-    } else {
+-        message ("pkg-config was not found. MTP support will not be included.")
+-    }
+ }
