@@ -114,7 +114,7 @@ src_install()
 
     if ! option frontend
     then
-        edo rmdir "${IMAGE}"/usr/bin "${IMAGE}"/usr/share/man/man1
+        edo rmdir "${IMAGE}"/usr/share/man/man1
     fi
 
     if option gimp
