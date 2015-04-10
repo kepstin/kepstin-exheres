@@ -21,6 +21,8 @@ MYOPTIONS="
 
 # The defaults are the "Standard UNIX" dependencies
 DEPENDENCIES="
+    build:
+        virtual/pkg-config
     build+run:
         x11-libs/libX11
         x11-libs/libXext
@@ -28,7 +30,7 @@ DEPENDENCIES="
         media-libs/openexr
         media-libs/jpeg:=
         media-libs/tiff
-        sys-devel/gcc:*[openmp]
+        sys-libs/libgomp
         sys-libs/zlib
         sci-libs/fftw[=3*]
         gimp? ( media-gfx/gimp[=2*] )
@@ -39,6 +41,10 @@ BUGS_TO=""
 src_prepare() {
     # Disable stripping
     edo sed -i '/^\s\+strip/d' src/Makefile
+
+    # Use pkg-config instead of gimptool
+    edo sed -i 's/gimptool-2\.0 --gimpplugindir/$(PKG_CONFIG) --variable=gimplibdir gimp-2.0/' src/Makefile
+    edo sed -i 's/gimptool-2\.0\$(EXE)/$(PKG_CONFIG) gimpui-2.0/g' src/Makefile
 }
 
 src_configure() {
@@ -49,18 +55,20 @@ src_compile() {
     edo pushd src
 
     # Command-line tool
-    emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" linux
+    emake CC=$(exhost --tool-prefix)g++ USR=/usr/$(exhost --target) \
+        "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" linux
 
     # Gimp plugin
     if option gimp; then
-        emake "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
+        emake CC=$(exhost --tool-prefix)g++ USR=/usr/$(exhost --target) \
+            "OPT_CFLAGS=${CFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
     fi
 
     edo popd
 }
 
 src_install() {
-    exeinto /usr/bin
+    exeinto /usr/$(exhost --target)/bin
     doexe src/gmic
 
     dobashcompletion resources/gmic_bashcompletion.sh gmic
@@ -69,7 +77,7 @@ src_install() {
     doman man/gmic.1
 
     if option gimp; then
-        exeinto "$(gimptool-2.0 --gimpplugindir)"/plug-ins
+        exeinto "$(${PKG_CONFIG} --variable gimplibdir gimp-2.0)"/plug-ins
         doexe src/gmic_gimp
     fi
 }
