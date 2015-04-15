@@ -76,7 +76,7 @@ src_install() {
     doins hostapd.conf hostapd.accept hostapd.deny hostapd.eap_user \
         hostapd.radius_clients hostapd.sim_db hostapd.wpa_psk
 
-    dosbin hostapd
+    dobin hostapd
     dobin hostapd_cli
     dobin nt_password_hash
     dobin hlr_auc_gw
