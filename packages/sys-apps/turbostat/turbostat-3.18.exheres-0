@@ -13,23 +13,18 @@ SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
-WORK="${WORKBASE}"/linux-${PV}
-# Kernel makefile errors out on 'check' target with unconfigured source
-RESTRICT="test"
+WORK="${WORKBASE}"/linux-${PV}/tools/power/x86/turbostat
 
 DEPENDENCIES=""
 
-BUGS_TO=""
+BUGS_TO="calvin.walton@kepstin.ca"
 
-src_compile() {
-    edo pushd tools/power/x86/turbostat
-    default
-    edo popd
-}
+DEFAULT_SRC_COMPILE_PARAMS=(
+    CC=$(exhost --tool-prefix)gcc
+)
 
 src_install() {
-    edo pushd tools/power/x86/turbostat
-    default
-    edo popd
+    dobin turbostat
+    doman turbostat.8
 }
 
