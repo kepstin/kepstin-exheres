@@ -67,23 +67,33 @@ src_compile()
 
 src_install()
 {
-    edo cp -rT "${WORK}" "${IMAGE}"
+    if optionq platform:amd64; then
+        LIBDIR=lib64
+    elif optionq platform:x86; then
+        LIBDIR=lib
+    fi
+
+    edo mkdir -p "${IMAGE}"/usr/$(exhost --target)/lib
+    edo cp -rT "${WORK}"/usr/${LIBDIR}/esci \
+        "${IMAGE}"/usr/$(exhost --target)/lib/esci
+    edo cp -rT "${WORK}"/usr/share "${IMAGE}"/usr/share
 }
 
 pkg_postinst()
 {
-    if [[ -z ${REPLACING_IDS} ]] ; then
-        edo iscan-registry --add interpreter usb 0x04b8 0x0142 \
-            /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
-            /usr/share/esci/esfwad.bin
+    # Remove any old instances, since they might have wrong path (pre-cross?)
+    mkdir -p "${ROOT}"/var/lib/iscan/interpreter
+    if [[ -f "${ROOT}"/var/lib/iscan/interpreter ]]; then
+        sed -i -e '/^interpreter usb 0x04b8 0x0142/d' \
+            "${ROOT}"/var/lib/iscan/interpreter
     fi
+    echo "interpreter usb 0x04b8 0x0142 /usr/$(exhost --target)/lib/esci/libesci-interpreter-perfection-v330 /usr/share/esci/esfwad.bin" >>"${ROOT}"/var/lib/iscan/interpreter
 }
 
 pkg_prerm()
 {
-    if [[ -z ${REPLACED_BY_ID} ]] ; then
-        edo iscan-registry --remove interpreter usb 0x04b8 0x0142 \
-            /usr/${LIBDIR}/esci/libesci-interpreter-perfection-v330 \
-            /usr/share/esci/esfwad.bin
+    if [[ -z "${REPLACED_BY_ID}" ]]; then
+        sed -i -e '/^interpreter usb 0x04b8 0x0142/d' \
+            "${ROOT}"/var/lib/iscan/interpreter
     fi
 }
