@@ -20,7 +20,7 @@ DEPENDENCIES="
 
 BUGS_TO="calvin.walton@kepstin.ca"
 
-DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}"/${PNV}-check-ar.patch )
+DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}"/${PN}-4-check-ar.patch )
 
 src_install() {
     default
