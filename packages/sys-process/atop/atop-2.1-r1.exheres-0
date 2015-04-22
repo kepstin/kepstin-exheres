@@ -32,6 +32,10 @@ BUGS_TO="Calvin Walton <calvin.walton@kepstin.ca>"
 DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}/${PNV}-install-sbin-directory.patch"
 )
+DEFAULT_SRC_INSTALL_PARAMS=(
+    BINPATH=/usr/$(exhost --target)/bin
+    SBINPATH=/usr/$(exhost --target)/bin
+)
 
 src_install() {
     default
