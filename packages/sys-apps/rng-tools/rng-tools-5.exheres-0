@@ -1,7 +1,7 @@
-# Copyright 2013 Calvin Walton
+# Copyright 2015 Calvin Walton
 # Distributed under the terms of the GNU General Public License v2
 
-require systemd-service
+require systemd-service autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.15 1.13 1.12 1.11 ] ]
 
 SUMMARY="Random number generator related utilities"
 PROJECT="gkernel"
@@ -18,14 +18,14 @@ DEPENDENCIES="
     build+run:
 "
 
-BUGS_TO=""
+BUGS_TO="calvin.walton@kepstin.ca"
 
-DEFAULT_SRC_CONFIGURE_PARAMS=( )
-DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( )
-DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( )
+DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}"/${PN}-4-check-ar.patch )
 
 src_install() {
     default
     install_systemd_files
+    edo sed -i -e "s:@sbindir@:/usr/$(exhost --target)/bin:" \
+        "${IMAGE}"${SYSTEMDSYSTEMUNITDIR}/rngd.service
 }
 
