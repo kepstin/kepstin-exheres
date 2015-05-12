@@ -54,13 +54,15 @@ DEPENDENCIES="
         nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
 "
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/nut-2.6.5-systemd-unit-dir-braindamage.patch
+)
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --sysconfdir=/etc/nut
     --datarootdir=/usr/share/nut
     --datadir=/usr/share/nut
     --htmldir=/usr/share/doc/${PNVR}/html
 
-    --with-drvpath=/usr/sbin
     --with-statepath=/run/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
@@ -90,12 +92,6 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     "nut_drivers:xml neon"
 )
 
-src_prepare() {
-    expatch "${FILES}"/nut-2.6.5-systemd-unit-dir-braindamage.patch
-
-    AT_M4DIR=m4 eautoreconf
-}
-
 src_install() {
     default
 
@@ -116,6 +112,6 @@ pkg_postinst() {
     if [[ "${ROOT}" == / ]] && option systemd; then
         # Create the /run/nut directory right away so people can start the
         # services without rebooting or a manual step.
-        edo systemd-tmpfiles --create /usr/${LIBDIR}/tmpfiles.d/nut.conf
+        nonfatal edo systemd-tmpfiles --create /usr/${LIBDIR}/tmpfiles.d/nut.conf
     fi
 }
