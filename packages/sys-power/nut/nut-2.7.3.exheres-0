@@ -17,13 +17,12 @@ LICENCES="GPL-2"
 # Note: The Python library is GPL-3, and the Perl module is GPL-1+/Artistic
 # Neither is currently installed.
 
-require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
-
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS="
     avahi
     ssl
+    ssl? ( ( providers: libressl openssl ) [[ number-selected = exactly-one ]] )
     systemd
     tcpd
     nut_drivers:
@@ -45,7 +44,10 @@ DEPENDENCIES="
     build+run:
         user/nut
         avahi? ( net-dns/avahi[>=0.6.30] )
-        ssl? ( dev-libs/openssl )
+        ssl? (
+            providers:libressl? ( dev-libs/libressl:= )
+            providers:openssl? ( dev-libs/openssl )
+        )
         tcpd? ( sys-apps/tcp-wrappers )
 
         nut_drivers:powerman? ( sys-power/powerman )
@@ -60,7 +62,7 @@ DEFAULT_SRC_CONFIGURE_PARAMS=(
     --datadir=/usr/share/nut
     --htmldir=/usr/share/doc/${PNVR}/html
 
-    --with-drvpath=/usr/sbin
+    --with-drvpath=/usr/$(exhost --target)/libexec/nut
     --with-statepath=/run/nut
     --with-pidpath=/run/nut
     --with-altpidpath=/run/nut
@@ -90,12 +92,6 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     "nut_drivers:usb udev-dir ${UDEVRULESDIR%/rules.d}"
 )
 
-src_prepare() {
-    expatch "${FILES}"/nut-2.7.2-systemd-unit-dir-braindamage.patch
-
-    AT_M4DIR=m4 eautoreconf
-}
-
 src_install() {
     default
 
@@ -107,7 +103,7 @@ src_install() {
 
     if option systemd; then
         # Automatically create the /run/nut directory
-        insinto /usr/${LIBDIR}/tmpfiles.d
+        insinto /usr/$(exhost --target)/lib/tmpfiles.d
         doins "${FILES}"/tmpfiles.d/nut.conf
     fi
 }
@@ -116,6 +112,6 @@ pkg_postinst() {
     if [[ "${ROOT}" == / ]] && option systemd; then
         # Create the /run/nut directory right away so people can start the
         # services without rebooting or a manual step.
-        edo systemd-tmpfiles --create /usr/${LIBDIR}/tmpfiles.d/nut.conf
+        edo systemd-tmpfiles --create /usr/$(exhost --target)/lib/tmpfiles.d/nut.conf
     fi
 }
