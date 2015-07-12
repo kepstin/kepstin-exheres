@@ -112,6 +112,6 @@ pkg_postinst() {
     if [[ "${ROOT}" == / ]] && option systemd; then
         # Create the /run/nut directory right away so people can start the
         # services without rebooting or a manual step.
-        edo systemd-tmpfiles --create /usr/$(exhost --target)/lib/tmpfiles.d/nut.conf
+        nonfatal edo systemd-tmpfiles --create /usr/$(exhost --target)/lib/tmpfiles.d/nut.conf
     fi
 }
