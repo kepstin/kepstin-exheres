@@ -1,7 +1,5 @@
-# Copyright © 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Copyright © 2015 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
-
-require systemd-service
 
 SUMMARY="Advanced System & Process Monitor"
 DESCRIPTION="
@@ -17,31 +15,21 @@ In combination with the optional kernel module netatop, it even shows network
 activity per process/thread.
 "
 HOMEPAGE="http://www.atoptool.nl/"
-DOWNLOADS="http://www.atoptool.nl/download/${PNV}-1.tar.gz"
+MY_PNV="${PN}-${PV/_/-}"
+DOWNLOADS="http://www.atoptool.nl/download/${MY_PNV}.tar.gz"
+WORK="${WORKBASE}/${MY_PNV}"
 
 LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
-MYOPTIONS="systemd"
-
-DEPENDENCIES="
-"
 
 BUGS_TO="Calvin Walton <calvin.walton@kepstin.ca>"
 
-DEFAULT_SRC_PREPARE_PATCHES=(
-    "${FILES}/${PNV}-install-sbin-directory.patch"
-)
-DEFAULT_SRC_INSTALL_PARAMS=(
-    BINPATH=/usr/$(exhost --target)/bin
-    SBINPATH=/usr/$(exhost --target)/bin
-)
-
 src_install() {
-    default
-
-    if optionq systemd; then
-        insinto "${SYSTEMDSYSTEMUNITDIR}"
-        doins atop.service
-    fi
+    emake -j1 DESTDIR="${IMAGE}" \
+        BINPATH=/usr/$(exhost --target)/bin \
+        SBINPATH=/usr/$(exhost --target)/bin \
+        SYSDPATH=/usr/$(exhost --target)/lib/systemd/system \
+        PMPATHD=/usr/$(exhost --target)/lib/systemd/system-sleep \
+        systemdinstall
 }
