@@ -1,7 +1,6 @@
 # Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require sourceforge [[ pnv=${PN}_${PV} suffix=tar.gz ]]
 require bash-completion
 
 SUMMARY="GREYC's Magic for Image Converting"
@@ -11,6 +10,8 @@ several different user interfaces to convert/manipulate/filter/visualize
 generic image datasets, from 1d scalar signals to 3d+t sequences of
 multi-spectral volumetric images.
 "
+
+DOWNLOADS="http://gmic.eu/files/source/${PN}_${PV}.tar.gz"
 
 LICENCES="CeCILL-2.0"
 SLOT="0"
@@ -28,14 +29,16 @@ DEPENDENCIES="
         x11-libs/libX11
         x11-libs/libXext
         media-libs/libpng:=
+        media-libs/opencv
         media-libs/openexr
-        providers:ijg-jpeg? ( media-libs/jpeg:= )
-        providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
         media-libs/tiff
+        net-misc/curl
         sys-libs/libgomp
         sys-libs/zlib
         sci-libs/fftw[=3*]
         gimp? ( media-gfx/gimp[=2*] )
+        providers:ijg-jpeg? ( media-libs/jpeg:= )
+        providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
 "
 
 BUGS_TO=""
@@ -43,6 +46,9 @@ BUGS_TO=""
 src_prepare() {
     # Disable stripping
     edo sed -i '/^\s\+strip/d' src/Makefile
+
+    # Use prefixed pkg-config
+    edo sed -i 's/pkg-config/$(PKG_CONFIG)/g' src/Makefile
 
     # Use pkg-config instead of gimptool
     edo sed -i 's/gimptool-2\.0 --gimpplugindir/$(PKG_CONFIG) --variable=gimplibdir gimp-2.0/' src/Makefile
@@ -54,19 +60,18 @@ src_configure() {
 }
 
 src_compile() {
-    edo pushd src
+    # Note that the G'MIC build currently assumes the use of g++
+    CXX=$(exhost --tool-prefix)g++
 
     # Command-line tool
-    emake CC=${CXX} USR=/usr/$(exhost --target) \
-        "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" linux
+    emake -C src CC=${CXX} USR=/usr/$(exhost --target) \
+        "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" cli
 
     # Gimp plugin
     if option gimp; then
-        emake CC=${CXX} USR=/usr/$(exhost --target) \
+        emake -C src CC=${CXX} USR=/usr/$(exhost --target) \
             "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
     fi
-
-    edo popd
 }
 
 src_install() {
