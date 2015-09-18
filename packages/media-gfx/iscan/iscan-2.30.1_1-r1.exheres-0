@@ -36,6 +36,7 @@ MYOPTIONS="
     gimp [[ description = [ GIMP plugin for the EPSON-specific frontend ] ]]
     tiff
     
+    frontend? ( providers: ijg-jpeg jpeg-turbo ) [[ number-selected = exactly-one ]]
     gimp [[ requires = frontend ]]
     tiff [[ requires = frontend ]]
 "
@@ -49,7 +50,8 @@ DEPENDENCIES="
         frontend? (
             x11-libs/gtk+:2
             media-libs/libpng:=
-            media-libs/jpeg:=
+            providers:ijg-jpeg? ( media-libs/jpeg:= )
+            providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
         )
         gimp? ( media-gfx/gimp[~>2.0] )
         tiff? ( media-libs/tiff )
@@ -119,7 +121,7 @@ src_install()
 
     if option gimp
     then
-        plugindir="$(gimptool-2.0 --gimpplugindir)/plug-ins"
+        plugindir="$(${PKG_CONFIG} --variable gimplibdir gimp-2.0)/plug-ins"
         dodir "${plugindir}"
         dosym /usr/bin/iscan "${plugindir}"
     fi
