@@ -40,7 +40,7 @@ src_compile()
     edo sh policy/make-policy-file \
                --mode=udev \
                --desc-file=epkowa.desc \
-               --template=${UDEVRULESDIR}/70-libsane.rules \
+               --template=${UDEVRULESDIR}/65-libsane.rules \
                --out-file=70-iscan.rules
 }
 
