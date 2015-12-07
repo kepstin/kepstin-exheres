@@ -116,6 +116,7 @@ pkg_postinst()
 
 pkg_prerm()
 {
+    INTERPRETER="/usr/$(exhost --target)/lib/iscan/interpreter"
     if [[ -z "${REPLACED_BY_ID}" ]]; then
         if [[ -f "${ROOT}/${INTERPRETER}" ]]; then
             ebegin "Clearing plugin registration for ${BUNDLE_PN}"
