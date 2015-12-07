@@ -10,8 +10,8 @@ SRC_NR=62344
 FONT="M+"
 
 SUMMARY="M+ Japanese outline fonts"
-HOMEPAGE="http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/"
-DOWNLOADS="mirror://sourceforge.jp/${PROJ_NAME}/${SRC_NR}/${MY_PNV}.tar.xz"
+HOMEPAGE="http://mplus-fonts.osdn.jp/"
+DOWNLOADS="mirror://osdn.jp/${PROJ_NAME}/${SRC_NR}/${MY_PNV}.tar.xz"
 
 LICENCES="as-is"
 SLOT="0"
