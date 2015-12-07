@@ -1,0 +1,127 @@
+# Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Plugin for the GT-F730/S630 and Perfection V33/V330 Photo"
+DESCRIPTION="
+This plugin converts between the native protocol of the supported
+devices and the ESC/I protocol.  The latter protocol is supported
+by the SANE 'epkowa' backend, part of Image Scan!, and some other
+SANE backends.  However, only the 'epkowa' backend provides the
+hooks needed to use this plugin.
+
+You only need this plugin if you have one of the following models:
+ - Epson GT-F730
+ - Epson GT-S630
+ - Epson Perfection V33
+ - Epson Perfection V330 Photo
+"
+
+BUNDLE_PN="perfection-v330"
+BUNDLE_PV="1.0.0"
+
+HOMEPAGE="http://support.epson.net/linux/en/iscan.php?model=${BUNDLE_PN}&version=${BUNDLE_PV}"
+DOWNLOADS="
+    https://download2.ebz.epson.net/iscan/plugin/${BUNDLE_PN}/rpm/x86/iscan-${BUNDLE_PN}-bundle-${BUNDLE_PV}.x86.rpm.tar.gz
+    https://download2.ebz.epson.net/iscan/plugin/${BUNDLE_PN}/rpm/x64/iscan-${BUNDLE_PN}-bundle-${BUNDLE_PV}.x64.rpm.tar.gz
+"
+RESTRICT="strip"
+
+LICENCES="AVASYSPL"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        app-arch/rpm2targz
+    build+run:
+        media-gfx/iscan[>=2.30.1_1-r2]
+"
+
+pkg_pretend()
+{
+    case "$(exhost --target)" in
+    i686-pc-linux-gnu|x86_64-pc-linux-gnu)
+        ;;
+    *)
+        die "This binary package does not support the target $(exhost --target)"
+    esac
+}
+
+rpm_unpack() {
+    # Pipes don't work with edo
+    echo "rpm2tar -O ${1} | tar -xf - --no-same-owner -C ${WORK}" 1>&2
+    rpm2tar -O "${1}" | tar -xf - --no-same-owner -C "${WORK}"
+    assert "Unpacking RPM failed"
+}
+
+src_unpack()
+{
+    case "$(exhost --target)" in
+    i686-pc-linux-gnu)
+        BUNDLE="iscan-${BUNDLE_PN}-bundle-${BUNDLE_PV}.x86.rpm"
+        BUNDLE_ARCHIVE="${BUNDLE}.tar.gz"
+        RPM="${PN}-${PV/_/-}.i386.rpm"
+        ;;
+    x86_64-pc-linux-gnu)
+        BUNDLE="iscan-${BUNDLE_PN}-bundle-${BUNDLE_PV}.x64.rpm"
+        BUNDLE_ARCHIVE="${BUNDLE}.tar.gz"
+        RPM="${PN}-${PV/_/-}.x86_64.rpm"
+        ;;
+    *)
+        die "This binary package does not support the target $(exhost --target)"
+    esac
+
+    edo unpack "${BUNDLE_ARCHIVE}"
+
+    edo mkdir -p "${WORK}"
+    rpm_unpack "${WORKBASE}/${BUNDLE}/plugins/${RPM}"
+}
+
+src_compile()
+{
+    :
+}
+
+src_install()
+{
+    LIBDIR=lib
+    case "$(exhost --target)" in
+    x86_64-pc-linux-gnu)
+        LIBDIR=lib64
+        ;;
+    esac
+
+    edo mkdir -p "${IMAGE}"/usr/$(exhost --target)/lib
+    edo cp -rT "${WORK}"/usr/${LIBDIR}/esci \
+        "${IMAGE}"/usr/$(exhost --target)/lib/esci
+    edo cp -rT "${WORK}"/usr/share "${IMAGE}"/usr/share
+}
+
+pkg_postinst()
+{
+    INTERPRETER="/usr/$(exhost --target)/lib/iscan/interpreter"
+    # Remove any old instances, since they might have wrong path (pre-cross?)
+    if [[ -f "${ROOT}/${INTERPRETER}" ]]; then
+        ebegin "Clearing plugin registration for ${BUNDLE_PN}"
+        sed -i -e '/^interpreter usb 0x04b8 0x0142/d' \
+            "${ROOT}/${INTERPRETER}"
+        eend $?
+    fi
+    ebegin "Registering plugin for ${BUNDLE_PN}"
+    echo "interpreter usb 0x04b8 0x0142 /usr/$(exhost --target)/lib/esci/libesci-interpreter-perfection-v330 /usr/share/esci/esfwad.bin" \
+        >>"${ROOT}/${INTERPRETER}"
+    eend $?
+}
+
+pkg_prerm()
+{
+    if [[ -z "${REPLACED_BY_ID}" ]]; then
+        if [[ -f "${ROOT}/${INTERPRETER}" ]]; then
+            ebegin "Clearing plugin registration for ${BUNDLE_PN}"
+            sed -i -e '/^interpreter usb 0x04b8 0x0142/d' \
+                "${ROOT}/${INTERPRETER}"
+            eend $?
+        fi
+    fi
+}
