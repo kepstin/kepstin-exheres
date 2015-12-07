@@ -16,12 +16,12 @@ standard compliant scanner utility.
 Note that several scanners require a non-free plugin before they can
 be used with this software.
 "
-HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
+HOMEPAGE="http://support.epson.net/linux/src/scanner/iscan/"
 
-DOWNLOADS="manual: ${PN}_${PV/_/-}.tar.gz"
+DOWNLOADS="http://support.epson.net/linux/src/scanner/iscan/${PN}_${PV/_/-}.tar.gz"
 WORK="${WORKBASE}"/${PN}-$(ever range 1-3 ${PV})
 # Frontend tests are known to be broken...
-RESTRICT="fetch test"
+RESTRICT="test"
 
 LICENCES="GPL-2 frontend? ( AVASYSPL ) "
 SLOT="0"
@@ -66,8 +66,9 @@ BUGS_TO="calvin.walton@kepstin.ca"
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --disable-rpath
     --disable-static
-    # The package 'helpfully' adds the /lib on its own
-    --localstatedir=/var
+    # localstatedir is used as the path to store an architecture-specific
+    # plugin registry. "/lib/iscan" is appended to it.
+    --localstatedir=/usr/$(exhost --target)
 )
 DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
     frontend
@@ -82,18 +83,6 @@ DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/iscan-2.29.1-libpng-1.5.patch
     "${FILES}"/iscan-2.29.1-make-gtk-conditional.patch
 )
-
-pkg_nofetch()
-{
-    if ! [[ -f "${FETCHEDDIR}/${ARCHIVES}" ]] ; then
-        echo "Please go to:"
-        echo "  http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-        echo "and enter your scanner model. Click download next to the"
-        echo "\"core package & data package\" module, then download the file:"
-        echo "  ${ARCHIVES}"
-        echo "and save it to your distfiles directory."
-    fi
-}
 
 src_prepare()
 {
@@ -125,4 +114,10 @@ src_install()
         dodir "${plugindir}"
         dosym /usr/bin/iscan "${plugindir}"
     fi
+}
+
+pkg_postinst()
+{
+    # Create the directory for the plugin registry file
+    nonfatal edo mkdir -p "${ROOT}/usr/$(exhost --target)/lib/iscan"
 }

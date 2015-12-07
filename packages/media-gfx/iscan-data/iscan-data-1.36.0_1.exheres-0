@@ -10,11 +10,10 @@ including device information and policy file generation logic.
 
 Image Scan! for Linux will not function without this package.
 "
-HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/"
+HOMEPAGE="http://support.epson.net/linux/src/scanner/iscan/"
 
-DOWNLOADS="manual: ${PN}_${PV/_/-}.tar.gz"
+DOWNLOADS="http://support.epson.net/linux/src/scanner/iscan/${PN}_${PV/_/-}.tar.gz"
 WORK="${WORKBASE}"/${PN}-$(ever range 1-3 ${PV})
-RESTRICT="fetch"
 
 LICENCES="GPL-2"
 SLOT="0"
@@ -31,18 +30,6 @@ DEPENDENCIES="
 "
 
 BUGS_TO="calvin.walton@kepstin.ca"
-
-pkg_nofetch()
-{
-    if ! [[ -f "${FETCHEDDIR}/${ARCHIVES}" ]] ; then
-        echo "Please go to:"
-        echo "  http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-        echo "and enter your scanner model. Click download next to the"
-        echo "\"core package & data package\" module, then download the file:"
-        echo "  ${ARCHIVES}"
-        echo "and save it to your distfiles directory."
-    fi
-}
 
 src_compile()
 {
