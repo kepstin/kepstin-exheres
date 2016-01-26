@@ -44,9 +44,6 @@ DEPENDENCIES="
 BUGS_TO=""
 
 src_prepare() {
-    # Disable stripping
-    edo sed -i '/^\s\+strip/d' src/Makefile
-
     # Use prefixed pkg-config
     edo sed -i 's/pkg-config/$(PKG_CONFIG)/g' src/Makefile
 
@@ -63,15 +60,13 @@ src_compile() {
     # Note that the G'MIC build currently assumes the use of g++
     CXX=$(exhost --tool-prefix)g++
 
-    # Command-line tool
-    emake -C src CC=${CXX} USR=/usr/$(exhost --target) NOSTRIP=1 \
-        "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" cli
-
-    # Gimp plugin
+    local targets=( cli )
     if option gimp; then
-        emake -C src CC=${CXX} USR=/usr/$(exhost --target) NOSTRIP=1 \
-            "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
+        targets+=( gimp )
     fi
+
+    emake -C src CC=${CXX} USR=/usr/$(exhost --target) NOSTRIP=1 \
+        "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" "${targets[@]}"
 }
 
 src_install() {
