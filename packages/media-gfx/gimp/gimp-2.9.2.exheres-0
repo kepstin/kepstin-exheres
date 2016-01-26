@@ -1,0 +1,157 @@
+# Copyright 2008 Richard Brown
+# Copyright 2010 Brett Witherspoon <spoonb@exherbo.org>
+# Copyright 2011,2012 Benedikt Morbach <moben@exherbo.org>
+# Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require freedesktop-desktop gtk-icon-cache
+
+SUMMARY="GNU Image Manipulation Program"
+DESCRIPTION="
+If DESCRIPTION is set it must not be an empty string.
+"
+HOMEPAGE="http://www.gimp.org"
+DOWNLOADS="http://download.gimp.org/pub/${PN}/v$(ever range 1-2)/${PNV}.tar.bz2"
+
+LICENCES="GPL-2 LGPL-3"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+
+# tests attempt to use X and fail
+RESTRICT="test"
+
+MYOPTIONS="
+    aalib gtk-doc jpeg2000 mng openexr python
+    alsa [[ description = [ Support MIDI input controllers ] ]]
+    pdf [[ description = [ Support importing PDF (Portable Document Format) files ] ]]
+    postscript [[ description = [ Support importing PS (PostScript) files ] ]]
+    svg [[ description = [ Support importing SVG (Scalable Vector Graphics) files ] ]]
+    wmf [[ description = [ Support for the Windows Metafile image format ] ]]
+    platform: amd64
+    x86_cpu_features: mmx sse
+    ( providers: ijg-jpeg jpeg-turbo ) [[ number-selected = exactly-one ]]
+"
+
+DEPENDENCIES="
+    build:
+        dev-util/intltool[>=0.40.1]
+        sys-devel/gettext[>=0.19]
+        virtual/pkg-config[>=0.16]
+        gtk-doc? ( dev-doc/gtk-doc[>=1.0] )
+    build+run:
+        app-arch/bzip2
+        app-arch/xz
+        app-text/iso-codes
+        dev-libs/atk[>=2.2.0]
+        dev-libs/gexiv2[>=0.6.1]
+        dev-libs/glib:2[>=2.43.0]
+        dev-libs/libxml2:2.0
+        dev-libs/libxslt
+        gnome-desktop/libgudev[>=167]
+        media-libs/babl[>=0.1.14]
+        media-libs/fontconfig[>=2.2.0]
+        media-libs/gegl:0.3[>=0.3.4]
+        media-libs/lcms2[>=2.6]
+        media-libs/libpng:=[>=1.2.37]
+        media-libs/tiff
+        sys-libs/zlib
+        x11-libs/cairo[>=1.12.2] [[ note = [ needs cairo-pdf, which we have enabled by default ] ]]
+        x11-libs/gdk-pixbuf:2.0[>=2.31.0]
+        x11-libs/gtk+:2[>=2.24.10]
+        x11-libs/libX11
+        x11-libs/libXcursor           [[ note = [ hard-enabled because gtk+ needs it anyway ] ]]
+        x11-libs/libXext
+        x11-libs/libXfixes
+        x11-libs/libXmu
+        x11-libs/libXpm               [[ note = [ hard-enabled because people who have xorg-server or xterm have it installed anyway and it's small ] ]]
+        x11-libs/harfbuzz[>=0.9.19]
+        x11-libs/pango[>=1.32.0]
+        aalib? ( media-libs/aalib )
+        alsa? ( sys-sound/alsa-lib[>=1.0.0] )
+        jpeg2000? ( media-libs/jasper )
+        mng? ( media-libs/libmng )
+        openexr? ( media-libs/openexr[>=1.6.1] )
+        pdf? ( app-text/poppler[>=0.12.4][glib] )
+        postscript? ( app-text/ghostscript )
+        providers:ijg-jpeg? ( media-libs/jpeg:= )
+        providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
+        python? (
+            dev-lang/python:2.7
+            gnome-bindings/pygtk:2[>=2.10.4][python_abis:2.7]
+        )
+        svg? ( gnome-desktop/librsvg:2[>=2.36.0] )
+        wmf? ( media-libs/libwmf[>=0.2.8] )
+    run:
+        x11-themes/hicolor-icon-theme
+"
+
+# TODO: libmypaint is a required dep in future versions
+
+src_prepare() {
+    edo sed -e "/AC_PATH_PROG(PKG_CONFIG/d" -i m4macros/gimp-2.0.m4
+
+    edo sed -i -e "s:pkg-config:$(exhost --tool-prefix)&:" tools/gimptool.c
+
+    # Respect datarootdir
+    # can't use intoolize because gimg has a strange po handling
+    edo sed -e 's:itlocaledir = $(prefix)/$(DATADIRNAME)/locale:itlocaledir = $(datarootdir)/locale:' \
+        -i "${WORK}"/po*/Makefile.in.in
+
+    autotools_src_prepare
+}
+
+src_configure() {
+    local myconf=(
+        # TODO required to enable tests
+        --without-xvfb-run
+
+        # always enable
+        --enable-default-binary
+
+        --with-gudev
+        --with-print
+        --with-xmc
+        --with-xpm
+        --without-libmypaint
+        --without-sendmail
+        --without-webkit
+        $(option_enable gtk-doc)
+        $(option_enable python)
+        $(option_with aalib aa)
+        $(option_with mng)
+        $(option_with openexr)
+        $(option_with pdf poppler)
+        $(option_with postscript gs)
+        $(option_with wmf)
+    )
+
+    if option platform:amd64; then
+        myconf+=(
+            --enable-mmx
+            --enable-sse
+        )
+    else
+        myconf+=(
+            $(option_enable x86_cpu_features:mmx)
+            $(option_enable x86_cpu_features:sse)
+        )
+    fi
+
+    econf "${myconf[@]}"
+}
+
+src_install() {
+    default
+    keepdir /usr/share/gimp/2.0/fonts
+}
+
+pkg_postinst() {
+    freedesktop-desktop_pkg_postinst
+    gtk-icon-cache_pkg_postinst
+}
+
+pkg_postrm() {
+    freedesktop-desktop_pkg_postrm
+    gtk-icon-cache_pkg_postrm
+}
+
