@@ -64,12 +64,12 @@ src_compile() {
     CXX=$(exhost --tool-prefix)g++
 
     # Command-line tool
-    emake -C src CC=${CXX} USR=/usr/$(exhost --target) \
+    emake -C src CC=${CXX} USR=/usr/$(exhost --target) NOSTRIP=1 \
         "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" cli
 
     # Gimp plugin
     if option gimp; then
-        emake -C src CC=${CXX} USR=/usr/$(exhost --target) \
+        emake -C src CC=${CXX} USR=/usr/$(exhost --target) NOSTRIP=1 \
             "OPT_CFLAGS=${CXXFLAGS}" "OPT_LDFLAGS=${LDFLAGS}" gimp
     fi
 }
