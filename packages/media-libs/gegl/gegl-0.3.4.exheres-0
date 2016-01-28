@@ -1,0 +1,139 @@
+# Copyright 2009 Richard Brown <rbrown@exherbo.org>
+# Copyright 2011, 2012 Benedikt Morbach <moben@exherbo.org>
+# Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.15 ] ]
+require alternatives
+
+SUMMARY="GEGL (Generic Graphics Library) is a graph based image processing framework"
+DESCRIPTION="
+GEGL provides infrastructure to do demand based cached non destructive image
+editing on larger than RAM buffers. Through babl it provides support for a wide
+range of color models and pixel storage formats for input and output.
+"
+HOMEPAGE="http://gegl.org/"
+UPSTREAM_RELEASE_NOTES="http://git.gnome.org/browse/${PN}/plain/NEWS"
+DOWNLOADS="http://download.gimp.org/pub/${PN}/$(ever range 1-2)/${PNV}.tar.bz2"
+
+LICENCES="GPL-3 LGPL-3"
+SLOT="0.3"
+PLATFORMS="~x86 ~amd64"
+MYOPTIONS="
+    exif ffmpeg jpeg2000 lcms lensfun openexr raw sdl svg tiff webp
+    v4l [[ description = [ V4L2 video capture device support ] ]]
+    ffmpeg? ( ( providers: ffmpeg libav ) [[ number-selected = exactly-one ]] )
+    ( platform: amd64 )
+    ( providers: ijg-jpeg jpeg-turbo ) [[ number-selected = exactly-one ]]
+"
+
+DEPENDENCIES="
+    build:
+        dev-util/intltool[>=0.40.1]
+        sys-devel/gettext
+        virtual/pkg-config
+    build+run:
+        core/json-glib
+        dev-libs/glib:2[>=2.36.0]
+        media-libs/babl[>=0.1.14]
+        media-libs/libpng:=
+        x11-libs/cairo
+        x11-libs/gdk-pixbuf:2.0[>=2.18.0]
+        x11-libs/pango
+        exif? ( graphics/exiv2 
+        )
+        ffmpeg? (
+            providers:ffmpeg? ( media/ffmpeg[>=0.11.1] )
+            providers:libav? ( media/libav[>=9.1] )
+        )
+        jpeg2000? ( media-libs/jasper[>=1.900.1] )
+        lcms? ( media-libs/lcms2[>=2.2] )
+        lensfun? ( media-libs/lensfun[>=0.2.5] )
+        openexr? ( media-libs/openexr )
+        providers:ijg-jpeg? ( media-libs/jpeg:= )
+        providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
+        raw? ( media-libs/libraw[>=0.15.4] )
+        sdl? ( media-libs/SDL:0 )
+        svg? ( gnome-desktop/librsvg:2[>=2.14.0] )
+        tiff? ( media-libs/tiff[>=4.0.0] )
+        v4l? ( media-libs/v4l-utils )
+        webp? ( media-libs/libwebp )
+
+        !media-libs/gegl:0[<=0.2.0-r7] [[
+            description = [ /usr/bin/gegl collides ]
+            resolution = upgrade-blocked-before
+        ]]
+"
+# TODO:
+# gobject-introspection
+# gexiv2 (only used by mrg-ui and examples?)
+# lua
+# mrg
+# using bundled poly2tri-c
+# using bundled npd
+# pygobject2/3 are checked, are they used?
+# spiro
+# vapigen (needs gobject-introspection, probably)
+
+src_prepare() {
+    # Disable failing test, last checked: 0.3.4
+    ever at_least 0.3.0 && edo sed -e 's#test-image-compare##g' -i tests/simple/Makefile.am
+
+    # don't install locales to /usr/${target}/share
+    # drop if po/Makefile.in.in doesn't have 'itlocaledir = $(prefix)/$(DATADIRNAME)/locale'
+    edo intltoolize --force --copy --automake
+
+    autotools_src_prepare
+}
+
+src_configure() {
+    local myconf=()
+    myconf+=(
+        --disable-docs
+        --disable-introspection
+        --with-cairo
+        --with-gdk-pixbuf
+        --with-pango
+        --with-pangocairo
+        --with-libjpeg
+        --with-libpng
+        --without-gexiv2
+        --without-graphviz
+        --without-libspiro
+        --without-lua
+        --without-mrg
+        --without-umfpack
+        --without-vala
+        $(option_with exif exiv2)
+        $(option_with ffmpeg libavformat)
+        $(option_with jpeg2000 jasper)
+        $(option_with lcms)
+        $(option_with lensfun)
+        $(option_with openexr)
+        $(option_with raw libraw)
+        $(option_with sdl)
+        $(option_with tiff libtiff)
+        $(option_with v4l libv4l2)
+        $(option_with webp)
+    )
+    if option platform:amd64; then
+        myconf+=(
+            --enable-mmx
+            --enable-sse
+        )
+    else
+        myconf+=(
+            x86_cpu_features:mmx
+            x86_cpu_features:sse
+        )
+    fi
+
+    econf "${myconf[@]}"
+}
+
+src_install() {
+    default
+
+    alternatives_for _${PN} ${PN}-${SLOT} ${SLOT} /usr/$(exhost --target)/bin/${PN} ${PN}-${SLOT}
+}
+
