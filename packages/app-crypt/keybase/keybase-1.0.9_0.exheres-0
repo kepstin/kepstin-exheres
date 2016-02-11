@@ -1,7 +1,7 @@
 # Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require github [ user=keybase pn=client tag=v${PV/_/-} ]
+require github [ project=client tag=v${PV/_/-} ]
 
 SUMMARY="Client for the keybase.io people directory"
 HOMEPAGE="https://keybase.io/"
