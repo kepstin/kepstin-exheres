@@ -1,0 +1,50 @@
+# Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=keybase pn=client tag=v${PV/_/-} ]
+
+SUMMARY="Client for the keybase.io people directory"
+HOMEPAGE="https://keybase.io/"
+
+LICENCES="BSD-3"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        dev-lang/go[>=1.5.1]
+    suggestion:
+        app-crypt/gnupg [[
+            description = [ Import and export keys to your gpg keyring ]
+        ]]
+"
+
+BUGS_TO=""
+
+src_compile() {
+    go_tags="production"
+    build_number="$(ever range 4)-exherbo-${PR}"
+    ldflags="-X github.com/keybase/client/go/libkb.CustomBuild=${build_number}"
+
+    export GO15VENDOREXPERIMENT=1 # all dependencies are vendored
+    export GOPATH="${WORKBASE}/gopath"
+    edo mkdir -p "${GOPATH}/src/github.com/keybase"
+    edo ln -s "${WORK}" "${GOPATH}/src/github.com/keybase/client"
+
+    # It's easiest to build the binaries directly into $IMAGE rather than
+    # save them somewhere else and copy them later.
+    bindir="${IMAGE}/usr/$(exhost --target)/bin"
+    edo mkdir -p "${bindir}"
+
+    # TODO: build kbfsfuse
+
+    pushd "${GOPATH}"
+
+    # Build the client binary
+    edo go build -tags "${go_tags}" -ldflags "${ldflags}" -o \
+        "${bindir}/keybase" github.com/keybase/client/go/keybase
+
+    popd
+}
+
