@@ -1,0 +1,21 @@
+# Copyright 2010 Sterling X. Winter <replica@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+
+require pypi
+require setup-py [ import=distutils has_bin=true ]
+
+SUMMARY="Python interface to Amazon Web Services"
+DESCRIPTION="
+The goal of boto is to support the full breadth and depth of Amazon Web
+Services. In addition, boto provides support for other public services such
+as Google Storage in addition to private cloud systems like Eucalyptus,
+OpenStack and Open Nebula.
+"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES=""
+
