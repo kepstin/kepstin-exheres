@@ -1,0 +1,104 @@
+# Copyright 2010 Elias Pipping <pipping@exherbo.org>
+# Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require flag-o-matic
+
+# From https://chromium.googlesource.com/chromium/src/+/48.0.2564.82/DEPS
+GITHASH="0941ff72a00732cea6750477edfe649348e699de"
+
+SUMMARY="VP8/VP9 Codec SDK"
+HOMEPAGE="http://www.webmproject.org"
+DOWNLOADS="https://chromium.googlesource.com/webm/${PN}/+archive/${GITHASH}.tar.gz -> ${PN}-${GITHASH}.tar.gz"
+
+LICENCES="BSD-3"
+SLOT="0"
+PLATFORMS="~amd64 ~amrv7 ~x86"
+MYOPTIONS="
+    examples
+    platform: amd64 x86
+"
+
+# requires internet access
+RESTRICT="test"
+
+DEPENDENCIES="
+    build:
+        platform:amd64? ( dev-lang/yasm )
+        platform:x86? ( dev-lang/yasm )
+"
+
+LIBVPX_MAKE_PARAMS=(
+    verbose=true
+    HAVE_GNU_STRIP=no
+)
+
+DEFAULT_SRC_COMPILE_PARAMS=( ${LIBVPX_MAKE_PARAMS[@]} )
+DEFAULT_SRC_INSTALL_PARAMS=( ${LIBVPX_MAKE_PARAMS[*]} )
+DEFAULT_SRC_INSTALL_EXCLUDE=( release.sh )
+
+WORK=${WORKBASE}
+
+pkg_setup() {
+    export AS=$(_libvpx_assembler)
+
+    # use prefixed gcc for linking
+    export LD=$(exhost --tool-prefix)gcc
+
+    filter-flags -ggdb3
+}
+
+src_prepare() {
+    default
+
+    # Custom configure script. Unconditionally enables building of documentation when doxygen and
+    # php are found. We just pretend doxygen does not exist
+    edo sed -e '/^doxy_version=/d' -i configure
+}
+
+_libvpx_assembler() {
+    case "$(exhost --target)" in
+    i686-*|x86_64-*)
+        echo yasm
+    ;;
+    arm*)
+        echo $(exhost --tool-prefix)as
+    ;;
+    esac
+}
+
+_libvpx_target() {
+    case "$(exhost --target)" in
+    armv7-*)
+        echo armv7-linux-gcc
+    ;;
+    i686-*)
+        echo x86-linux-gcc
+    ;;
+    x86_64-*)
+        echo x86_64-linux-gcc
+    ;;
+    *)
+        die "Unknown libvpx target for $(exhost --target)"
+    ;;
+    esac
+}
+
+src_configure() {
+    local myconf=(
+        --prefix=/usr/$(exhost --target)
+        --target=$(_libvpx_target)
+        --enable-pic
+        --enable-runtime-cpu-detect
+        --enable-shared
+        --enable-vp{8,9}
+        --enable-{,vp9-}postproc
+        --disable-optimizations # Otherwise CFLAGS are overridden
+        --disable-static
+        $(expecting_tests && echo --enable-unit-tests || echo --disable-unit-tests)
+        $(option_enable examples)
+    )
+
+    edo ./configure ${myconf[*]}
+}
+
