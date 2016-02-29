@@ -103,3 +103,9 @@ src_configure() {
     edo ./configure ${myconf[*]}
 }
 
+pkg_postinst() {
+    elog "This snapshot of libvpx may include ABI-incompatible changes"
+    elog "to avoid issues, you should rebuild applications using libvpx:"
+    elog "    cave resolve -D libvpx nothing"
+}
+
