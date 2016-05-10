@@ -1,7 +1,7 @@
 # Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require github [ project=client tag=v${PV/_/-} ]
+require github [ project=client tag=v${PV} ]
 
 SUMMARY="Client for the keybase.io people directory"
 HOMEPAGE="https://keybase.io/"
@@ -24,8 +24,6 @@ BUGS_TO=""
 
 src_compile() {
     go_tags="production"
-    build_number="$(ever range 4)-exherbo-${PR}"
-    ldflags="-X github.com/keybase/client/go/libkb.CustomBuild=${build_number}"
 
     export GO15VENDOREXPERIMENT=1 # all dependencies are vendored
     export GOPATH="${WORKBASE}/gopath"
@@ -37,12 +35,12 @@ src_compile() {
     bindir="${IMAGE}/usr/$(exhost --target)/bin"
     edo mkdir -p "${bindir}"
 
-    # TODO: build kbfsfuse
+    # TODO: build kbfsfuse, electron client
 
     pushd "${GOPATH}"
 
     # Build the client binary
-    edo go build -tags "${go_tags}" -ldflags "${ldflags}" -o \
+    edo go build -tags "${go_tags}" -o \
         "${bindir}/keybase" github.com/keybase/client/go/keybase
 
     popd
