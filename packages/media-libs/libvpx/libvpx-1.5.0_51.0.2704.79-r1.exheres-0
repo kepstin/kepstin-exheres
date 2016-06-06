@@ -52,6 +52,15 @@ pkg_setup() {
 src_prepare() {
     default
 
+    # During inter-release periods, they sometimes update the CHANGELOG file
+    # in a way that breaks the version.sh script. Prepend the version number from
+    # the exheres.
+    edo mv CHANGELOG CHANGELOG.orig
+    echo "Exherbo v$(ever range 1-3)" >CHANGELOG
+    assert "Failed to write Exherbo package version"
+    cat CHANGELOG.orig >>CHANGELOG
+    assert "Failed to restore original changelog"
+
     # Custom configure script. Unconditionally enables building of documentation when doxygen and
     # php are found. We just pretend doxygen does not exist
     edo sed -e '/^doxy_version=/d' -i configure
