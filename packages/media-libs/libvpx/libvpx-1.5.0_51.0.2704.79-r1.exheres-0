@@ -5,7 +5,7 @@
 require flag-o-matic
 
 # From https://chromium.googlesource.com/chromium/src/+/51.0.2704.79/DEPS
-# Last checked 51.0.2704.84
+# Last checked 51.0.2704.107
 GITHASH="904cb53302dfebee4a0d795ad6ccebdd5da5f542"
 
 SUMMARY="VP8/VP9 Codec SDK"
