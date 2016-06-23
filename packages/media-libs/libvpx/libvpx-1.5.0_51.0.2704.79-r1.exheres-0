@@ -4,9 +4,9 @@
 
 require flag-o-matic
 
-# From https://chromium.googlesource.com/chromium/src/+/50.0.2661.75/DEPS
-# Last checked 50.0.2661.75
-GITHASH="89cc68252846478fa7f2d570d96ff93776cefac6"
+# From https://chromium.googlesource.com/chromium/src/+/51.0.2704.79/DEPS
+# Last checked 51.0.2704.103
+GITHASH="904cb53302dfebee4a0d795ad6ccebdd5da5f542"
 
 SUMMARY="VP8/VP9 Codec SDK"
 HOMEPAGE="http://www.webmproject.org"
@@ -51,6 +51,15 @@ pkg_setup() {
 
 src_prepare() {
     default
+
+    # During inter-release periods, they sometimes update the CHANGELOG file
+    # in a way that breaks the version.sh script. Prepend the version number from
+    # the exheres.
+    edo mv CHANGELOG CHANGELOG.orig
+    echo "Exherbo v$(ever range 1-3)" >CHANGELOG
+    assert "Failed to write Exherbo package version"
+    cat CHANGELOG.orig >>CHANGELOG
+    assert "Failed to restore original changelog"
 
     # Custom configure script. Unconditionally enables building of documentation when doxygen and
     # php are found. We just pretend doxygen does not exist
