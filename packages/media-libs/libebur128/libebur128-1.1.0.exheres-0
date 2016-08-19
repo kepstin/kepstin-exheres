@@ -1,0 +1,16 @@
+# Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=jiixyj tag=v${PV} ]
+require cmake [ api=2 ]
+
+SUMMARY="A library that implements the EBU R 128 standard for loudness normalisation"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    media-libs/speexdsp [[ note = [ True Peak detection ] ]]
+"
+
