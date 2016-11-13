@@ -4,9 +4,9 @@
 
 require flag-o-matic
 
-# From https://chromium.googlesource.com/chromium/src/+/53.0.2785.92/DEPS
-# Last checked 53.0.2785.92
-GITHASH="1c0a9f36f15a83816aebe5395e19c21f3d545aa2"
+# From https://chromium.googlesource.com/chromium/src/+/54.0.2840.100/DEPS
+# Last checked 54.0.2840.100
+GITHASH="8b4210940ce4183d4cfded42c323612c0c6d1688"
 
 SUMMARY="VP8/VP9 Codec SDK"
 HOMEPAGE="http://www.webmproject.org"
