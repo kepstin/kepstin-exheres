@@ -1,6 +1,7 @@
 # Copyright 2012 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.15 ] ]
 require systemd-service udev-rules
 
 SUMMARY="Network UPS Tools"
@@ -40,7 +41,7 @@ MYOPTIONS="
 
 DEPENDENCIES="
     build:
-        dev-util/pkg-config
+        virtual/pkg-config
     build+run:
         user/nut
         avahi? ( net-dns/avahi[>=0.6.30] )
@@ -92,6 +93,14 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     "nut_drivers:usb udev-dir ${UDEVRULESDIR%/rules.d}"
 )
 
+src_prepare() {
+    edo rm m4/libtool.m4 m4/lt*.m4
+    edo sed -i 's/pkg-config/${PKG_CONFIG}/g' m4/*.m4
+    edo sed -i '/AC_PATH_PROG(AR/d' configure.ac
+
+    autotools_src_prepare
+}
+
 src_install() {
     default
 
@@ -115,3 +124,4 @@ pkg_postinst() {
         nonfatal edo systemd-tmpfiles --create /usr/$(exhost --target)/lib/tmpfiles.d/nut.conf
     fi
 }
+

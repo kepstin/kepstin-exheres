@@ -1,0 +1,41 @@
+# Copyright 2016 Calvin Walton
+# Distributed under the terms of the GNU General Public License v2
+
+MY_PV=${PV/_beta/-beta.}
+MY_PNV=${PN}-${MY_PV}
+require github [ user=mypaint release="v${MY_PV}" pnv="${MY_PNV}" suffix=tar.xz ]
+
+SUMMARY="A library for making brushstrokes which is used by MyPaint and other projects"
+HOMEPAGE="http://mypaint.org/"
+
+LICENCES="ISC"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    gegl [[ description = [ Add APIs for working with tiled GEGL surfaces ] ]]
+    gobject-introspection
+    openmp [[ description = [ Enable multithreaded rendering ] ]]
+    linguas: ar_AR ca cs da de en_CA en_GB es fa fi fr he hu id it ja ko nb nn_NO
+             pl pt_BR ro ru sc sk sl sv tr uk zh_CN zh_TW
+"
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+    build+run:
+        dev-libs/json-c
+        gegl? ( media-libs/gegl:0.3[>=0.3] )
+        gobject-introspection? (
+            dev-libs/glib:2
+            gnome-desktop/gobject-introspection:1[>=1.32.0]
+        )
+        openmp? ( sys-libs/libgomp:* )
+"
+
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    gegl
+    'gobject-introspection introspection'
+    openmp
+)
+
+

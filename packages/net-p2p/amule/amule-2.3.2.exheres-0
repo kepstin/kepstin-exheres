@@ -1,14 +1,12 @@
 # Copyright 2009 Maxime Coste <frrrwww@gmail.com>
 # Distributed under the terms of the GNU General Public License v2
 
-#MY_PNV=${PNV/amule/aMule}
-MY_PNV=${PN}-3c58bd3
+MY_PNV=${PNV/amule/aMule}
 
 SUMMARY="aMule p2p client"
 DESCRIPTION="aMule, The all-plateform eMule like P2P client"
 HOMEPAGE="www.amule.org"
-#DOWNLOADS="mirror://sourceforge/amule/${MY_PNV}.tar.bz2"
-DOWNLOADS="http://repo.or.cz/w/amule.git/snapshot/3c58bd305b1f3e655db4bd2f030669cca3b4c11b.tar.gz"
+DOWNLOADS="mirror://sourceforge/amule/${MY_PNV}.tar.xz"
 
 LICENCES="GPL-2"
 SLOT="0"
@@ -25,11 +23,11 @@ MYOPTIONS="
 
 DEPENDENCIES="
     build+run:
-        x11-libs/wxGTK[>=2.8]
-          sys-libs/zlib
-          dev-libs/crypto++
-        amulecmd? ( sys-libs/readline )
-        webserver? ( media-libs/libpng[>=1.2] )
+        x11-libs/wxGTK:=[>=2.8.12]
+        sys-libs/zlib[>=1.1.4]
+        dev-libs/crypto++
+        amulecmd? ( sys-libs/readline:= )
+        webserver? ( media-libs/libpng:=[>=1.2] )
         gd? ( media-libs/gd[>=2] )
         upnp? ( net-libs/libupnp[>=3] )
 "
