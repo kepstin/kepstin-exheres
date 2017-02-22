@@ -103,6 +103,11 @@ src_configure() {
         --enable-shared
         --enable-vp{8,9}
         --enable-{,vp9-}postproc
+        --enable-webm-io
+        --enable-libyuv
+        --enable-multi-res-encoding
+        --enable-{,vp9-}temporal-denoising
+        --enable-vp9-highbitdepth
         --disable-optimizations # Otherwise CFLAGS are overridden
         --disable-static
         # Options required by Chromium
