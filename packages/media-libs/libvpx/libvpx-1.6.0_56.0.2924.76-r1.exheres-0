@@ -105,6 +105,9 @@ src_configure() {
         --enable-{,vp9-}postproc
         --disable-optimizations # Otherwise CFLAGS are overridden
         --disable-static
+        # Options required by Chromium
+        --enable-experimental
+        --enable-spatial-svc
         $(expecting_tests && echo --enable-unit-tests || echo --disable-unit-tests)
         $(option_enable examples)
     )
