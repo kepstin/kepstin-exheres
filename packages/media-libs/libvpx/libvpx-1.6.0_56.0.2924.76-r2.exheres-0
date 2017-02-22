@@ -110,9 +110,13 @@ src_configure() {
         --enable-vp9-highbitdepth
         --disable-optimizations # Otherwise CFLAGS are overridden
         --disable-static
-        # Options required by Chromium
+        --size-limit=16384x16384
+        # Chrome builds their libvpx without spatial svc, but they use the
+        # the header for it... which is only installed if it's enabled
         --enable-experimental
         --enable-spatial-svc
+        # Chrome also enables realtime_only, but the shared lib should
+        # support non-realtime modes too.
         $(expecting_tests && echo --enable-unit-tests || echo --disable-unit-tests)
         $(option_enable examples)
     )
