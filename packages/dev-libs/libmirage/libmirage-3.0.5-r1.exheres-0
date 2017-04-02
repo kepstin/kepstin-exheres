@@ -29,7 +29,7 @@ MYOPTIONS="
 
 DEPENDENCIES="
     build:
-        dev-util/pkg-config[>=0.16]
+        virtual/pkg-config[>=0.16]
         doc? ( dev-doc/gtk-doc[>=1.4] )
         gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=1.30.0] )
     build+run:
