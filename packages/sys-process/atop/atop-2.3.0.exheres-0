@@ -14,16 +14,18 @@ and exit code.
 In combination with the optional kernel module netatop, it even shows network
 activity per process/thread.
 "
-HOMEPAGE="http://www.atoptool.nl/"
-MY_PNV="${PN}-${PV/_/-}"
-DOWNLOADS="http://www.atoptool.nl/download/${MY_PNV}.tar.gz"
-WORK="${WORKBASE}/${MY_PNV}"
+HOMEPAGE="https://www.atoptool.nl/"
+DOWNLOADS="https://www.atoptool.nl/download/${PNV}.tar.gz"
 
 LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
 
 BUGS_TO="Calvin Walton <calvin.walton@kepstin.ca>"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/pr5-recognize-nvme-disks.patch
+)
 
 src_install() {
     emake -j1 DESTDIR="${IMAGE}" \
