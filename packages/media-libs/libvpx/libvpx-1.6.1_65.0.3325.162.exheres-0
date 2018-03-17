@@ -2,10 +2,10 @@
 # Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require flag-o-matic
+require flag-o-matic alternatives
 
-# From https://chromium.googlesource.com/chromium/src/+/64.0.3282.168/DEPS
-GITHASH="cbe62b9c2d2b006aba52c8eebe7d842e59166fe4"
+# From https://chromium.googlesource.com/chromium/src/+/65.0.3325.162/DEPS
+GITHASH="373e08f921e5bfd5a96963fabbbbe16ec793d44e"
 
 SUMMARY="VP8/VP9 Codec SDK"
 HOMEPAGE="http://www.webmproject.org"
@@ -26,6 +26,11 @@ DEPENDENCIES="
     build:
         platform:amd64? ( dev-lang/yasm )
         platform:x86? ( dev-lang/yasm )
+    run:
+        !media-libs/libvpx:0[<1.6.1_65] [[
+            description = [ Alternatives conflict ]
+            resolution = upgrade-blocked-before
+        ]]
 "
 
 LIBVPX_MAKE_PARAMS=(
@@ -52,8 +57,8 @@ src_prepare() {
     default
 
     # During inter-release periods, they sometimes update the CHANGELOG file
-    # in a way that breaks the version.sh script. Prepend the version number from
-    # the exheres.
+    # in a way that breaks the version.sh script. Prepend the version number
+    # from the exheres.
     edo mv CHANGELOG CHANGELOG.orig
     echo "Exherbo v$(ever range 1-3)" >CHANGELOG
     assert "Failed to write Exherbo package version"
@@ -78,6 +83,9 @@ _libvpx_assembler() {
 
 _libvpx_target() {
     case "$(exhost --target)" in
+    aarch64-*)
+        echo arm64-linux-gcc
+    ;;
     armv7-*)
         echo armv7-linux-gcc
     ;;
@@ -123,7 +131,24 @@ src_configure() {
     edo ./configure ${myconf[*]}
 }
 
+src_install() {
+    local arch_dependent_alternatives=()
+    local host=$(exhost --target)
+
+    default
+
+    arch_dependent_alternatives+=(
+        /usr/${host}/include/vpx          vpx-${SLOT}
+        /usr/${host}/lib/${PN}.so         ${PN}-${SLOT}.so
+        /usr/${host}/lib/pkgconfig/vpx.pc vpx-${SLOT}.pc
+    )
+
+    alternatives_for _${host}_${PN} ${SLOT} ${SLOT} "${arch_dependent_alternatives[@]}"
+}
+
 pkg_postinst() {
+    alternatives_pkg_postinst
+
     elog "This snapshot of libvpx may include ABI-incompatible changes"
     elog "to avoid issues, you should rebuild applications using libvpx:"
     elog "    cave resolve -D libvpx nothing"
