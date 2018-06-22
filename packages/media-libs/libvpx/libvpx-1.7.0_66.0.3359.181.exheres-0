@@ -2,17 +2,17 @@
 # Copyright 2016 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require flag-o-matic
+require flag-o-matic alternatives
 
-# From https://chromium.googlesource.com/chromium/src/+/64.0.3282.168/DEPS
-GITHASH="cbe62b9c2d2b006aba52c8eebe7d842e59166fe4"
+# From https://chromium.googlesource.com/chromium/src/+/66.0.3359.181/DEPS
+GITHASH="e9fff8a9dbcd03fbf3e5b7caaa9dc2631a79882a"
 
 SUMMARY="VP8/VP9 Codec SDK"
 HOMEPAGE="http://www.webmproject.org"
 DOWNLOADS="https://chromium.googlesource.com/webm/${PN}/+archive/${GITHASH}.tar.gz -> ${PN}-${GITHASH}.tar.gz"
 
 LICENCES="BSD-3"
-SLOT="0"
+SLOT="5"
 PLATFORMS="~amd64 ~amrv7 ~x86"
 MYOPTIONS="
     examples
@@ -26,6 +26,11 @@ DEPENDENCIES="
     build:
         platform:amd64? ( dev-lang/yasm )
         platform:x86? ( dev-lang/yasm )
+    run:
+        !media-libs/libvpx:0[<1.6.1_65] [[
+            description = [ Alternatives conflict ]
+            resolution = upgrade-blocked-before
+        ]]
 "
 
 LIBVPX_MAKE_PARAMS=(
@@ -121,6 +126,21 @@ src_configure() {
     )
 
     edo ./configure ${myconf[*]}
+}
+
+src_install() {
+    local arch_dependent_alternatives=()
+    local host=$(exhost --target)
+
+    default
+
+    arch_dependent_alternatives+=(
+        /usr/${host}/include/vpx          vpx-${SLOT}
+        /usr/${host}/lib/${PN}.so         ${PN}-${SLOT}.so
+        /usr/${host}/lib/pkgconfig/vpx.pc vpx-${SLOT}.pc
+    )
+
+    alternatives_for _${host}_${PN} ${SLOT} ${SLOT} "${arch_dependent_alternatives[@]}"
 }
 
 pkg_postinst() {
