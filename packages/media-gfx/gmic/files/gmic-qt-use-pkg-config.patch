@@ -1,0 +1,150 @@
+Source: Written by Calvin Walton <calvin.walton@kepstin.ca>
+Upstream: TODO
+Reason: Build fixes for G'MIC with cmake
+ - Fix automagic dependencies.
+ - Work around CFLAGS handling issues when CMAKE_BUILD_TYPE=None.
+ - We don't install fftw with cmake, so find_package(FFTW3) doesn't work.
+   Use pkg-config instead.
+ - Use pkg-config instead of gimptool-2.0 to get gimp build info.
+ - Allow CMAKE_BUILD_TYPE=None when building qt gui.
+
+--- a/CMakeLists.txt	2018-08-26 19:26:13.002538637 -0400
++++ b/CMakeLists.txt	2018-08-26 19:28:24.383588501 -0400
+@@ -128,7 +128,7 @@
+ 
+ # Zlib support
+ if(ENABLE_ZLIB)
+-  find_package(ZLIB)
++  find_package(ZLIB REQUIRED)
+ endif()
+ if(ZLIB_FOUND)
+   set(COMPILE_FLAGS "${COMPILE_FLAGS} -Dcimg_use_zlib")
+@@ -138,7 +138,7 @@
+ 
+ #X11 support
+ if(ENABLE_X)
+-  find_package(X11)
++  find_package(X11 REQUIRED)
+ endif()
+ if(X11_FOUND)
+   set(COMPILE_FLAGS "${COMPILE_FLAGS} -Dcimg_display=1 -Dcimg_appname=\\\"gmic\\\"")
+@@ -158,7 +158,7 @@
+ endif()
+ 
+ if(ENABLE_FFTW)
+-  pkg_check_modules(FFTW3 fftw3>=3.0)
++  pkg_check_modules(FFTW3 REQUIRED fftw3>=3.0)
+ endif()
+ if(FFTW3_FOUND)
+   set(COMPILE_FLAGS "${COMPILE_FLAGS} -Dcimg_use_fftw3")
+@@ -172,7 +172,7 @@
+ endif()
+ 
+ if(ENABLE_OPENCV)
+-  pkg_check_modules(OPENCV opencv)
++  pkg_check_modules(OPENCV REQUIRED opencv)
+ endif()
+ if(OPENCV_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_opencv")
+@@ -181,7 +181,7 @@
+ endif()
+ 
+ if(ENABLE_GRAPHICSMAGICK)
+-  pkg_check_modules(GRAPHICSMAGICK GraphicsMagick++)
++  pkg_check_modules(GRAPHICSMAGICK REQUIRED GraphicsMagick++)
+ endif()
+ if(GRAPHICSMAGICK_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_magick")
+@@ -190,7 +190,7 @@
+ endif()
+ 
+ if(ENABLE_TIFF)
+-  find_package(TIFF)
++  find_package(TIFF REQUIRED)
+ endif()
+ if(TIFF_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_tiff")
+@@ -199,7 +199,7 @@
+ endif()
+ 
+ if(ENABLE_PNG)
+-  find_package(PNG)
++  find_package(PNG REQUIRED)
+ endif()
+ if(PNG_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_png")
+@@ -208,7 +208,7 @@
+ endif()
+ 
+ if(ENABLE_JPEG)
+-  find_package(JPEG)
++  find_package(JPEG REQUIRED)
+ endif()
+ if(JPEG_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_jpeg")
+@@ -217,7 +217,7 @@
+ endif()
+ 
+ if(ENABLE_OPENEXR)
+-  pkg_check_modules(OPENEXR OpenEXR)
++  pkg_check_modules(OPENEXR REQUIRED OpenEXR)
+ endif()
+ if(OPENEXR_FOUND)
+   set(CLI_COMPILE_FLAGS "${CLI_COMPILE_FLAGS} -Dcimg_use_openexr")
+@@ -250,6 +250,7 @@
+ set(CMAKE_CXX_FLAGS_DEBUG "-g -ansi -Wall -Wextra -pedantic -Dcimg_verbosity=3 ${COMPILE_FLAGS}")
+ set(CMAKE_CXX_FLAGS_RELEASE "${COMPILE_FLAGS}")
+ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g ${COMPILE_FLAGS}")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILE_FLAGS}")
+ 
+ if(NOT CUSTOM_CFLAGS)
+   set(CMAKE_CXX_FLAGS_DEBUG "-Og ${CMAKE_CXX_FLAGS_DEBUG}")
+--- a/gmic-qt/CMakeLists.txt	2018-08-26 17:49:07.705586384 -0400
++++ b/gmic-qt/CMakeLists.txt	2018-08-26 17:51:38.690047869 -0400
+@@ -6,6 +6,8 @@
+ LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+ include(FeatureSummary)
+ 
++find_package(PkgConfig)
++
+ set(CMAKE_CXX_STANDARD 11)
+ add_definitions(-Dcimg_use_cpp11=1)
+ set(MIN_QT_VERSION 5.2.0)
+@@ -141,10 +143,10 @@
+ #
+ # FFTW3
+ #
+-find_package(FFTW3 REQUIRED)
++pkg_check_modules(FFTW3 REQUIRED fftw3>=3.0)
+ add_definitions(-Dcimg_use_fftw3 )
+ add_definitions(-Dcimg_use_fftw3_singlethread )
+-include_directories(${FFTW3_INCLUDE_DIR})
++include_directories(${FFTW3_INCLUDE_DIRS})
+ 
+ #
+ # CURL
+@@ -254,8 +256,6 @@
+     string(REPLACE "-O3" "" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+     set_source_files_properties(${GMIC_PATH}/gmic.cpp PROPERTIES COMPILE_FLAGS "-Ofast")
+     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2")
+-else()
+-    message(FATAL_ERROR "Build type not recognized (${CMAKE_BUILD_TYPE})")
+ endif()
+ 
+ include_directories(${CMAKE_SOURCE_DIR}/src ${GMIC_PATH})
+@@ -471,13 +471,12 @@
+ 
+ if (${GMIC_QT_HOST} STREQUAL "gimp")
+ 
+-    execute_process(COMMAND gimptool-2.0 --libs-noui OUTPUT_VARIABLE GIMP2_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    execute_process(COMMAND gimptool-2.0 --cflags-noui OUTPUT_VARIABLE GIMP2_INCLUDE_DIRS OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GIMP2_INCLUDE_DIRS}")
++  pkg_check_modules(GIMP2 REQUIRED gimp-2.0)
+ 
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/Gimp/host_gimp.cpp)
+     add_definitions(-DGMIC_HOST=gimp_qt -DGIMP_DISABLE_DEPRECATED)
+     add_executable(gmic_gimp_qt ${gmic_qt_SRCS} ${gmic_qt_QRC} ${qmic_qt_QM})
++    include_directories(${GIMP2_INCLUDE_DIRS})
+     target_link_libraries(
+       gmic_gimp_qt
+       PRIVATE

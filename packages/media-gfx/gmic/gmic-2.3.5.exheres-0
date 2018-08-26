@@ -1,0 +1,171 @@
+# Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+# Disable cmake exlib's WORK mangling, out of source build is done manually.
+require cmake [ api=2 out_of_source=false ]
+require bash-completion
+
+SUMMARY="GREYC's Magic for Image Converting"
+DESCRIPTION="
+G'MIC is a full-features open-source framework for image processing, providing
+several different user interfaces to convert / manipulate / filter / visualize
+generic image datasets, from 1d scalar signals to 3d+t sequences of
+multi-spectral volumetric images, hence including 2d color images.
+"
+
+DOWNLOADS="http://gmic.eu/files/source/${PN}_${PV}.tar.gz"
+
+LICENCES="CeCILL-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    gui [[ description = [ install a stand-alone GUI interface ] ]]
+    gimp [[ description = [ install a filter plugin for The Gimp ] ]]
+    graphicsmagick
+    opencv
+    openexr
+    ( providers: ijg-jpeg jpeg-turbo ) [[ number-selected = exactly-one ]]
+"
+
+# The default build, except that a couple of enabled-by-default features with
+# uncommon dependencies are made optional (opencv, openexr)
+GMIC_QT_DEPENDENCIES="
+        net-misc/curl
+        x11-libs/qtbase:5[>=5.2.0][gui]
+"
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+    build+run:
+        x11-libs/libX11
+        x11-libs/libXext
+        media-libs/libpng:=
+        media-libs/tiff
+        sys-libs/libgomp
+        sys-libs/zlib
+        sci-libs/fftw[=3*]
+        gui? ( ${GMIC_QT_DEPENDENCIES} )
+        gimp? (
+            ${GMIC_QT_DEPENDENCIES}
+            media-gfx/gimp[=2*]
+        )
+        graphicsmagick? ( media-gfx/GraphicsMagick )
+        opencv? ( media-libs/opencv )
+        openexr? ( media-libs/openexr )
+        providers:ijg-jpeg? ( media-libs/jpeg:= )
+        providers:jpeg-turbo? ( media-libs/libjpeg-turbo )
+"
+
+BUGS_TO=""
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/gmic-qt-use-pkg-config.patch
+)
+
+#    # Use pkg-config instead of gimptool
+#    edo sed -i 's/gimptool-2\.0 --gimpplugindir/$(PKG_CONFIG) --variable=gimplibdir gimp-2.0/' src/Makefile
+#    edo sed -i 's/gimptool-2\.0\$(EXE)/$(PKG_CONFIG) gimpui-2.0/g' src/Makefile
+
+# The gui and gimp plugin are build from the same source tree, but with
+# different configuration parameters, so use different build directories for each
+
+GMIC_WORK="${WORKBASE}/build"
+GUI_WORK="${WORKBASE}/build-gui"
+GIMP_WORK="${WORKBASE}/build-gimp"
+GMIC_SOURCE="${WORKBASE}/${PNV}"
+GMIC_QT_SOURCE="${GMIC_SOURCE}/gmic-qt"
+
+src_configure() {
+    einfo "Configuring G'MIC library and CLI tool"
+    edo mkdir -p "${GMIC_WORK}"
+    edo pushd "${GMIC_WORK}"
+    CMAKE_SOURCE="${GMIC_SOURCE}"
+    ecmake \
+        --hates=CMAKE_BUILD_TYPE \
+        -DBUILD_LIB_STATIC:BOOL=FALSE \
+        -DCUSTOM_CFLAGS:BOOL=TRUE \
+        -DENABLE_DYNAMIC_LINKING:BOOL=TRUE \
+        $(cmake_enable GRAPHICSMAGICK) \
+        $(cmake_enable OPENCV) \
+        $(cmake_enable OPENEXR)
+    edo popd
+
+    GMIC_QT_CMAKE_PARAMS=(
+        -DENABLE_DYNAMIC_LINKING:BOOL=TRUE
+        -DGMIC_PATH:PATH="${GMIC_SOURCE}/src"
+        -DGMIC_LIB_PATH:PATH="${GMIC_WORK}"
+    )
+
+    if optionq gui; then
+        einfo "Configuring G'MIC standalone GUI"
+        edo mkdir -p "${GUI_WORK}"
+        edo pushd "${GUI_WORK}"
+        CMAKE_SOURCE="${GMIC_QT_SOURCE}"
+        ecmake \
+            "${GMIC_QT_CMAKE_PARAMS[@]}" \
+            -DGMIC_QT_HOST:STRING=none
+        edo popd
+    fi
+
+    if optionq gimp; then
+        einfo "Configuring G'MIC GIMP plugin"
+        edo mkdir -p "${GIMP_WORK}"
+        edo pushd "${GIMP_WORK}"
+        CMAKE_SOURCE="${GMIC_QT_SOURCE}"
+        ecmake \
+            "${GMIC_QT_CMAKE_PARAMS[@]}" \
+            -DGMIC_QT_HOST:STRING=gimp
+        edo popd
+    fi
+}
+
+src_compile() {
+    einfo "Compiling G'MIC library and CLI tool"
+    edo pushd "${GMIC_WORK}"
+    default
+    edo popd
+
+    if optionq gui; then
+        einfo "Compiling G'MIC standalone GUI"
+        edo pushd "${GUI_WORK}"
+        default
+        edo popd
+    fi
+
+    if optionq gimp; then
+        einfo "Compiling G'MIC GIMP plugin"
+        edo pushd "${GIMP_WORK}"
+        default
+        edo popd
+    fi
+}
+
+src_install() {
+    einfo "Installing G'MIC library and CLI tool"
+    edo pushd "${GMIC_WORK}"
+    default
+    dobashcompletion resources/gmic_bashcompletion.sh gmic
+    edo popd
+
+    if optionq gui; then
+        einfo "Installing G'MIC standalone GUI"
+        edo pushd "${GUI_WORK}"
+        default
+        edo popd
+    fi
+
+    if optionq gimp; then
+        einfo "Installing G'MIC GIMP plugin"
+        edo pushd "${GIMP_WORK}"
+        exeinto "$($PKG_CONFIG --variable=gimplibdir gimp-2.0)/plug-ins"
+        doexe gmic_gimp_qt
+        edo popd
+    fi
+
+    edo pushd "${GMIC_SOURCE}"
+    emagicdocs
+    edo popd
+
+    die "src_install() is not finished"
+}
+
