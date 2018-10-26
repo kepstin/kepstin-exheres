@@ -27,8 +27,8 @@ MYOPTIONS="
     ( providers: ijg-jpeg jpeg-turbo ) [[ number-selected = exactly-one ]]
 "
 
-# The default build, except that a couple of enabled-by-default features with
-# uncommon dependencies are made optional (opencv, openexr)
+# All features except those that require non-trivial dependencies are enabled
+# by default.
 GMIC_QT_DEPENDENCIES="
         net-misc/curl
         x11-libs/qtbase:5[>=5.2.0][gui]
@@ -61,10 +61,6 @@ BUGS_TO=""
 DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/gmic-qt-use-pkg-config.patch
 )
-
-#    # Use pkg-config instead of gimptool
-#    edo sed -i 's/gimptool-2\.0 --gimpplugindir/$(PKG_CONFIG) --variable=gimplibdir gimp-2.0/' src/Makefile
-#    edo sed -i 's/gimptool-2\.0\$(EXE)/$(PKG_CONFIG) gimpui-2.0/g' src/Makefile
 
 # The gui and gimp plugin are build from the same source tree, but with
 # different configuration parameters, so use different build directories for each
@@ -165,7 +161,5 @@ src_install() {
     edo pushd "${GMIC_SOURCE}"
     emagicdocs
     edo popd
-
-    die "src_install() is not finished"
 }
 
