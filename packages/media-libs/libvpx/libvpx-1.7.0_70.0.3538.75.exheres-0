@@ -4,15 +4,20 @@
 
 require flag-o-matic alternatives
 
+<<<<<<< HEAD:packages/media-libs/libvpx/libvpx-1.6.1_65.0.3325.162.exheres-0
 # From https://chromium.googlesource.com/chromium/src/+/65.0.3325.162/DEPS
 GITHASH="373e08f921e5bfd5a96963fabbbbe16ec793d44e"
+=======
+# From https://chromium.googlesource.com/chromium/src/+/70.0.3538.75/DEPS
+GITHASH="753fd86e86ac727dccac88376260b8f54502f2a3"
+>>>>>>> 282ffd83c9496bc0ff1dd9047912ad595bf7fcba:packages/media-libs/libvpx/libvpx-1.7.0_70.0.3538.75.exheres-0
 
 SUMMARY="VP8/VP9 Codec SDK"
 HOMEPAGE="http://www.webmproject.org"
 DOWNLOADS="https://chromium.googlesource.com/webm/${PN}/+archive/${GITHASH}.tar.gz -> ${PN}-${GITHASH}.tar.gz"
 
 LICENCES="BSD-3"
-SLOT="0"
+SLOT="5"
 PLATFORMS="~amd64 ~amrv7 ~x86"
 MYOPTIONS="
     examples
@@ -118,10 +123,6 @@ src_configure() {
         --disable-optimizations # Otherwise CFLAGS are overridden
         --disable-static
         --size-limit=16384x16384
-        # Chrome builds their libvpx without spatial svc, but they use the
-        # the header for it... which is only installed if it's enabled
-        --enable-experimental
-        --enable-spatial-svc
         # Chrome also enables realtime_only, but the shared lib should
         # support non-realtime modes too.
         $(expecting_tests && echo --enable-unit-tests || echo --disable-unit-tests)

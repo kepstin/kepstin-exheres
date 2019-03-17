@@ -20,7 +20,7 @@ DEPENDENCIES=""
 BUGS_TO="calvin.walton@kepstin.ca"
 
 DEFAULT_SRC_COMPILE_PARAMS=(
-    CC=$(exhost --tool-prefix)gcc
+    CC=${CC}
 )
 
 src_install() {

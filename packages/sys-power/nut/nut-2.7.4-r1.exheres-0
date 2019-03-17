@@ -57,6 +57,9 @@ DEPENDENCIES="
         nut_drivers:xml? ( net-misc/neon[>=0.25.0] )
 "
 
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/nut-2.7.4-openssl-1.1.patch
+)
 DEFAULT_SRC_CONFIGURE_PARAMS=(
     --sysconfdir=/etc/nut
     --datarootdir=/usr/share/nut
