@@ -1,6 +1,8 @@
 # Copyright © 2013 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
+require github [ user=dspinellis rev=2dd22fc6335320bf004e3e6f07dc6565c29f6d0d ]
+
 SUMMARY="Delete files from a backup set while maintaining a time distribution"
 DESCRIPTION="
 Fileprune will delete files from the specified set targetting a given
@@ -9,12 +11,8 @@ constraints. Its main purpose is to keep a set of daily-created backup files
 in managable size, while still providing reasonable access to older versions.
 "
 HOMEPAGE="http://www.dmst.aueb.gr/dds/sw/unix/${PN}"
-DOWNLOADS="http://www.dmst.aueb.gr/dds/sw/unix/${PN}/${PNV}.tar.gz"
 
-# The licence text is based on the as-is family of licences, but the language
-# permitting modifications has been removed. The result doesn't meet the FSF's
-# definition of a free licence.
-LICENCES="fileprune"
+LICENCES="Apache-2.0"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
@@ -25,6 +23,10 @@ BUGS_TO=""
 
 src_compile() {
     edo ${CC} ${CFLAGS} ${LDFLAGS} -o fileprune fileprune.c -lm
+}
+
+src_test() {
+    emake -j1 test
 }
 
 src_install() {
