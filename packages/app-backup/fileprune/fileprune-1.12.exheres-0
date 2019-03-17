@@ -22,7 +22,7 @@ DEPENDENCIES=""
 BUGS_TO=""
 
 src_compile() {
-    edo ${CC} ${CFLAGS} ${LDFLAGS} -o fileprune fileprune.c -lm
+    edo ${CC} ${CFLAGS} ${LDFLAGS} -D_FILE_OFFSET_BITS=64 -o fileprune fileprune.c -lm
 }
 
 src_test() {
