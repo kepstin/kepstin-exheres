@@ -1,6 +1,8 @@
 # Copyright 2019 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
+require distcheck
+
 SUMMARY="check and set the region code of DVD drives"
 HOMEPAGE="http://linvdr.org/projects/regionset/"
 DOWNLOADS="http://linvdr.org/download/regionset/${PNV}.tar.gz"

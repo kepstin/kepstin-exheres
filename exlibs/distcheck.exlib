@@ -1,0 +1,29 @@
+# Copyright 2019 Calvin Walton
+# Distributed under the terms of the GNU General Public License v2
+
+# Quick hack to verify checksums of distfiles before extracting them
+
+# List of checksum algorithms to use
+myexparam algos=[ sha512 ]
+
+exparam -v DISTCHECK_ALGOS algos[@]
+
+export_exlib_phases src_fetch_extra
+
+distcheck_src_fetch_extra() {
+    local a
+    edo pushd "$FETCHEDDIR" >/dev/null
+    for a in "${DISTCHECK_ALGOS[@]}" ; do
+        einfo "Checking distfiles using $a"
+        case "$a" in
+        sha512)
+            edo sha512sum --check --ignore-missing "${FILES}/distcheck"
+            ;;
+        *)
+            die "Unsupported checksum algorithm $a"
+            ;;
+        esac
+    done
+    edo popd >/dev/null
+}
+
