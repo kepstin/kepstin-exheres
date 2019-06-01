@@ -1,7 +1,7 @@
 # Copyright 2015 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require gnu [ suffix=lz ]
+require distcheck gnu [ suffix=lz ]
 
 SUMMARY="A data recovery tool"
 DESCRIPTION="
@@ -11,7 +11,7 @@ first in case of read errors.
 "
 
 # Repackaged, because the original distfile is in the little-used lzip format
-DOWNLOADS="https://www.kepstin.ca/distfiles/${PNV}.tar.xz"
+DOWNLOADS="https://www.kepstin.ca/distfiles/${PNV}.tar.gz"
 
 LICENCES="GPL-2"
 SLOT="0"
