@@ -2,6 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Quick hack to verify checksums of distfiles before extracting them
+#
+# Instructions:
+#
+# Require this exlib, optionally specifying a list of checksum algorithms
+# to use.
+# Create a file named distcheck in the $FILES directory for your package.
+# Each line of this file should be a tagged (BSD-style) checksum for
+# a file to check. The filename should be relative to $FETCHEDDIR
 
 # List of checksum algorithms to use
 myexparam algos=[ sha512 ]
