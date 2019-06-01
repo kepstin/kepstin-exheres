@@ -24,6 +24,9 @@ distcheck_src_fetch_extra() {
     for a in "${DISTCHECK_ALGOS[@]}" ; do
         einfo "Checking distfiles using $a"
         case "$a" in
+        sha256)
+            edo sha256sum --check --ignore-missing "${FILES}/distcheck"
+            ;;
         sha512)
             edo sha512sum --check --ignore-missing "${FILES}/distcheck"
             ;;
