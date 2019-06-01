@@ -2,7 +2,7 @@
 # Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require cmake [ api=2 ] freedesktop-mime
+require cmake [ api=2 ] distcheck freedesktop-mime
 
 SUMMARY="A CD-ROM image access library."
 DESCRIPTION="
