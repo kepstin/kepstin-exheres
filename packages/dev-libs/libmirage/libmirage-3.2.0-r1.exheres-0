@@ -24,8 +24,8 @@ SLOT="0"
 PLATFORMS="~amd64 ~x86"
 MYOPTIONS="
     doc [[ description = [ Use gtk-doc to build API reference ] ]]
-    gobject-introspection
 "
+# gobject-introspection disabled, installs to wrong path
 
 DEPENDENCIES="
     build:
@@ -33,7 +33,6 @@ DEPENDENCIES="
         sys-devel/gettext[>=0.15]
         virtual/pkg-config[>=0.16]
         doc? ( dev-doc/gtk-doc[>=1.4] )
-        gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=1.30.0] )
     build+run:
         app-arch/bzip2[>=1.0.0]
         app-arch/xz[>=5.0.0]
@@ -45,12 +44,14 @@ DEPENDENCIES="
         !app-emulation/cdemu[<3.0.0]
         !app-emulation/cdemud[<3.0.0]
 "
+#        gobject-introspection? ( gnome-desktop/gobject-introspection:1[>=1.30.0] )
 
 CMAKE_SRC_CONFIGURE_OPTIONS=(
     "doc GTKDOC_ENABLED"
-    "gobject-introspection INTROSPECTION_ENABLED"
 )
+#    "gobject-introspection INTROSPECTION_ENABLED"
 CMAKE_SRC_CONFIGURE_PARAMS=(
     "-DPOST_INSTALL_HOOKS:BOOL=FALSE"
+    "-DINTROSPECTION_ENABLED:BOOL=FALSE"
 )
 
