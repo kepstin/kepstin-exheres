@@ -1,0 +1,24 @@
+Source: https://bbs.archlinux.org/viewtopic.php?pid=1848597#p1848597
+Upstream: no, proprietary upstream.
+Reason: Fix segfault with glibc 2.29
+
+--- a/backend/cfg-obj.c
++++ b/backend/cfg-obj.c
+@@ -1026,7 +1026,7 @@
+       char *vendor = NULL;
+       char *model  = NULL;
+ 
+-      sscanf (string, "%*s %as %as", &vendor, &model);
++      sscanf (string, "%*s %ms %ms", &vendor, &model);
+ 
+       if (list_append (_cfg->seen[CFG_KEY_SCSI], info))
+         {
+@@ -1108,7 +1108,7 @@
+       char *library  = NULL;
+       char *firmware = NULL;
+ 
+-      sscanf (string, "%*s %*s %x %x %as %as",
++      sscanf (string, "%*s %*s %x %x %ms %ms",
+               &vendor, &product, &library, &firmware);
+ 
+       if (library && _cfg_have_interpreter (library, firmware)

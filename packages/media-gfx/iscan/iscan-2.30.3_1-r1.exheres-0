@@ -83,6 +83,7 @@ DEFAULT_SRC_PREPARE_PATCHES=(
     "${FILES}"/iscan-2.29.1-libpng-1.5.patch
     "${FILES}"/iscan-2.29.1-make-gtk-conditional.patch
     "${FILES}"/hain01commits2dip-obj.patch
+    "${FILES}"/iscan-2.30.3_fix-sscanf-modifier-in-cfg-obj.patch
 )
 
 src_prepare()
