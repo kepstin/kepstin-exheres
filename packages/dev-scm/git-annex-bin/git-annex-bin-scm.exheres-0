@@ -81,7 +81,8 @@ src_unpack() {
     GIT_ANNEX_ARCHIVE="git-annex-standalone-$(git_annex_arch).tar.gz"
 
     edo gpg --no-default-keyring --keyring "${FILES}"/git-annex.gpg --verify \
-        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}.sig"
+        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}.sig" \
+        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}"
 
     unpack "${GIT_ANNEX_ARCHIVE}"
 }
