@@ -1,0 +1,122 @@
+# Copyright 2020 Calvin Walton <calvin.walton@kepstin.ca>
+# Based in part on dev-scm/git-annex exheres,
+#   Copyright 2013 Alex Elsayed <eternaleye@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="git-annex allows managing files with git, without checking the
+file contents into git."
+DESCRIPTION="
+git-annex allows managing files with git, without checking the file
+contents into git. While that may seem paradoxical, it is useful when
+dealing with files larger than git can currently easily handle, whether
+due to limitations in memory, checksumming time, or disk space.
+
+Even without file content tracking, being able to manage files
+with git, move files around and delete files with versioned directory
+trees, and use branches and distributed clones, are all very handy
+reasons to use git. And annexed files can co-exist in the same git
+repository with regularly versioned files, which is convenient for
+maintaining documents, Makefiles, etc that are associated with
+annexed files but that benefit from full revision control.
+
+This is a prebuilt version of git-annex distributed in binary form.
+Versioned binary packages are not available, so this is an 'scm'
+package that will download the latest release automatically.
+"
+HOMEPAGE="http://git-annex.branchable.com/"
+
+# Some image resources (doc/logo* */favicon.ico
+# standalone/osx/git-annex.app/Contents/Resources/git-annex.icns)
+# have a non-standard license which reads:
+# "Free to modify and redistribute with due credit, and obviously free to use."
+LICENCES="GPL-3 AGPL-3 || (  LGPL-2.1  LGPL-3 )"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        app-crypt/gnupg [[ note = [ Used for verifying downloaded tarball ] ]]
+    run:
+        dev-scm/git
+        net-misc/curl
+        net-misc/openssh
+        net-misc/rsync
+        sys-process/lsof
+        virtual/gzip
+        virtual/tar
+"
+
+BUGS_TO=""
+
+WORK="${WORKBASE}/git-annex.linux"
+RESTRICT="strip"
+
+git_annex_arch() {
+    case "$(exhost --target)" in
+        aarch64-*) echo "arm64" ;;
+        armv7-*) echo "armel" ;;
+        i?86-*) echo "i386" ;;
+        x86_64-*) echo "amd64" ;;
+    esac
+}
+
+src_fetch_extra() {
+    GIT_ANNEX_ARCHIVE="git-annex-standalone-$(git_annex_arch).tar.gz"
+
+    local path
+    for path in ${PALUDIS_FETCHERS_DIRS[@]}; do
+        export PATH="${PATH}:${path}"
+    done
+
+    edo dohttps "https://downloads.kitenet.net/git-annex/linux/current/${GIT_ANNEX_ARCHIVE}" \
+        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}"
+    edo dohttps "https://downloads.kitenet.net/git-annex/linux/current/${GIT_ANNEX_ARCHIVE}.sig" \
+        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}.sig"
+}
+
+pkg_setup() {
+    exdirectory --allow /opt
+}
+
+src_unpack() {
+    GIT_ANNEX_ARCHIVE="git-annex-standalone-$(git_annex_arch).tar.gz"
+
+    edo gpg --no-default-keyring --keyring "${FILES}"/git-annex.gpg --verify \
+        "${FETCHEDDIR}/${GIT_ANNEX_ARCHIVE}.sig"
+
+    unpack "${GIT_ANNEX_ARCHIVE}"
+}
+
+src_prepare() {
+    einfo "Disabling bundled tools..."
+    # If the wrappers are present, then git-annex will prefer the bundled tools over system tools.
+    for wrapper in bin/*; do
+        case "$wrapper" in
+            bin/git-annex*|bin/git-remote-tor-annex) continue ;;
+            *) edo rm -v "$wrapper" ;;
+        esac
+    done
+    # The "extra" wrappers are lower priority than system tools, but still remove them
+    edo rm -rv extra
+}
+
+src_install() {
+    # The contents of the tar are designed to be just dumped in a directory somewhere
+    dodir /opt
+    edo cp -dR "." "${IMAGE}/opt/${PN}"
+
+    keepdir "/opt/${PN}/templates/branches"
+
+    # Install symlinks for the git-annex tools into the path
+    dodir /opt/bin
+    dosym "../${PN}/git-annex" /opt/bin
+    dosym "../${PN}/git-annex-shell" /opt/bin
+    dosym "../${PN}/git-annex-webapp" /opt/bin
+
+    # Adds man pages to the MANPATH
+    hereenvd 90git-annex-bin <<EOF
+MANPATH="/opt/${PN}/usr/share/man"
+EOF
+}
+
