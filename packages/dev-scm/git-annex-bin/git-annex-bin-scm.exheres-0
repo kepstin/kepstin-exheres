@@ -63,9 +63,7 @@ git_annex_arch() {
 }
 
 git_annex_fetcher() {
-    pushd "${FETCHEDDIR}"
-    edo ${WGET_WRAPPER} ${LOCAL_WGET:-wget} -T 30 -t 1 --continue --timestamping "${1}"
-    popd
+    edo ${WGET_WRAPPER} ${LOCAL_WGET:-wget} -T 30 -t 1 -c -N -P "${FETCHEDDIR}" "${1}"
 }
 
 src_fetch_extra() {
