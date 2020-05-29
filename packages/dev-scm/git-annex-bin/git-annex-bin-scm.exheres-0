@@ -63,7 +63,7 @@ git_annex_arch() {
 }
 
 git_annex_fetcher() {
-    edo ${WGET_WRAPPER} ${LOCAL_WGET:-wget} -T 30 -t 1 -c -N -P "${FETCHEDDIR}" "${1}"
+    edo ${WGET_WRAPPER} ${LOCAL_WGET:-wget} -T 30 -t 1 -N -P "${FETCHEDDIR}" "${1}"
 }
 
 src_fetch_extra() {
