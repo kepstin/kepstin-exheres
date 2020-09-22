@@ -1,0 +1,22 @@
+# Copyright 2012 Markus Rothe
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ suffix=tar.gz ]
+
+SUMMARY="Rip video DVDs from the command line"
+HOMEPAGE="http://dvdbackup.sourceforge.net/"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/libdvdread-6.1.0.diff
+)
+
+DEPENDENCIES="
+    build+run:
+        media-libs/libdvdread
+"
+
