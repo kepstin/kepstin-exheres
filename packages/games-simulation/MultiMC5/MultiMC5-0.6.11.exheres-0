@@ -1,0 +1,62 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=MultiMC ]
+require cmake
+
+# Revisions for git submodules
+LIBNBTPLUSPLUS_REV="92f8d57227feb94643378ecf595626c60c0f59b8"
+QUAZIP_REV="3691d57d3af13f49b2be2b62accddefee3c26b9c"
+
+SUMMARY="A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once"
+HOMEPAGE="https://multimc.org/"
+DOWNLOADS+="
+    https://github.com/MultiMC/libnbtplusplus/archive/${LIBNBTPLUSPLUS_REV}.tar.gz -> libnbtplusplus-${LIBNBTPLUSPLUS_REV}.tar.gz
+    https://github.com/MultiMC/quazip/archive/${QUAZIP_REV}.tar.gz -> quazip-${QUAZIP_REV}.tar.gz
+"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build:
+        virtual/jdk:*[>=1.8]
+    build+run:
+        dev-libs/libglvnd[X] [[ note = [ GL/GLX headers ] ]]
+        sys-libs/zlib
+        x11-libs/qtbase:5[gui][>=5.6]
+    run:
+        virtual/jre:*[>=1.8]
+    suggestion:
+        x11-apps/xrandr [[ description = [ Required for Minecraft versions 1.12.2 and older ] ]]
+"
+
+CMAKE_SRC_CONFIGURE_PARAMS=(
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr
+    -DMultiMC_BUILD_PLATFORM:STRING=Exherbo
+    -DMultiMC_LAYOUT:STRING=lin-system
+    -DMultiMC_BINARY_DEST_DIR:STRING=$(exhost --target)/bin
+    -DMultiMC_LIBRARY_DEST_DIR:STRING=$(exhost --target)/lib
+    -DMultiMC_SHARE_DEST_DIR:STRING=share/multimc
+)
+
+src_unpack() {
+    cmake_src_unpack
+
+    edo pushd ${CMAKE_SOURCE}/libraries
+    edo rmdir libnbtplusplus quazip
+    edo ln -s ${WORKBASE}/libnbtplusplus-${LIBNBTPLUSPLUS_REV} libnbtplusplus
+    edo ln -s ${WORKBASE}/quazip-${QUAZIP_REV} quazip
+    edo popd
+}
+
+src_install() {
+    cmake_src_install
+
+    insinto /usr/share/pixmaps
+    doins "${CMAKE_SOURCE}"/application/resources/multimc/scalable/multimc.svg
+    insinto /usr/share/applications
+    doins "${CMAKE_SOURCE}"/application/package/linux/multimc.desktop
+}
+
