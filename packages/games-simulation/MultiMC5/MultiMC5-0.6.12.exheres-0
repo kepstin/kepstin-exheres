@@ -3,9 +3,10 @@
 
 require github [ user=MultiMC ]
 require cmake
+require distcheck
 
 # Revisions for git submodules
-LIBNBTPLUSPLUS_REV="92f8d57227feb94643378ecf595626c60c0f59b8"
+LIBNBTPLUSPLUS_REV="dc72a20b7efd304d12af2025223fad07b4b78464"
 QUAZIP_REV="3691d57d3af13f49b2be2b62accddefee3c26b9c"
 
 SUMMARY="A custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once"
