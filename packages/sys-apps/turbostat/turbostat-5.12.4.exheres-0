@@ -8,14 +8,25 @@ DESCRIPTION="
 Report processor topology, frequency, idle power-state statistics, temperature
 and power on modern X86 processors.
 "
-DOWNLOADS="mirror://kernel/linux/kernel/v$(ever major).x/linux-${PV}.tar.xz"
+DOWNLOADS="
+    mirror://kernel/linux/kernel/v$(ever major).x/linux-$(ever range 1-2).tar.xz
+"
+if [[ -n $(ever range 3-) ]]; then
+    DOWNLOADS+="
+        mirror://kernel/linux/kernel/v$(ever major).x/patch-$PV.xz -> linux-patch-$PV.xz
+    "
+    DEFAULT_SRC_PREPARE_PATCHES=(
+        "${WORKBASE}/linux-patch-$PV"
+    )
+fi
+
 
 LICENCES="GPL-2"
 SLOT="0"
 PLATFORMS="~amd64"
 MYOPTIONS=""
 
-WORK="${WORKBASE}"/linux-${PV}/tools/power/x86/turbostat
+WORK="${WORKBASE}/linux-$(ever range 1-2)"
 
 DEPENDENCIES=""
 
@@ -25,8 +36,16 @@ DEFAULT_SRC_COMPILE_PARAMS=(
     CC=${CC}
 )
 
+src_compile() {
+    edo pushd tools/power/x86/turbostat
+    default
+    edo popd
+}
+
 src_install() {
+    edo pushd tools/power/x86/turbostat
     dobin turbostat
     doman turbostat.8
+    edo popd
 }
 
