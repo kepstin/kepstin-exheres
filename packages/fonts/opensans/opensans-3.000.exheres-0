@@ -1,0 +1,31 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+# From google/fonts@4ebf835
+# * Open Sans Version 3.000 taken from the upstream repo https://github.com/googlefonts/opensans
+#   at commit googlefonts/opensans@c071e96.
+require github [ user=googlefonts rev=c071e9696751f2d69925d66f3b8c581f2dc041c2 ]
+require xfont
+
+SUMMARY="Open Sans is a humanist sans serif typeface designed by Steve Matteson, Type Director of Ascender Corp"
+DESCRIPTION="
+Open Sans was designed with an upright stress, open forms and a neutral, yet friendly appearance. It
+was optimized for print, web, and mobile interfaces, and has excellent legibility characteristics in
+its letterforms.
+"
+HOMEPAGE="https://fonts.google.com/specimen/Open+Sans"
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="static [[ description = [ Install static font instances instead of variable fonts ] ]]"
+
+src_install() {
+    insinto /usr/share/fonts/${PN}
+    if optionq static; then
+        doins fonts/ttf/*
+    else
+        doins fonts/variable/*
+    fi
+}
+
