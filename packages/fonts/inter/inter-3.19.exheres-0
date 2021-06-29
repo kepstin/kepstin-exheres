@@ -1,0 +1,35 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=rsms project=${PN} pn=Inter release=v${PV} suffix=zip ]
+require distcheck [ algos=[ sha512 ] ]
+require xfont
+
+SUMMARY="Inter is a typeface carefully crafted & designed for computer screens."
+DESCRIPTION="
+Inter features a tall x-height to aid in readability of mixed-case and lower-case text. Several
+OpenType features are provided as well, like contextual alternates that adjusts punctuation
+depending on the shape of surrounding glyphs, slashed zero for when you need to disambiguate \"0\"
+from \"o\", tabular numbers, etc.
+"
+HOMEPAGE="https://rsms.me/inter/"
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+
+WORK="${WORKBASE}/Inter Desktop"
+
+src_install() {
+    insinto /usr/share/fonts/${PN}
+    doins *
+}
+
+pkg_postinst() {
+    xfont_pkg_postinst
+}
+
+pkg_postrm() {
+    xfont_pkg_postrm
+}
+
