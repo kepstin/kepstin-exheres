@@ -1,0 +1,51 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require distcheck [ algos=[ sha256 ] ]
+
+MY_PN="${PN/-bin}"
+
+SUMMARY="AWS Client VPN for Linux"
+DESCRIPTION="
+AWS Client VPN is a managed client-based VPN service that enables you to securely access AWS resources and resources in your
+on-premises network.
+"
+HOMEPAGE="https://aws.amazon.com/vpn/client-vpn-download/"
+DOWNLOADS="platform:amd64? ( https://d20adtppz83p9s.cloudfront.net/GTK/${PV}/${MY_PN}_amd64.deb -> ${MY_PN}_${PV}_amd64.deb )"
+
+LICENCES=""
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="platform: amd64"
+
+RESTRICT="strip"
+
+DEPENDENCIES=""
+
+WORK="${WORKBASE}"
+
+pkg_setup() {
+    exdirectory --allow /opt/awsvpnclient
+}
+
+src_unpack() {
+    edo "${AR}" x "${FETCHEDDIR}/${ARCHIVES}"
+    echo "xz -dc data.tar.xz | tar xf - --no-same-owner" 1>&2
+    xz -dc data.tar.xz | tar xf - --no-same-owner
+    assert "Couldn't unpack data.tar.xz"
+}
+
+src_install() {
+    edo cp -dR opt "${IMAGE}"
+
+    insinto /usr/$(exhost --target)/lib/systemd/system
+    doins etc/systemd/system/awsvpnclient.service
+
+    insinto /usr/share/pixmaps
+    doins usr/share/pixmaps/acvc-64.png
+    insinto /usr/share/applications
+    doins usr/share/applications/awsvpnclient.desktop
+
+    dodoc usr/share/doc/awsvpnclient/copyright
+}
+
