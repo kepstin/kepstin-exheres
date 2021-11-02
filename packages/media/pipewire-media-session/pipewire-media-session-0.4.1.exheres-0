@@ -1,0 +1,41 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+MY_PN=${PN/pipewire-}
+WORK="${WORKBASE}/${MY_PN}-${PV}"
+
+require gitlab [ prefix="https://gitlab.freedesktop.org" user=pipewire suffix=tar.bz2 new_download_scheme=true ]
+require meson [ meson_minimum_version=0.56.09 ]
+require systemd-service
+
+SUMMARY="Example session manager for PipeWire"
+DESCRIPTION="
+PipeWire Media Session is an example session manager for PipeWire.
+
+Note that we recommend the use of WirePlumber instead.
+This package is provided for testing or working around regressions.
+"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="providers: systemd"
+
+DEPENDENCIES="
+    build:
+    build+run:
+        media/pipewire[>=0.3.39]
+        sys-apps/systemd
+        sys-sound/alsa-lib[>=1.1.7]
+"
+
+MESON_SRC_CONFIGURE_PARAMS=(
+    -Ddocs=disabled
+    -Dsystemd-system-service=disabled
+    -Dsystemd-user-unit-dir=${SYSTEMDUSERUNITDIR}
+)
+MESON_SRC_CONFIGURE_OPTION_FEATURES=(
+    'providers:systemd systemd'
+    'providers:systemd systemd-user-service'
+)
+
