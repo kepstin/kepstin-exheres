@@ -1,0 +1,88 @@
+# Copyright 2011-2021 Timo Gurr <tgurr@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+# Based in part upon 'makemkv-1.6.16.ebuild' from Gentoo, which is:
+#   Copyright 1999-2011 Gentoo Foundation
+
+require gtk-icon-cache alternatives distcheck [ algos=[ sha256 ] ]
+
+MY_PNV="${PN}-oss-${PV}"
+MY_PNVB="${PN}-bin-${PV}"
+
+SUMMARY="Tool for ripping Blu-Ray, HD-DVD and DVD discs and copying content to a Matroska container"
+HOMEPAGE="https://www.${PN}.com"
+DOWNLOADS="
+    listed-only:
+        ${HOMEPAGE}/download/${MY_PNV}.tar.gz
+        ${HOMEPAGE}/download/${MY_PNVB}.tar.gz
+"
+
+LICENCES="
+    MakeMKV-EULA [[ note = [ oss/makemkvgui, css/* ] ]]
+    LGPL-2.1 [[ note = [ oss/{libabi,libdriveio,libebml,libmakemkv,libmatroska,libmmbd} ] ]]
+    public-domain [[ note = [ oss/sstring ] ]]
+"
+SLOT="0"
+PLATFORMS="-* ~amd64 ~x86"
+MYOPTIONS="
+    qt5
+    ( providers: libressl openssl ) [[ number-selected = exactly-one ]]
+"
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config[>=0.9.0]
+    build+run:
+        dev-libs/expat
+        media/ffmpeg[>=4.0][fdk-aac] [[ note = [ LIBAVCODEC_VERSION_MAJOR >= 58 ] ]]
+        sys-libs/zlib
+        qt5? ( x11-libs/qtbase:5[gui] )
+        providers:openssl? ( dev-libs/openssl:= )
+        providers:libressl? ( dev-libs/libressl:= )
+"
+
+WORK=${WORKBASE}/${MY_PNV}
+
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( 'qt5 gui' )
+
+src_compile() {
+    emake GCC="${CC} ${CFLAGS} ${LDFLAGS} ${CXXFLAGS}"
+}
+
+src_install() {
+    default
+
+    dosym libdriveio.so.0 /usr/$(exhost --target)/lib/libdriveio.so.0.${PV}
+    dosym libdriveio.so.0 /usr/$(exhost --target)/lib/libdriveio.so
+    dosym libmakemkv.so.1 /usr/$(exhost --target)/lib/libmakemkv.so.1.${PV}
+    dosym libmakemkv.so.1 /usr/$(exhost --target)/lib/libmakemkv.so
+    dosym libmmbd.so.0 /usr/$(exhost --target)/lib/libmmbd.so.0.${PV}
+    dosym libmmbd.so.0 /usr/$(exhost --target)/lib/libmmbd.so
+    # TODO: if libbd+ ever gets written, add another alternative for that one
+    dosym libmmbd.so.0 /usr/$(exhost --target)/lib/libbdplus.so.0
+
+    alternatives_for libaacs ${PN} 1 /usr/$(exhost --target)/lib/libaacs.so libmmbd.so.0 /usr/$(exhost --target)/lib/libaacs.so.0 libmmbd.so.0
+
+    # install bin package
+    edo pushd "../${MY_PNVB}"
+    if [[ $(exhost --target) == x86_64-pc-linux-gnu ]] ; then
+        dobin bin/amd64/makemkvcon
+    elif [[ $(exhost --target) == i686-pc-linux-gnu ]] ; then
+        dobin bin/i386/makemkvcon
+    fi
+
+    # TODO: Profile parsing error: default profile missing, using builtin default
+    insinto /usr/$(exhost --target)/share/MakeMKV
+    doins -r src/share/*
+
+    edo popd
+}
+
+pkg_postinst() {
+    option qt5 && gtk-icon-cache_pkg_postinst
+    alternatives_pkg_postinst
+}
+
+pkg_postrm() {
+    option qt5 && gtk-icon-cache_pkg_postrm
+}
+
