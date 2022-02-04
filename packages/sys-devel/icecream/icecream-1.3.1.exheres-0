@@ -1,0 +1,67 @@
+# Copyright 2013-2017 Wulf C. Krueger <philantrop@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+# Based in part upon on an old version of this exheres which is
+#     Copyright 2009, 2010 Sterling X. Winter <replica@exherbo.org>
+#     Based in part upon 'icecream-0.9.3.ebuild' from Gentoo, which is:
+#     Copyright 1999-2009 Gentoo Foundation
+
+require github [ user=icecc release=${PV} pnv=icecc-${PV} suffix=tar.xz ] \
+        systemd-service
+
+SUMMARY="Distributed parallel compilation system"
+DESCRIPTION="
+Icecream is based on ideas and code from distcc. Like distcc it takes compile
+jobs from a build and distributes them to remote machines for parallel
+compilation. Unlike distcc, icecream uses a central server that schedules the
+compile jobs to the fastest free server and is thus dynamic. Icemon, the
+icecream monitor, is not included in this package.
+"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        app-text/docbook-utils
+        app-text/docbook-xml-dtd:4.5
+    build+run:
+        app-arch/libarchive[zstd]
+        app-arch/lzo
+        app-arch/zstd
+        sys-libs/libcap-ng
+        group/icecc
+        user/icecc
+    suggestion:
+        sys-devel/icemon
+"
+
+DEFAULT_SRC_CONFIGURE_PARAMS=(
+    --libexecdir=/usr/$(exhost --target)/libexec
+    --sbindir=/usr/$(exhost --target)/bin
+)
+
+src_install() {
+    default
+
+    keepdir /var/cache/icecream
+    keepdir /var/log/icecream
+    edo chown icecc:icecc "${IMAGE}"/var/cache/icecream
+    edo chown icecc:icecc "${IMAGE}"/var/log/icecream
+
+    for compiler in gcc cc c++ g++ ; do
+        dosym /usr/$(exhost --target)/bin/icecc /usr/$(exhost --target)/libexec/icecc/bin/$(exhost --target)-${compiler}
+    done
+
+    dodoc "${FILES}"/README.Exherbo
+
+    install_systemd_files
+    insinto /etc/conf.d
+    doins "${FILES}"/icecream.conf
+}
+
+pkg_postinst() {
+    elog "For information about setting up icecream, read /usr/share/doc/${PNVR}/README.Exherbo."
+}
+

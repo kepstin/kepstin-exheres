@@ -1,0 +1,13 @@
+[Unit]
+Description=Icecream Distributed Compiler
+After=network.target
+
+[Service]
+Type=forking
+Nice=5
+EnvironmentFile=/etc/conf.d/icecream.conf
+ExecStart=/usr/host/bin/iceccd $NETNAME $SCHEDULER $MAXPROC $REMOTE -vvv -d -u icecc -l /var/log/icecream/iceccd -b /var/cache/icecream
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

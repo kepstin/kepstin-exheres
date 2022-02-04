@@ -1,0 +1,114 @@
+1. Prerequisites and environment setup
+
+If your local binutils/gcc/glibc are compiled with processor-specific flags
+they might not work on remote machines. So don't do this.
+
+Sensible flags for amd64 would be:
+
+x86_64_pc_linux_gnu_CFLAGS="-pipe -O2 -march=x86-64 -mtune=generic"
+
+
+To use icecream with Paludis set the following in /etc/paludis/bashrc:
+
+    PATH="/usr/host/libexec/icecc/bin:${PATH}"
+
+Since we're cross-compiling everything, you'll have to create a gcc tarball for every
+target you want to build for.
+
+For example, if you have...
+
+*/*     targets: x86_64-pc-linux-gnu i686-pc-linux-gnu
+
+... in /etc/paludis/options.conf, you need to run these commands to create said tarball:
+
+/usr/host/libexec/icecc/icecc-create-env --gcc \
+    /usr/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-gcc \
+    /usr/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-g++
+
+/usr/host/libexec/icecc/icecc-create-env --gcc \
+    /usr/host/bin/i686-pc-linux-gnu-gcc \
+    /usr/host/bin/i686-pc-linux-gnu-g++
+
+This will create a cryptically named tarball per toolchain in the current directory.
+Rename each to something sensible and move it to a location accessible for icecream,
+e. g. /opt/icecc-tc/x86_64.tar.gz and /opt/icecc-tc/i686.tar.gz.
+
+If you're using multiload and see warnings like this...
+
+unable to open '--verify': No such file or directory
+
+... just ignore them.
+
+
+Next you need to make icecream use these by specifying them in /etc/paludis/bashrc
+by using the ICECC_VERSION variable:
+
+ICECC_VERSION=/opt/icecc-tc/x86_64.tar.gz=x86_64-pc-linux-gnu,/opt/icecc-tc/i686.tar.gz=i686-pc-linux-gnu
+
+Note that you have to use the correct toolchain prefix for each target.
+
+
+2. Parallel jobs configuration
+
+Change or add the following in /etc/paludis/options.conf:
+
+    */* build_options: jobs=N
+
+where N is the number of parallel make jobs to distribute. A typical value is
+1 plus twice the number of total CPUs or cores available in your icecream
+cluster.
+
+
+3. sydbox configuration
+
+Add this to /usr/share/sydbox/paludis.syd-1:
+
+# icecream begin
+whitelist/network/connect+inet:<Network in CIDR notation, e. g. 192.168.1.0/24>@8765
+whitelist/network/connect+inet:<Network in CIDR notation, e. g. 192.168.1.0/24>@10245
+whitelist/network/connect+unix:/var/run/iceccd.socket
+whitelist/network/connect+unix:/run/iceccd.socket
+whitelist/network/connect+unix:/var/run/icecc/iceccd.socket
+whitelist/network/connect+unix:/run/icecc/iceccd.socket
+# icecream end
+
+An example:
+
+# icecream begin
+whitelist/network/connect+inet:192.168.168.0/24@8765
+whitelist/network/connect+inet:192.168.168.0/24@10245
+whitelist/network/connect+inet:192.168.178.0/24@8765
+whitelist/network/connect+inet:192.168.178.0/24@10245
+whitelist/network/connect+inet:178.63.65.197/32@8765
+whitelist/network/connect+inet:178.63.65.197/32@10245
+whitelist/network/connect+unix:/var/run/iceccd.socket
+whitelist/network/connect+unix:/run/iceccd.socket
+whitelist/network/connect+unix:/var/run/icecc/iceccd.socket
+whitelist/network/connect+unix:/run/icecc/iceccd.socket
+# icecream end
+
+
+4. Using icecream for manual building
+
+You can use icecream with plain make by putting the above PATH line in
+/etc/env.d/99local, then running:
+
+    eclectic env update && . /etc/profile
+
+and then manually passing -jN to make whenever you call it.
+
+
+5. Ports used by icecream
+
+The following ports might need to be opened in your firewall(s):
+    TCP/8765 for the the scheduler computer (required)
+    UDP/8765 for broadcast to find the scheduler (optional)
+    TCP/8766 for the telnet interface to the scheduler (optional)
+    TCP/10245 on the daemon computers (required)"
+
+
+6. More information
+
+For some configuration options, take a look at /etc/conf.d/icecream.conf.
+icecream's README: /usr/share/doc/icecream-${PVR}/README.md
+
