@@ -1,0 +1,45 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require setup-py [ import=setuptools multibuild=false blacklist=none ] \
+        github [ user=whipper-team tag="v${PV}" ]
+
+SUMMARY="Python CD-DA ripper aiming for accuracy over speed"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~x86 ~amd64"
+
+DEPENDENCIES="
+    build:
+        dev-python/docutils[python_abis:*(-)?] [[ note = [ to build man pages ] ]]
+    build+run:
+        app-cdr/cdrdao
+        dev-libs/libcdio-paranoia[>=10.2.2.0.1] [[ note = [ for 'cd-paranoia' executable name ] ]]
+        dev-python/musicbrainzngs[python_abis:*(-)?]
+        dev-python/mutagen[python_abis:*(-)?]
+        dev-python/pycdio[python_abis:*(-)?]
+        dev-python/python-discid[python_abis:*(-)?]
+        dev-python/ruamel-yaml[python_abis:*(-)?]
+        gnome-bindings/pygobject:3[python_abis:*(-)?]
+        media-libs/flac
+        media-libs/libsndfile
+        media-sound/sox
+    test:
+        net-twisted/Twisted[python_abis:*(-)?]
+    suggestion:
+        dev-python/Pillow[python_abis:*(-)?] [[ description = [ Support embedding cover art ] ]]
+"
+
+src_prepare() {
+    # Disable test that requires network access
+    edo sed -e '1i import unittest' \
+        -e '/def test_AccurateRipResponse_parses_correctly(/i\ \ \ \ @unittest.skip("network")' \
+        -e '/def test_raises_entrynotfound_for_no_entry(/i\ \ \ \ @unittest.skip("network")' \
+        -i whipper/test/test_common_accurip.py
+
+    # Log formatting test does not roundtrip newlines; possible ruamel-yaml compat issue
+    edo sed -e '/def testLogger(/i\ \ \ \ @unittest.skip("newline roundtrip issue")' \
+        -i whipper/test/test_result_logger.py
+}
+
