@@ -1,0 +1,38 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Open-source monospace font for code listings."
+
+# See https://github.com/google/fonts/commit/0f203e3
+require github [ user=googlefonts project=Inconsolata rev=540ba910bb13ab92147f8d064d6f9ec070fe1820 ]
+require xfont
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    static-fonts [[ description = [ Install static font instances instead of variable font ] ]]
+    ligatures [[ description = [ Install additional Ligconsolata font with programming ligatures ] ]]
+"
+
+src_install() {
+    insinto /usr/share/fonts/${PN}
+
+    if optionq static-fonts; then
+        doins fonts/otf/Inconsolata-*.otf
+    else
+        doins fonts/variable/*
+    fi
+
+    # Ligatures are currently static instances only
+    optionq ligatures && doins fonts/oft/Ligconsolata-*.otf
+}
+
+pkg_postinst() {
+    xfont_pkg_postinst
+}
+
+pkg_postrm() {
+    xfont_pkg_postrm
+}
+
