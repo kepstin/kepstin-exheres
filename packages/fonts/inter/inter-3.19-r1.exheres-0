@@ -3,7 +3,7 @@
 
 require github [ user=rsms project=${PN} pn=Inter release=v${PV} suffix=zip ]
 require distcheck [ algos=[ sha512 ] ]
-require xfont
+require font
 
 SUMMARY="Inter is a typeface carefully crafted & designed for computer screens."
 DESCRIPTION="
@@ -17,19 +17,18 @@ HOMEPAGE="https://rsms.me/inter/"
 LICENCES="OFL-1.1"
 SLOT="0"
 PLATFORMS="~amd64 ~x86"
+MYOPTIONS="static-fonts [[ description = [ Install static font instances instead of variable font ] ]]"
 
-WORK="${WORKBASE}/Inter Desktop"
+WORK="${WORKBASE}"
 
 src_install() {
     insinto /usr/share/fonts/${PN}
-    doins *
-}
 
-pkg_postinst() {
-    xfont_pkg_postinst
-}
-
-pkg_postrm() {
-    xfont_pkg_postrm
+    if optionq static-fonts; then
+        doins "Inter Desktop"/*.otf
+    else
+        # Fontconfig currently doesn't work properly with the multi axis font with slant
+        doins "Inter Variable/Single axis"/*.ttf
+    fi
 }
 

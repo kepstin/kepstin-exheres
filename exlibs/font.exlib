@@ -1,0 +1,26 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Based on xfont.exlib
+# Copyright 2008 Alexander Færøy <eroyf@exherbo.org>
+# Distributed under the terms of the GNU General Public License v2
+
+export_exlib_phases pkg_postinst pkg_postrm
+
+DEPENDENCIES="
+    build+run:
+        media-libs/fontconfig[>=2.10.1]
+"
+
+update_font_cache() {
+    ebegin "Updating system-wide font cache"
+        fc-cache --system-only --force
+    eend $?
+}
+
+font_pkg_postinst() {
+    update_font_cache
+}
+
+font_pkg_postrm() {
+    [[ -n ${REPLACED_BY_ID} ]] || update_font_cache
+}
+
