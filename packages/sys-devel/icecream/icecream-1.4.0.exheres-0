@@ -5,7 +5,13 @@
 #     Based in part upon 'icecream-0.9.3.ebuild' from Gentoo, which is:
 #     Copyright 1999-2009 Gentoo Foundation
 
-require github [ user=icecc release=${PV} pnv=icecc-${PV} suffix=tar.xz ] \
+if [[ $(ever range 3) == 0 ]]; then
+    MY_PV=$(ever range 1-2)
+else
+    MY_PV=${PV}
+fi
+
+require github [ user=icecc release=${MY_PV} pnv=icecc-${PV} suffix=tar.xz ] \
         systemd-service
 
 SUMMARY="Distributed parallel compilation system"
@@ -26,6 +32,7 @@ DEPENDENCIES="
     build:
         app-text/docbook-utils
         app-text/docbook-xml-dtd:4.5
+        virtual/pkg-config
     build+run:
         app-arch/libarchive[zstd]
         app-arch/lzo
