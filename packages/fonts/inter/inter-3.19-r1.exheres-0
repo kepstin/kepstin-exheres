@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 require github [ user=rsms project=${PN} pn=Inter release=v${PV} suffix=zip ]
-require distcheck [ algos=[ sha512 ] ]
 require font
 
 SUMMARY="Inter is a typeface carefully crafted & designed for computer screens."
