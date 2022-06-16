@@ -1,10 +1,10 @@
 # Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-# From google/fonts@4ebf835
-# * Open Sans Version 3.000 taken from the upstream repo https://github.com/googlefonts/opensans
-#   at commit googlefonts/opensans@c071e96.
-require github [ user=googlefonts rev=c071e9696751f2d69925d66f3b8c581f2dc041c2 ]
+# From google/fonts@2c2daf5
+# * Open Sans Version 3.001 taken from the upstream repo https://github.com/googlefonts/opensans
+#   at commit googlefonts/opensans@ebedbda
+require github [ user=googlefonts rev=ebedbda589fe5bd861b02325aca98c86ad845251 ]
 require xfont
 
 SUMMARY="Open Sans is a humanist sans serif typeface designed by Steve Matteson, Type Director of Ascender Corp"
