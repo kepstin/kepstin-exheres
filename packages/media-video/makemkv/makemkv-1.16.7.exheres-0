@@ -3,7 +3,7 @@
 # Based in part upon 'makemkv-1.6.16.ebuild' from Gentoo, which is:
 #   Copyright 1999-2011 Gentoo Foundation
 
-require gtk-icon-cache alternatives distcheck [ algos=[ sha256 ] ]
+require gtk-icon-cache alternatives
 
 MY_PNV="${PN}-oss-${PV}"
 MY_PNVB="${PN}-bin-${PV}"
