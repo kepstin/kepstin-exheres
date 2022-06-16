@@ -1,8 +1,6 @@
 # Copyright 2013 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require distcheck [ algos=[ sha256 ] ]
-
 SUMMARY="Report processor frequency and idle statistics"
 DESCRIPTION="
 Report processor topology, frequency, idle power-state statistics, temperature
