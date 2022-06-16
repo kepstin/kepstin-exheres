@@ -1,0 +1,35 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require font
+
+SUMMARY="The IBM Plex corporate typeface. It’s global, it’s versatile and it’s distinctly IBM."
+HOMEPAGE="https://www.ibm.com/plex/"
+REMOTE_IDS="github:IBM/plex"
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64 ~armv8 ~x86"
+
+# Based on feedback in https://github.com/IBM/plex/issues/214 the "TrueType"
+# version of the font has better rendering with freetype.
+DOWNLOADS="https://github.com/IBM/plex/releases/download/v${PV}/TrueType.zip -> ${PN}-TrueType-${PV}.zip"
+WORK="${WORKBASE}/TrueType"
+
+DEPENDENCIES="
+    build:
+        virtual/unzip
+"
+
+src_install() {
+    for family in *;
+    do
+        pushd "$family" >/dev/null
+        # For screen use, install the hinted versions of CJK fonts
+        [[ -d hinted ]] && cd hinted
+        insinto "/usr/share/fonts/${PN}/${family}"
+        doins *.ttf
+        popd >/dev/null
+    done
+}
+
