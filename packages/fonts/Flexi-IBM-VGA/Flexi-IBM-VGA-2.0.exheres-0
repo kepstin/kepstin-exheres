@@ -1,0 +1,29 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require distcheck [ algos=[ sha512 ] ]
+require font
+
+SUMMARY="A scalable, monospaced font based on the VGA ROM character set."
+DESCRIPTION="
+If DESCRIPTION is set it must not be an empty string.
+"
+HOMEPAGE="https://int10h.org/blog/2020/12/more-font-updates-oldschool-pack-flexi-vga/#flexi-ibm-vga-v2-0"
+DOWNLOADS="http://int10h.org/filez/Flexi_IBM_VGA_Fonts.zip -> Flexi_IBM_VGA_Fonts-2.0.zip"
+WORK="${WORKBASE}"
+
+LICENCES="CCPL-Attribution-ShareAlike-4.0"
+SLOT="0"
+PLATFORMS="~amd64 ~armv8 ~x86"
+
+DEPENDENCIES="
+    build:
+        virtual/unzip
+"
+
+src_install() {
+    insinto "/usr/share/fonts/${PN}"
+    doins Flexi_IBM_VGA_False.ttf Flexi_IBM_VGA_True.ttf
+    dodoc README.TXT
+}
+
