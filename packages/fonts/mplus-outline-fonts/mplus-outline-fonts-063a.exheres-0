@@ -2,7 +2,7 @@
 # Copyright 2014 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require distcheck [ algos=[ sha256 ] ] xfont
+require xfont
 
 MY_PNV="mplus-TESTFLIGHT-${PV}"
 PROJ_NAME=mplus-fonts
