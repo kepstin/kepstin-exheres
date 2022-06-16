@@ -1,7 +1,6 @@
 # Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
 # Distributed under the terms of the GNU General Public License v2
 
-require distcheck [ algos=[ sha512 ] ]
 require font
 
 SUMMARY="A scalable, monospaced font based on the VGA ROM character set."
