@@ -1,0 +1,36 @@
+# Copyright 2022 Calvin Walton
+# Distributed under the terms of the GNU General Public License v2
+
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.15 ] ]
+
+SUMMARY="Linux IPv6 Router Advertisement Daemon"
+DESCRIPTION="
+The router advertisement daemon (radvd) is run by Linux or BSD systems acting as IPv6 routers. It sends Router Advertisement messages, specified by RFC 2461, to a local Ethernet LAN periodically and when requested by a node sending a Router Solicitation message. These messages are required for IPv6 stateless autoconfiguration.
+"
+HOMEPAGE="https://radvd.litech.org/"
+DOWNLOADS="https://radvd.litech.org/dist/${PNV}.tar.gz"
+
+LICENCES="radvd"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="systemd"
+
+DEPENDENCIES="
+    build:
+        sys-devel/bison
+        sys-devel/flex
+    test:
+        dev-libs/check[>=0.9.4]
+"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/radvd-2.19-configure-check-ar.diff
+)
+
+src_configure() {
+    econf \
+        --with-pidfile=/run/radvd.pid \
+        "$(option_with systemd systemdsystemunitdir "/usr/$(exhost --target)/lib/systemd/system")" \
+        "$(expecting_tests --with-check --without-check)"
+}
+
