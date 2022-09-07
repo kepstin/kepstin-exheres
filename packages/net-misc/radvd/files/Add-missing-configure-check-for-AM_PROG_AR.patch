@@ -1,0 +1,36 @@
+From 1639d152f5939b0ac628aa559d5694e80dc28b7e Mon Sep 17 00:00:00 2001
+From: Calvin Walton <calvin.walton@kepstin.ca>
+Date: Wed, 7 Sep 2022 12:01:00 -0400
+Subject: [PATCH] Add missing configure check for AM_PROG_AR
+
+The automake build generates a static convenience library
+(libradvd_parser.a) but the configure script does not include a check
+for the 'ar' program used to generate that library. Without any check,
+automake ends up using the tool 'ar' as a fallback.
+
+This fails in some distro packaging or cross-compiling environments
+where a specific prefixed 'ar' tool is needed.
+
+Adding the AM_PROG_AR makes the configure script autodetect the prefixed
+ar tool in a way that's compatible with normal distro packaging and
+cross compiling tooling.
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+Upstream: https://github.com/radvd-project/radvd/pull/188
+
+diff --git a/configure.ac b/configure.ac
+index 23c21e7..f56da1d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -49,6 +49,7 @@ esac
+ dnl Determine CC and preset CFLAGS
+ AC_PROG_CC_C99
+ AC_PROG_RANLIB
++AM_PROG_AR
+ 
+ AC_ARG_WITH([stack-protector], AS_HELP_STRING([--without-stack-protector], [Build without -fstack-protector]),[],[with_stack_protector=yes])
+ AM_CONDITIONAL(HAVE_STACK_PROTECTOR, test x"$with_stack_protector" = xyes)
+-- 
+2.37.3

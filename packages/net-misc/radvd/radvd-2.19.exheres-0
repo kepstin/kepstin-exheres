@@ -24,7 +24,7 @@ DEPENDENCIES="
 "
 
 DEFAULT_SRC_PREPARE_PATCHES=(
-    "${FILES}"/radvd-2.19-configure-check-ar.diff
+    "${FILES}"/Add-missing-configure-check-for-AM_PROG_AR.patch
 )
 
 src_configure() {
