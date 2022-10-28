@@ -1,0 +1,49 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=oneapi-src tag=v${PV} ]
+require cmake [ ninja=true ]
+
+SUMMARY="oneAPI Video Processing Library"
+DESCRIPTION="
+The oneAPI Video Processing Library (oneVPL) is a programming interface for
+video decoding, encoding, and processing to build portable media pipelines on
+CPUs, GPUs, and other accelerators.
+
+This package installs the following components of oneVPL:
+* The oneVPL Specification API header files
+* oneVPL Dispatcher
+* (optionally) oneVPL command line tools
+"
+HOMEPAGE="https://www.oneapi.io/"
+
+LICENCES="MIT BSD-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="tools [[ description = [ Sample tools for testing oneVPL implementations ] ]]"
+
+DEPENDENCIES="
+    build:
+        tools? ( sys-libs/wayland-protocols[>=1.15] )
+        virtual/pkg-config
+    build+run:
+        tools? (
+            x11-dri/libdrm[>=2.4.91]
+            sys-libs/wayland
+            x11-libs/libX11
+            x11-libs/libpciaccess
+            x11-libs/libva[X][>=2.2.0] [[ note = [ VA-API version 1.2 ] ]]
+        )
+"
+
+CMAKE_SRC_CONFIGURE_PARAMS=(
+    '-DBUILD_EXAMPLES=OFF'
+    '-DINSTALL_EXAMPLE_CODE=OFF'
+)
+CMAKE_SRC_CONFIGURE_OPTION_BUILDS=(
+    'TOOLS'
+)
+CMAKE_SRC_CONFIGURE_TESTS=(
+    '-DBUILD_TESTS=ON'
+)
+
