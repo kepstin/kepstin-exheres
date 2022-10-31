@@ -30,6 +30,6 @@ src_install() {
     fi
 
     # Ligatures are currently static instances only
-    optionq ligatures && doins fonts/oft/Ligconsolata-*.otf
+    optionq ligatures && doins fonts/otf/Ligconsolata-*.otf
 }
 
