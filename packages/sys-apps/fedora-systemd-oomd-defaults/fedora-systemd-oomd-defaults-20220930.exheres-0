@@ -1,0 +1,48 @@
+# Copyright 2022 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require systemd-service
+
+SUMMARY="Configuration files from Fedora for systemd-oomd"
+DESCRIPTION="
+A set of drop-in files for systemd units to enable action from systemd-oomd,
+a userspace out-of-memory (OOM) killer.
+"
+HOMEPAGE="https://src.fedoraproject.org/rpms/systemd/"
+DOWNLOADS=""
+
+LICENCES="LGPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build+run:
+        sys-apps/systemd[>=250]
+"
+
+WORK="${WORKBASE}"
+
+src_install() {
+    insinto "/usr/$(exhost --target)/lib/systemd/oomd.conf.d"
+    doins "${FILES}"/10-oomd-defaults.conf
+    insinto "${SYSTEMDSYSTEMUNITDIR}/user-.slice.d"
+    doins "${FILES}"/10-oomd-per-slice-defaults.conf
+    insinto "${SYSTEMDSYSTEMUNITDIR}/system.slice.d"
+    doins "${FILES}"/10-oomd-per-slice-defaults.conf
+    insinto "${SYSTEMDUSERUNITDIR}/slice.d"
+    doins "${FILES}"/10-oomd-per-slice-defaults.conf
+}
+
+pkg_postinst() {
+    [[ ${ROOT} == / ]] || return
+
+    esandbox allow_net --connect unix:/run/systemd/private
+    esandbox allow_net --connect unix:/run/dbus/system_bus_socket
+
+    nonfatal edo systemctl daemon-reload && nonfatal edo systemctl try-restart systemd-oomd.service
+
+    if ! systemctl --quiet is-enabled systemd-oomd.service; then
+        einfo "To enable systemd-oomd, run: systemctl enable --now systemd-oomd.service"
+    fi
+}
+
