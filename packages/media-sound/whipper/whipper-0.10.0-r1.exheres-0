@@ -22,7 +22,7 @@ DEPENDENCIES="
         dev-python/python-discid[python_abis:*(-)?]
         dev-python/ruamel-yaml[python_abis:*(-)?]
         gnome-bindings/pygobject:3[python_abis:*(-)?]
-        media-libs/flac
+        media-libs/flac:*
         media-libs/libsndfile
         media-sound/sox
     test:
