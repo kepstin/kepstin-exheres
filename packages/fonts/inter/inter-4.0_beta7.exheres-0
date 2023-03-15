@@ -1,0 +1,35 @@
+# Copyright 2021 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+MY_PV=$(ever replace 2 -)
+require github [ user=rsms project=${PN} pn=Inter pv=${MY_PV} release=v${MY_PV} suffix=zip ]
+require font
+
+SUMMARY="Inter is a typeface carefully crafted & designed for computer screens."
+DESCRIPTION="
+Inter features a tall x-height to aid in readability of mixed-case and lower-case text. Several
+OpenType features are provided as well, like contextual alternates that adjusts punctuation
+depending on the shape of surrounding glyphs, slashed zero for when you need to disambiguate \"0\"
+from \"o\", tabular numbers, etc.
+"
+HOMEPAGE="https://rsms.me/inter/"
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64 ~x86"
+MYOPTIONS="static-fonts [[ description = [ Install static font instances instead of variable font ] ]]"
+
+WORK="${WORKBASE}"
+
+src_install() {
+    if optionq static-fonts; then
+        insinto /usr/share/fonts/${PN}
+        # Use the unhinted fonts on Linux; the freetype autohinter works well
+        doins Desktop/*.otf
+    else
+        insinto /usr/share/fonts/${PN}
+        doins Variable/Inter.var.ttf
+        doins Variable/Inter-Italic.var.ttf
+    fi
+}
+
