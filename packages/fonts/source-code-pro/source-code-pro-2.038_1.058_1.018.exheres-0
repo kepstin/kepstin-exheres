@@ -1,0 +1,38 @@
+# Copyright 2023 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require font
+
+SUMMARY="Monospaced font family for user interface and coding environments"
+HOMEPAGE="https://adobe-fonts.github.io/source-code-pro/"
+
+LICENCES="OFL-1.1"
+SLOT="0"
+PLATFORMS="~amd64 ~arm ~x86"
+MYOPTIONS="
+    variable [[ description = [ Additional version of the font in variable format ] ]]
+"
+
+PV_RO="$(ever range 1-2)R"
+PV_IT="$(ever range 3-4)R"
+PV_VAR="$(ever range 5-6)R"
+RELEASE="${PV_RO}-ro/${PV_IT}-it/${PV_VAR}-VAR"
+
+DOWNLOADS="
+    https://github.com/adobe-fonts/${PN}/releases/download/${RELEASE}/OTF-${PN}-${PV_RO}-ro-${PV_IT}-it.zip
+    variable? (
+        https://github.com/adobe-fonts/${PN}/releases/download/${RELEASE}/VAR-source-code-var-${PV_VAR}.zip
+    )
+"
+
+DEPENDENCIES="
+    build:
+        virtual/unzip
+"
+
+WORK="${WORKBASE}"
+
+src_install() {
+    insinto "/usr/share/fonts/${PN}"
+    doins *.otf
+}
