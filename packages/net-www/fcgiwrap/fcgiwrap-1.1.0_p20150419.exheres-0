@@ -1,0 +1,55 @@
+# Copyright 2023 Calvin Walton <calvin.walton@kepstin.ca>
+# Based on "fcgiwrap-1.1.0-r2.ebuild"
+#   Copyright 1999-2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=gnosek rev=99c942c90063c73734e56bacaa65f947772d9186 ]
+require autotools [ supported_autoconf=[ 2.7 ] supported_automake=[ 1.16 ]  need_libtool=false ]
+
+SUMMARY="Simple FastCGI wrapper for CGI scripts (CGI support for nginx)"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="systemd [[ description = [ support systemd socket activation ] ]]"
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+    build+run:
+        dev-libs/fcgi
+        systemd? ( sys-apps/systemd )
+    run:
+        systemd? ( user/fcgiwrap )
+"
+
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( systemd )
+
+src_prepare() {
+    default
+
+    # Since package was released, systemd library got renamed and new compiler warnings have been
+    # added.
+    edo sed \
+        -e s/-Werror// \
+        -e s/libsystemd-daemon/libsystemd/ \
+        -i configure.ac
+
+    # Package adds @prefix@ to @sbindir@ and @mandir@ even when they're absolute paths
+    edo sed \
+        -e '/^targetdir = $(DESTDIR)/s/@prefix@//' \
+        -e '/^man8dir = $(DESTDIR)/s/@prefix@//' \
+		-i Makefile.in
+
+    # Adjust systemd unit file to match Exherbo setup
+    edo sed \
+        -e '/^User=/s/http/fcgiwrap/' \
+        -e '/^Group=/s/http/fcgiwrap/' \
+        -e "/^ExecStart=/s:/usr/sbin:/usr/$(exhost --target)/bin:" \
+        -i systemd/fcgiwrap.service
+
+    eautoreconf
+    # This package does not use automake, but autoconf requires some files that automake installs.
+    NO_FAIL=1 autotools_run_tool automake --add-missing --copy --force-missing
+}
+
