@@ -1,0 +1,44 @@
+# Copyright 2023 Calvin Walton <calvin.walton@kepstin.ca>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=Guldoman tag="v${PV}" ]
+
+SUMMARY="Prevent screen blanking in GNOME while playing media in mpv"
+
+LICENCES="MIT"
+SLOT="0"
+PLATFORMS="~amd64"
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+    build+run:
+        media/mpv
+        sys-apps/dbus
+"
+
+src_compile() {
+    # This package has a pretty bad manually written Makefile build system. Rather than attempt to
+    # work around it, just build it manually.
+    edo ${CC} \
+        ${CPPFLAGS} $(${PKG_CONFIG} --cflags dbus-1 mpv) \
+        ${CFLAGS} -fPIC \
+        src/dbus_helper.c \
+        src/gnome_session_manager.c \
+        src/main.c \
+        ${LDFLAGS} $(${PKG_CONFIG} --libs dbus-1) -shared \
+        -o ${PN}.so
+}
+
+src_install() {
+    # mpv only loads plugins from an architecture-independent path. We don't want to actually
+    # install the plugin .so there, so install it under /usr/CTARGET/lib and put a symlink into the
+    # plugin directory that is architecture-independent via the "/usr/host" symlink. Non-native mpv
+    # won't be able to load the plugin unless it's manually specified in user config, but at least
+    # there won't be file collisions.
+    insinto /usr/$(exhost --target)/lib/mpv/scripts
+    doins ${PN}.so
+    dodir /usr/share/mpv/scripts
+    dosym /usr/host/lib/mpv/scripts/${PN}.so /usr/share/mpv/scripts/${PN}.so
+}
+
