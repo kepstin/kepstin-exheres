@@ -38,7 +38,7 @@ src_install() {
     # there won't be file collisions.
     insinto /usr/$(exhost --target)/lib/mpv/scripts
     doins ${PN}.so
-    dodir /usr/share/mpv/scripts
-    dosym /usr/host/lib/mpv/scripts/${PN}.so /usr/share/mpv/scripts/${PN}.so
+    dodir /etc/mpv/scripts
+    dosym /usr/host/lib/mpv/scripts/${PN}.so /etc/mpv/scripts/${PN}.so
 }
 
