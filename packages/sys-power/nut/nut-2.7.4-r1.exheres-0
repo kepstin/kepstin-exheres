@@ -96,6 +96,11 @@ DEFAULT_SRC_CONFIGURE_OPTION_WITHS=(
     "nut_drivers:usb udev-dir ${UDEVRULESDIR%/rules.d}"
 )
 
+pkg_setup() {
+    # Newer C++ standards have changed in backwards-incompatible ways and break the build.
+    CXXFLAGS="${CXXFLAGS:+${CXXFLAGS} }-std=gnu++14"
+}
+
 src_prepare() {
     edo rm m4/libtool.m4 m4/lt*.m4
     edo sed -i 's/pkg-config/${PKG_CONFIG}/g' m4/*.m4
